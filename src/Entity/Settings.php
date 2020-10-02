@@ -50,6 +50,7 @@ class Settings
     public const SHORT_SYNC_LAST_RUN = 'sync_fast_last_run';
     public const MEDIUM_SYNC_LAST_RUN = 'sync_last_run';
     public const LONG_SYNC_LAST_RUN = 'sync_slow_last_run';
+    public const MANUAL_SYNC_LAST_RUN = 'sync_manual_last_run';
 
     public const UPDATES_NONE = 0;
     public const UPDATES_ALL = 1;

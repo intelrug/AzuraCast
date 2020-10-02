@@ -51,6 +51,10 @@ class DebugController
         $this->logger->pushHandler($this->testHandler);
 
         switch ($type) {
+            case 'manual':
+                $sync->syncManual(true);
+                break;
+
             case 'long':
                 $sync->syncLong(true);
                 break;

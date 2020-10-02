@@ -9,6 +9,7 @@ class GetSyncTasks
     public const SYNC_SHORT = 'short';
     public const SYNC_MEDIUM = 'medium';
     public const SYNC_LONG = 'long';
+    public const SYNC_MANUAL = 'manual';
 
     protected string $type;
 

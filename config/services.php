@@ -398,11 +398,7 @@ return [
                 App\Sync\Task\Backup::class,
                 App\Sync\Task\RelayCleanup::class,
             ],
-            App\Event\GetSyncTasks::SYNC_MEDIUM => [
-                App\Sync\Task\Media::class,
-                App\Sync\Task\FolderPlaylists::class,
-                App\Sync\Task\CheckForUpdates::class,
-            ],
+            App\Event\GetSyncTasks::SYNC_MEDIUM => [],
             App\Event\GetSyncTasks::SYNC_LONG => [
                 App\Sync\Task\Analytics::class,
                 App\Sync\Task\RadioAutomation::class,
@@ -410,6 +406,11 @@ return [
                 App\Sync\Task\StorageCleanupTask::class,
                 App\Sync\Task\RotateLogs::class,
                 App\Sync\Task\UpdateGeoLiteDatabase::class,
+                App\Sync\Task\CheckForUpdates::class,
+            ],
+            App\Event\GetSyncTasks::SYNC_MANUAL => [
+                App\Sync\Task\Media::class,
+                App\Sync\Task\FolderPlaylists::class,
             ],
         ]);
     },

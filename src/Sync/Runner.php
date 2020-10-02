@@ -79,6 +79,17 @@ class Runner
         $this->runSyncTask(GetSyncTasks::SYNC_LONG, $force);
     }
 
+    /**
+     * Manual Synchronization
+     * This task runs manually.
+     *
+     * @param bool $force
+     */
+    public function syncManual($force = false): void
+    {
+        $this->runSyncTask(GetSyncTasks::SYNC_MANUAL, $force);
+    }
+
     public function runSyncTask(string $type, bool $force = false): void
     {
         // Immediately halt if setup is not complete.
@@ -156,9 +167,7 @@ class Runner
             ],
             GetSyncTasks::SYNC_MEDIUM => [
                 'name' => __('5-Minute Sync'),
-                'contents' => [
-                    __('Check Media Folders'),
-                ],
+                'contents' => [],
                 'lastRunSetting' => Entity\Settings::MEDIUM_SYNC_LAST_RUN,
                 'timeout' => 600,
             ],
@@ -167,9 +176,18 @@ class Runner
                 'contents' => [
                     __('Analytics/Statistics'),
                     __('Cleanup'),
+                    __('Check Updates'),
                 ],
                 'lastRunSetting' => Entity\Settings::LONG_SYNC_LAST_RUN,
                 'timeout' => 1800,
+            ],
+            GetSyncTasks::SYNC_MANUAL => [
+                'name' => __('Manual Sync'),
+                'contents' => [
+                    __('Check Media Folders'),
+                ],
+                'lastRunSetting' => Entity\Settings::MANUAL_SYNC_LAST_RUN,
+                'timeout' => 600,
             ],
         ];
 
