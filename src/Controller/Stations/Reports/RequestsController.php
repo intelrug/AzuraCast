@@ -62,7 +62,7 @@ class RequestsController
             $request->getFlash()->addMessage('<b>Request deleted!</b>', Flash::SUCCESS);
         }
 
-        return $response->withRedirect($request->getRouter()->fromHere('stations:reports:requests'));
+        return $response->withRedirect($request->getRouter()->fromHere('stations:requests'));
     }
 
     public function clearAction(
@@ -82,6 +82,6 @@ class RequestsController
 
         $request->getFlash()->addMessage('<b>All pending requests cleared.</b>', Flash::SUCCESS);
 
-        return $response->withRedirect($request->getRouter()->fromHere('stations:reports:requests'));
+        return $response->withRedirect($request->getRouter()->fromHere('stations:requests'));
     }
 }

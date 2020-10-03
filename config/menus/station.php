@@ -44,7 +44,7 @@ return function (App\Event\BuildStationMenu $e) {
             'icon' => 'public',
             'url' => $router->named('public:index', ['station_id' => $station->getShortName()]),
             'external' => true,
-            'visible' => $station->getEnablePublicPage(),
+            'visible' => false && $station->getEnablePublicPage(),
         ],
         'ondemand' => [
             'label' => __('On-Demand Media'),
@@ -67,39 +67,41 @@ return function (App\Event\BuildStationMenu $e) {
             'visible' => $backend::supportsMedia(),
             'permission' => Acl::STATION_MEDIA,
         ],
-        'streamers' => [
-            'label' => __('Streamer/DJ Accounts'),
-            'icon' => 'mic',
-            'url' => $router->fromHere('stations:streamers:index'),
-            'visible' => $backend::supportsStreamers(),
-            'permission' => Acl::STATION_STREAMERS,
+        'listeners' => [
+            'label' => __('Listeners'),
+            'icon' => 'people',
+            'url' => $router->fromHere('stations:listeners'),
+            'visible' => $frontend::supportsListenerDetail(),
+            'permission' => Acl::STATION_REPORTS,
+        ],
+        'requests' => [
+            'label' => __('Song Requests'),
+            'icon' => 'music_note',
+            'url' => $router->fromHere('stations:requests'),
+            'visible' => $station->getEnableRequests(),
+            'permission' => Acl::STATION_REPORTS,
+        ],
+        'queue' => [
+            'label' => __('Upcoming Song Queue'),
+            'icon' => 'queue_play_next',
+            'url' => $router->fromHere('stations:queue:index'),
+            'visible' => true,
+            'permission' => Acl::STATION_BROADCASTING,
         ],
         'web_dj' => [
             'label' => __('Web DJ'),
             'icon' => 'surround_sound',
             'url' => $router->named('public:dj', ['station_id' => $station->getShortName()], [], true)
                 ->withScheme('https'),
-            'visible' => $station->getEnablePublicPage() && $station->getEnableStreamers(),
+            'visible' => false && $station->getEnablePublicPage() && $station->getEnableStreamers(),
             'external' => true,
-        ],
-        'mounts' => [
-            'label' => __('Mount Points'),
-            'icon' => 'wifi_tethering',
-            'url' => $router->fromHere('stations:mounts:index'),
-            'visible' => $frontend::supportsMounts(),
-            'permission' => Acl::STATION_MOUNTS,
         ],
         'remotes' => [
             'label' => __('Remote Relays'),
             'icon' => 'router',
             'url' => $router->fromHere('stations:remotes:index'),
+            'visible' => false,
             'permission' => Acl::STATION_REMOTES,
-        ],
-        'webhooks' => [
-            'label' => __('Web Hooks'),
-            'icon' => 'code',
-            'url' => $router->fromHere('stations:webhooks:index'),
-            'permission' => Acl::STATION_WEB_HOOKS,
         ],
         'reports' => [
             'label' => __('Reports'),
@@ -109,16 +111,6 @@ return function (App\Event\BuildStationMenu $e) {
                 'reports_overview' => [
                     'label' => __('Statistics Overview'),
                     'url' => $router->fromHere('stations:reports:overview'),
-                ],
-                'reports_listeners' => [
-                    'label' => __('Listeners'),
-                    'url' => $router->fromHere('stations:reports:listeners'),
-                    'visible' => $frontend::supportsListenerDetail(),
-                ],
-                'reports_requests' => [
-                    'label' => __('Song Requests'),
-                    'url' => $router->fromHere('stations:reports:requests'),
-                    'visible' => $station->getEnableRequests(),
                 ],
                 'reports_timeline' => [
                     'label' => __('Song Playback Timeline'),
@@ -172,6 +164,26 @@ return function (App\Event\BuildStationMenu $e) {
                     'label' => __('Upcoming Song Queue'),
                     'url' => $router->fromHere('stations:queue:index'),
                     'permission' => Acl::STATION_BROADCASTING,
+                ],
+                'streamers' => [
+                    'label' => __('Streamer/DJ Accounts'),
+                    'icon' => 'mic',
+                    'url' => $router->fromHere('stations:streamers:index'),
+                    'visible' => $backend::supportsStreamers(),
+                    'permission' => Acl::STATION_STREAMERS,
+                ],
+                'mounts' => [
+                    'label' => __('Mount Points'),
+                    'icon' => 'wifi_tethering',
+                    'url' => $router->fromHere('stations:mounts:index'),
+                    'visible' => $frontend::supportsMounts(),
+                    'permission' => Acl::STATION_MOUNTS,
+                ],
+                'webhooks' => [
+                    'label' => __('Web Hooks'),
+                    'icon' => 'code',
+                    'url' => $router->fromHere('stations:webhooks:index'),
+                    'permission' => Acl::STATION_WEB_HOOKS,
                 ],
                 'restart' => [
                     'label' => __('Restart Broadcasting'),

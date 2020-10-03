@@ -22,7 +22,7 @@
             $station->getId())): ?>
             <div class="card-actions">
                 <?php if ($acl->userAllowed($user, \App\Acl::STATION_REPORTS, $station->getId())): ?>
-                    <a class="btn btn-outline-primary" href="<?=$router->fromHere('stations:reports:requests')?>">
+                    <a class="btn btn-outline-primary" href="<?=$router->fromHere('stations:requests')?>">
                         <i class="material-icons" aria-hidden="true">assignment</i>
                         <?=__('View')?>
                     </a>

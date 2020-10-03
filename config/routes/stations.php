@@ -48,6 +48,12 @@ return function (App $app) {
             ->setName('stations:playlists:index')
             ->add(new Middleware\Permissions(Acl::STATION_MEDIA, true));
 
+        $group->map(['GET', 'POST'], '/listeners', Controller\Stations\Reports\ListenersController::class)
+            ->setName('stations:listeners');
+
+        $group->get('/requests', Controller\Stations\Reports\RequestsController::class)
+            ->setName('stations:requests');
+
         $group->group('/mounts', function (RouteCollectorProxy $group) {
 
             $group->get('', Controller\Stations\MountsController::class . ':indexAction')
@@ -113,22 +119,16 @@ return function (App $app) {
                 Controller\Stations\Reports\DuplicatesController::class . ':deleteAction')
                 ->setName('stations:reports:duplicates:delete');
 
-            $group->map(['GET', 'POST'], '/listeners', Controller\Stations\Reports\ListenersController::class)
-                ->setName('stations:reports:listeners');
-
             $group->map(['GET', 'POST'], '/soundexchange', Controller\Stations\Reports\SoundExchangeController::class)
                 ->setName('stations:reports:soundexchange');
 
-            $group->get('/requests', Controller\Stations\Reports\RequestsController::class)
-                ->setName('stations:reports:requests');
-
             $group->get('/requests/delete/{request_id}/{csrf}',
                 Controller\Stations\Reports\RequestsController::class . ':deleteAction')
-                ->setName('stations:reports:requests:delete');
+                ->setName('stations:requests:delete');
 
             $group->get('/requests/clear/{csrf}',
                 Controller\Stations\Reports\RequestsController::class . ':clearAction')
-                ->setName('stations:reports:requests:clear');
+                ->setName('stations:requests:clear');
 
         })->add(new Middleware\Permissions(Acl::STATION_REPORTS, true));
 
