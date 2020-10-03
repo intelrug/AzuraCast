@@ -194,5 +194,11 @@ return function (App\Event\BuildStationMenu $e) {
                 ],
             ],
         ],
+        'rescan_media' => [
+            'label' => __('Rescan Media'),
+            'icon' => 'find_in_page',
+            'url' => $router->fromHere('admin:debug:sync', ['type' => 'manual']),
+            'permission' => Acl::GLOBAL_STATIONS,
+        ],
     ]);
 };
