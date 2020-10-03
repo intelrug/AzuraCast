@@ -21,12 +21,14 @@ $assets
 
 <div class="row" id="profile">
     <div class="col-lg-7">
-        <?=$this->fetch('stations/profile/panel_header')?>
+        <!-- <?=$this->fetch('stations/profile/panel_header')?> -->
 
         <?=$this->fetch('stations/profile/panel_nowplaying')?>
 
         <?=$this->fetch('stations/profile/panel_schedule')?>
 
+        <?=$this->fetch('stations/profile/panel_streams')?>
+<!--
         <?php if ($backend::supportsRequests() || $backend::supportsStreamers()): ?>
             <div class="row">
                 <?php if ($backend::supportsRequests()): ?>
@@ -43,19 +45,21 @@ $assets
         <?php endif; ?>
 
         <?=$this->fetch('stations/profile/panel_publicpages')?>
+
+-->
     </div>
 
     <div class="col-lg-5">
-        <?=$this->fetch('stations/profile/panel_streams')?>
-
-        <?php if (\App\Radio\Adapters::FRONTEND_REMOTE !== $frontend_type): ?>
-            <?=$this->fetch('stations/profile/panel_frontend')?>
-        <?php endif; ?>
 
         <?php if (\App\Radio\Adapters::BACKEND_NONE === $backend_type): ?>
             <?=$this->fetch('stations/profile/panel_backend_none')?>
         <?php else: ?>
             <?=$this->fetch('stations/profile/panel_backend')?>
         <?php endif; ?>
+
+        <?php if (\App\Radio\Adapters::FRONTEND_REMOTE !== $frontend_type): ?>
+            <?=$this->fetch('stations/profile/panel_frontend')?>
+        <?php endif; ?>
+
     </div>
 </div>
