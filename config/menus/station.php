@@ -39,13 +39,6 @@ return function (App\Event\BuildStationMenu $e) {
             'icon' => 'image',
             'url' => $router->fromHere('stations:profile:index'),
         ],
-        'public' => [
-            'label' => __('Public Page'),
-            'icon' => 'public',
-            'url' => $router->named('public:index', ['station_id' => $station->getShortName()]),
-            'external' => true,
-            'visible' => false && $station->getEnablePublicPage(),
-        ],
         'ondemand' => [
             'label' => __('On-Demand Media'),
             'icon' => 'cloud_download',
@@ -131,6 +124,13 @@ return function (App\Event\BuildStationMenu $e) {
                     'url' => $router->fromHere('stations:reports:soundexchange'),
                     'visible' => $frontend::supportsListenerDetail(),
                 ],
+                'public' => [
+                    'label' => __('Public Page'),
+                    'icon' => 'public',
+                    'url' => $router->named('public:index', ['station_id' => $station->getShortName()]),
+                    'external' => true,
+                    'visible' => $station->getEnablePublicPage(),
+                ],
             ],
         ],
         'utilities' => [
@@ -198,7 +198,7 @@ return function (App\Event\BuildStationMenu $e) {
             'label' => __('Rescan Media'),
             'icon' => 'find_in_page',
             'url' => $router->fromHere('admin:debug:sync', ['type' => 'manual']),
-            'permission' => Acl::GLOBAL_STATIONS,
+            'permission' => Acl::STATION_ALL,
         ],
     ]);
 };

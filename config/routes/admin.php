@@ -7,6 +7,13 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
+    $app->get('/sync/{type}', Controller\Admin\DebugController::class . ':syncAction')
+        ->setName('admin:debug:sync')
+        ->add(Middleware\Module\Admin::class)
+        ->add(Middleware\EnableView::class)
+        ->add(new Middleware\Permissions(Acl::STATION_ALL))
+        ->add(Middleware\RequireLogin::class);
+
     $app->group('/admin', function (RouteCollectorProxy $group) {
         $group->get('', Controller\Admin\IndexController::class)
             ->setName('admin:index:index');
@@ -21,9 +28,6 @@ return function (App $app) {
 
             $group->get('/clear-queue', Controller\Admin\DebugController::class . ':clearQueueAction')
                 ->setName('admin:debug:clear-queue');
-
-            $group->get('/sync/{type}', Controller\Admin\DebugController::class . ':syncAction')
-                ->setName('admin:debug:sync');
 
             $group->group('/station/{station_id}', function (RouteCollectorProxy $group) {
 
