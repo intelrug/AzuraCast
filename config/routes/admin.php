@@ -7,11 +7,11 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
-    $app->get('/sync/{type}', Controller\Admin\DebugController::class . ':syncAction')
+    $app->get('/admin/debug/sync/{type}', Controller\Admin\DebugController::class . ':syncAction')
         ->setName('admin:debug:sync')
         ->add(Middleware\Module\Admin::class)
         ->add(Middleware\EnableView::class)
-        ->add(new Middleware\Permissions(Acl::STATION_ALL))
+        ->add(new Middleware\Permissions(Acl::GLOBAL_MEDIA_SYNC))
         ->add(Middleware\RequireLogin::class);
 
     $app->group('/admin', function (RouteCollectorProxy $group) {

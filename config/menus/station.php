@@ -198,7 +198,7 @@ return function (App\Event\BuildStationMenu $e) {
             'label' => __('Rescan Media'),
             'icon' => 'find_in_page',
             'url' => $router->fromHere('admin:debug:sync', ['type' => 'manual']),
-            'permission' => Acl::STATION_ALL,
+            'permission' => Acl::GLOBAL_MEDIA_SYNC,
         ],
     ]);
 };
