@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Form;
 
 use App\Config;
 use App\Entity;
-use App\Settings;
+use App\Environment;
 use Doctrine\ORM\EntityManagerInterface;
 
 class BrandingSettingsForm extends AbstractSettingsForm
@@ -11,17 +12,20 @@ class BrandingSettingsForm extends AbstractSettingsForm
     public function __construct(
         EntityManagerInterface $em,
         Entity\Repository\SettingsRepository $settingsRepo,
-        Settings $settings,
+        Environment $environment,
         Config $config
     ) {
-        $formConfig = $config->get('forms/branding', [
-            'settings' => $settings,
-        ]);
+        $formConfig = $config->get(
+            'forms/branding',
+            [
+                'settings' => $environment,
+            ]
+        );
 
         parent::__construct(
             $em,
             $settingsRepo,
-            $settings,
+            $environment,
             $formConfig
         );
     }

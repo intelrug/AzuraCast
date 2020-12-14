@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity\Repository;
 
 use App\Doctrine\Repository;
@@ -7,7 +8,7 @@ use App\Entity;
 class RolePermissionRepository extends Repository
 {
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getActionsForAllRoles(): array
     {
@@ -28,14 +29,17 @@ class RolePermissionRepository extends Repository
     /**
      * @param Entity\Role $role
      *
-     * @return array
+     * @return mixed[]
      */
     public function getActionsForRole(Entity\Role $role): array
     {
-        $role_has_action = $this->em->createQuery(/** @lang DQL */ 'SELECT e 
-            FROM App\Entity\RolePermission e 
-            WHERE e.role_id = :role_id')
-            ->setParameter('role_id', $role->getId())
+        $role_has_action = $this->em->createQuery(
+            <<<'DQL'
+                SELECT e
+                FROM App\Entity\RolePermission e
+                WHERE e.role_id = :role_id
+            DQL
+        )->setParameter('role_id', $role->getId())
             ->getArrayResult();
 
         $result = [];
@@ -56,10 +60,12 @@ class RolePermissionRepository extends Repository
      */
     public function setActionsForRole(Entity\Role $role, $post_values): void
     {
-        $this->em->createQuery(/** @lang DQL */ 'DELETE 
-            FROM App\Entity\RolePermission rp
-            WHERE rp.role_id = :role_id')
-            ->setParameter('role_id', $role->getId())
+        $this->em->createQuery(
+            <<<'DQL'
+                DELETE FROM App\Entity\RolePermission rp
+                WHERE rp.role_id = :role_id
+            DQL
+        )->setParameter('role_id', $role->getId())
             ->execute();
 
         foreach ($post_values as $post_key => $post_value) {
@@ -70,8 +76,10 @@ class RolePermissionRepository extends Repository
             }
 
             foreach ((array)$post_value as $action_name) {
-                $station = ($post_key_id !== 'global') ? $this->em->getReference(Entity\Station::class,
-                    $post_key_id) : null;
+                $station = ($post_key_id !== 'global') ? $this->em->getReference(
+                    Entity\Station::class,
+                    $post_key_id
+                ) : null;
 
                 $record = new Entity\RolePermission($role, $station, $action_name);
                 $this->em->persist($record);

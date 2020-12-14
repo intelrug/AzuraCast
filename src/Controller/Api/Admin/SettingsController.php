@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Api\Admin;
 
 use App\Entity;
@@ -8,7 +9,6 @@ use App\Http\ServerRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Annotations as OA;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -20,26 +20,18 @@ class SettingsController
 
     protected ValidatorInterface $validator;
 
-    protected Entity\Repository\SettingsRepository $settings_repo;
-
-    protected Entity\Api\Admin\Settings $api_settings;
+    protected Entity\Repository\SettingsRepository $settingsRepo;
 
     public function __construct(
         EntityManagerInterface $em,
-        Entity\Repository\SettingsRepository $settings_repo,
+        Entity\Repository\SettingsRepository $settingsRepo,
         Serializer $serializer,
         ValidatorInterface $validator
     ) {
         $this->em = $em;
         $this->serializer = $serializer;
         $this->validator = $validator;
-
-        $this->settings_repo = $settings_repo;
-        $all_settings = $settings_repo->fetchAll();
-
-        /** @var Entity\Api\Admin\Settings $api_settings */
-        $api_settings = $this->serializer->denormalize($all_settings, Entity\Api\Admin\Settings::class);
-        $this->api_settings = $api_settings;
+        $this->settingsRepo = $settingsRepo;
     }
 
     /**
@@ -47,7 +39,7 @@ class SettingsController
      *   tags={"Administration: Settings"},
      *   description="List the current values of all editable system settings.",
      *   @OA\Response(response=200, description="Success",
-     *     @OA\JsonContent(ref="#/components/schemas/Api_Admin_Settings")
+     *     @OA\JsonContent(ref="#/components/schemas/Settings")
      *   ),
      *   @OA\Response(response=403, description="Access denied"),
      *   security={{"api_key": {}}},
@@ -55,12 +47,11 @@ class SettingsController
      *
      * @param ServerRequest $request
      * @param Response $response
-     *
-     * @return ResponseInterface
      */
     public function listAction(ServerRequest $request, Response $response): ResponseInterface
     {
-        return $response->withJson($this->api_settings);
+        $settings = $this->settingsRepo->readSettings();
+        return $response->withJson($this->serializer->normalize($settings, null));
     }
 
     /**
@@ -68,7 +59,7 @@ class SettingsController
      *   tags={"Administration: Settings"},
      *   description="Update settings to modify any settings provided.",
      *   @OA\RequestBody(
-     *     @OA\JsonContent(ref="#/components/schemas/Api_Admin_Settings")
+     *     @OA\JsonContent(ref="#/components/schemas/Settings")
      *   ),
      *   @OA\Response(response=200, description="Success",
      *     @OA\JsonContent(ref="#/components/schemas/Api_Status")
@@ -80,24 +71,11 @@ class SettingsController
      * @param ServerRequest $request
      * @param Response $response
      *
-     * @return ResponseInterface
      * @throws ValidationException
      */
     public function updateAction(ServerRequest $request, Response $response): ResponseInterface
     {
-        $api_settings_obj = $this->serializer->denormalize($request->getParsedBody(), Entity\Api\Admin\Settings::class,
-            null, [
-                AbstractNormalizer::OBJECT_TO_POPULATE => $this->api_settings,
-            ]);
-
-        $errors = $this->validator->validate($api_settings_obj);
-        if (count($errors) > 0) {
-            throw new ValidationException((string)$errors);
-        }
-
-        $api_settings = $this->serializer->normalize($api_settings_obj);
-
-        $this->settings_repo->setSettings($api_settings);
+        $this->settingsRepo->writeSettings($request->getParsedBody());
 
         return $response->withJson(new Entity\Api\Status());
     }

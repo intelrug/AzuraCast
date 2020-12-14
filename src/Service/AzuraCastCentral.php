@@ -1,54 +1,55 @@
 <?php
+
 namespace App\Service;
 
 use App\Entity;
-use App\Settings;
+use App\Environment;
 use App\Version;
 use Exception;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 
 class AzuraCastCentral
 {
     protected const BASE_URL = 'https://central.azuracast.com';
 
-    protected Settings $app_settings;
+    protected Environment $environment;
 
-    protected Client $http_client;
+    protected Client $httpClient;
 
-    protected Entity\Repository\SettingsRepository $settings_repo;
+    protected Entity\Repository\SettingsRepository $settingsRepo;
 
     protected Version $version;
 
     protected LoggerInterface $logger;
 
     public function __construct(
-        Entity\Repository\SettingsRepository $settings_repo,
-        Settings $app_settings,
+        Environment $environment,
         Version $version,
-        Client $http_client,
-        LoggerInterface $logger
+        Client $httpClient,
+        LoggerInterface $logger,
+        Entity\Repository\SettingsRepository $settingsRepo
     ) {
-        $this->settings_repo = $settings_repo;
-        $this->app_settings = $app_settings;
+        $this->environment = $environment;
         $this->version = $version;
-        $this->http_client = $http_client;
+        $this->httpClient = $httpClient;
         $this->logger = $logger;
+        $this->settingsRepo = $settingsRepo;
     }
 
     /**
      * Ping the AzuraCast Central server for updates and return them if there are any.
      *
-     * @return array|null
+     * @return mixed[]|null
      */
     public function checkForUpdates(): ?array
     {
-        $app_uuid = $this->settings_repo->getUniqueIdentifier();
-
         $request_body = [
-            'id' => $app_uuid,
-            'is_docker' => $this->app_settings->isDocker(),
-            'environment' => $this->app_settings[Settings::APP_ENV],
+            'id' => $this->getUniqueIdentifier(),
+            'is_docker' => $this->environment->isDocker(),
+            'environment' => $this->environment->getAppEnvironment(),
+            'release_channel' => $this->version->getReleaseChannel(),
         ];
 
         $commit_hash = $this->version->getCommitHash();
@@ -59,7 +60,7 @@ class AzuraCastCentral
         }
 
         try {
-            $response = $this->http_client->request(
+            $response = $this->httpClient->request(
                 'POST',
                 self::BASE_URL . '/api/update',
                 ['json' => $request_body]
@@ -76,22 +77,36 @@ class AzuraCastCentral
         return null;
     }
 
+    public function getUniqueIdentifier(): string
+    {
+        $settings = $this->settingsRepo->readSettings();
+        $appUuid = $settings->getAppUniqueIdentifier();
+
+        if (empty($appUuid)) {
+            $appUuid = Uuid::uuid4()->toString();
+
+            $settings->setAppUniqueIdentifier($appUuid);
+            $this->settingsRepo->writeSettings($settings);
+        }
+
+        return $appUuid;
+    }
+
     /**
      * Ping the AzuraCast Central server to retrieve this installation's likely public-facing IP.
      *
      * @param bool $cached
-     *
-     * @return string|null
      */
     public function getIp(bool $cached = true): ?string
     {
+        $settings = $this->settingsRepo->readSettings();
         $ip = ($cached)
-            ? $this->settings_repo->getSetting(Entity\Settings::EXTERNAL_IP)
+            ? $settings->getExternalIp()
             : null;
 
         if (empty($ip)) {
             try {
-                $response = $this->http_client->request(
+                $response = $this->httpClient->request(
                     'GET',
                     self::BASE_URL . '/ip'
                 );
@@ -106,7 +121,8 @@ class AzuraCastCentral
             }
 
             if (!empty($ip) && $cached) {
-                $this->settings_repo->setSetting(Entity\Settings::EXTERNAL_IP, $ip);
+                $settings->setExternalIp($ip);
+                $this->settingsRepo->writeSettings($settings);
             }
         }
 

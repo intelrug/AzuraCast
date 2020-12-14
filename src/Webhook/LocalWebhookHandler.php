@@ -1,16 +1,16 @@
 <?php
+
 namespace App\Webhook;
 
 use App\Entity;
+use App\Environment;
 use App\Event\SendWebhooks;
 use App\Service\NChan;
-use App\Settings;
 use GuzzleHttp\Client;
-use InfluxDB\Database;
-use InfluxDB\Point;
 use Monolog\Logger;
 use Psr\SimpleCache\CacheInterface;
 use RuntimeException;
+
 use const JSON_PRETTY_PRINT;
 
 class LocalWebhookHandler
@@ -21,8 +21,6 @@ class LocalWebhookHandler
 
     protected Logger $logger;
 
-    protected Database $influx;
-
     protected CacheInterface $cache;
 
     protected Entity\Repository\SettingsRepository $settingsRepo;
@@ -30,13 +28,11 @@ class LocalWebhookHandler
     public function __construct(
         Logger $logger,
         Client $httpClient,
-        Database $influx,
         CacheInterface $cache,
         Entity\Repository\SettingsRepository $settingsRepo
     ) {
         $this->logger = $logger;
         $this->httpClient = $httpClient;
-        $this->influx = $influx;
         $this->cache = $cache;
         $this->settingsRepo = $settingsRepo;
     }
@@ -47,23 +43,10 @@ class LocalWebhookHandler
         $station = $event->getStation();
 
         if ($event->isStandalone()) {
-            $this->logger->debug('Writing entry to InfluxDB...');
-
-            // Post statistics to InfluxDB.
-            $influx_point = new Point(
-                'station.' . $station->getId() . '.listeners',
-                (int)$np->listeners->current,
-                [],
-                ['station' => $station->getId()],
-                time()
-            );
-
-            $this->influx->writePoints([$influx_point], Database::PRECISION_SECONDS);
-
             // Replace the relevant station information in the cache and database.
             $this->logger->debug('Updating NowPlaying cache...');
 
-            $np_full = $this->cache->get('api_nowplaying_data');
+            $np_full = $this->cache->get('nowplaying');
 
             if ($np_full) {
                 $np_new = [];
@@ -76,8 +59,11 @@ class LocalWebhookHandler
                     }
                 }
 
-                $this->cache->set('api_nowplaying_data', $np_new, 120);
-                $this->settingsRepo->setSetting('nowplaying', $np_new);
+                $this->cache->set('nowplaying', $np_new, 120);
+
+                $settings = $this->settingsRepo->readSettings(true);
+                $settings->setNowplaying($np_new);
+                $this->settingsRepo->writeSettings($settings);
             }
         }
 
@@ -87,10 +73,15 @@ class LocalWebhookHandler
         $config_dir = $station->getRadioConfigDir();
         $np_file = $config_dir . '/nowplaying.txt';
 
-        $np_text = implode(' - ', array_filter([
-            $np->now_playing->song->artist ?? null,
-            $np->now_playing->song->title ?? null,
-        ]));
+        $np_text = implode(
+            ' - ',
+            array_filter(
+                [
+                    $np->now_playing->song->artist ?? null,
+                    $np->now_playing->song->title ?? null,
+                ]
+            )
+        );
 
         if (empty($np_text)) {
             $np_text = $station->getName();
@@ -103,7 +94,7 @@ class LocalWebhookHandler
         // Write JSON file to disk so nginx can serve it without calling the PHP stack at all.
         $this->logger->debug('Writing static nowplaying text file...');
 
-        $static_np_dir = Settings::getInstance()->getTempDirectory() . '/nowplaying';
+        $static_np_dir = Environment::getInstance()->getTempDirectory() . '/nowplaying';
         if (!is_dir($static_np_dir) && !mkdir($static_np_dir) && !is_dir($static_np_dir)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $static_np_dir));
         }
@@ -118,9 +109,12 @@ class LocalWebhookHandler
         if (NChan::isSupported()) {
             $this->logger->debug('Dispatching Nchan notification...');
 
-            $this->httpClient->post('http://localhost:9010/pub/' . urlencode($station->getShortName()), [
-                'json' => $np,
-            ]);
+            $this->httpClient->post(
+                'http://localhost:9010/pub/' . urlencode($station->getShortName()),
+                [
+                    'json' => $np,
+                ]
+            );
         }
     }
 }

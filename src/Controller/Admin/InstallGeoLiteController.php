@@ -1,14 +1,14 @@
 <?php
+
 namespace App\Controller\Admin;
 
 use App\Entity\Repository\SettingsRepository;
-use App\Entity\Settings;
 use App\Form\GeoLiteSettingsForm;
 use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Service\IpGeolocator\GeoLite;
 use App\Session\Flash;
-use App\Sync\Task\UpdateGeoLiteDatabase;
+use App\Sync\Task\UpdateGeoLiteTask;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 
@@ -20,20 +20,23 @@ class InstallGeoLiteController
         ServerRequest $request,
         Response $response,
         GeoLiteSettingsForm $form,
-        UpdateGeoLiteDatabase $syncTask
+        UpdateGeoLiteTask $syncTask
     ): ResponseInterface {
         if (false !== $form->process($request)) {
-
             $flash = $request->getFlash();
 
             try {
-                $syncTask->updateDatabase();
+                $settings = $form->getEntityRepository()->readSettings();
+                $syncTask->updateDatabase($settings->getGeoliteLicenseKey() ?? '');
                 $flash->addMessage(__('Changes saved.'), Flash::SUCCESS);
             } catch (Exception $e) {
-                $flash->addMessage(__(
-                    'An error occurred while downloading the GeoLite database: %s',
-                    $e->getMessage() . ' (' . $e->getFile() . ' L' . $e->getLine() . ')'
-                ), Flash::ERROR);
+                $flash->addMessage(
+                    __(
+                        'An error occurred while downloading the GeoLite database: %s',
+                        $e->getMessage() . ' (' . $e->getFile() . ' L' . $e->getLine() . ')'
+                    ),
+                    Flash::ERROR
+                );
             }
 
             return $response->withRedirect($request->getUri()->getPath());
@@ -41,12 +44,16 @@ class InstallGeoLiteController
 
         $version = GeoLite::getVersion();
 
-        return $request->getView()->renderToResponse($response, 'admin/install_geolite/index', [
-            'form' => $form,
-            'title' => __('Install GeoLite IP Database'),
-            'version' => $version,
-            'csrf' => $request->getCsrf()->generate($this->csrf_namespace),
-        ]);
+        return $request->getView()->renderToResponse(
+            $response,
+            'admin/install_geolite/index',
+            [
+                'form' => $form,
+                'title' => __('Install GeoLite IP Database'),
+                'version' => $version,
+                'csrf' => $request->getCsrf()->generate($this->csrf_namespace),
+            ]
+        );
     }
 
     public function uninstallAction(
@@ -57,7 +64,9 @@ class InstallGeoLiteController
     ): ResponseInterface {
         $request->getCsrf()->verify($csrf, $this->csrf_namespace);
 
-        $settingsRepo->setSetting(Settings::GEOLITE_LICENSE_KEY, '');
+        $settings = $settingsRepo->readSettings();
+        $settings->setGeoliteLicenseKey(null);
+        $settingsRepo->writeSettings($settings);
 
         @unlink(GeoLite::getDatabasePath());
 

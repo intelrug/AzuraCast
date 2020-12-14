@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Controller\Stations;
 
+use App\Environment;
 use App\Exception\StationUnsupportedException;
 use App\Form\SftpUserForm;
 use App\Http\Response;
@@ -14,26 +16,31 @@ class SftpUsersController extends AbstractStationCrudController
 {
     protected AzuraCastCentral $ac_central;
 
-    public function __construct(SftpUserForm $form, AzuraCastCentral $ac_central)
+    protected Environment $environment;
+
+    public function __construct(SftpUserForm $form, AzuraCastCentral $ac_central, Environment $environment)
     {
         parent::__construct($form);
 
         $this->ac_central = $ac_central;
+        $this->environment = $environment;
+
         $this->csrf_namespace = 'stations_sftp_users';
     }
 
     public function indexAction(ServerRequest $request, Response $response): ResponseInterface
     {
-        if (!SftpGo::isSupported()) {
+        $station = $request->getStation();
+
+        if (!SftpGo::isSupportedForStation($station)) {
             throw new StationUnsupportedException(__('This feature is not currently supported on this station.'));
         }
-
-        $station = $request->getStation();
 
         $baseUrl = $request->getRouter()->getBaseUrl(false)
             ->withScheme('sftp')
             ->withPort(null);
-        $port = $_ENV['AZURACAST_SFTP_PORT'] ?? 2022;
+
+        $port = $this->environment->getSftpPort();
 
         $sftpInfo = [
             'url' => (string)$baseUrl,
@@ -50,7 +57,7 @@ class SftpUsersController extends AbstractStationCrudController
 
     public function editAction(ServerRequest $request, Response $response, $id = null): ResponseInterface
     {
-        if (false !== $this->_doEdit($request, $id)) {
+        if (false !== $this->doEdit($request, $id)) {
             $request->getFlash()->addMessage('<b>' . __('Changes saved.') . '</b>', Flash::SUCCESS);
             return $response->withRedirect($request->getRouter()->fromHere('stations:sftp_users:index'));
         }
@@ -68,7 +75,7 @@ class SftpUsersController extends AbstractStationCrudController
         $id,
         $csrf
     ): ResponseInterface {
-        $this->_doDelete($request, $id, $csrf);
+        $this->doDelete($request, $id, $csrf);
 
         $request->getFlash()->addMessage('<b>' . __('SFTP User deleted.') . '</b>', Flash::SUCCESS);
         return $response->withRedirect($request->getRouter()->fromHere('stations:sftp_users:index'));

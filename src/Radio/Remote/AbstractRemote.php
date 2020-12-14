@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Radio\Remote;
 
 use App\Entity;
@@ -14,7 +15,7 @@ abstract class AbstractRemote
 {
     protected EntityManagerInterface $em;
 
-    protected Entity\Repository\SettingsRepository $settingsRepo;
+    protected Entity\Settings $settings;
 
     protected Client $http_client;
 
@@ -30,7 +31,7 @@ abstract class AbstractRemote
         AdapterFactory $adapterFactory
     ) {
         $this->em = $em;
-        $this->settingsRepo = $settingsRepo;
+        $this->settings = $settingsRepo->readSettings();
         $this->http_client = $http_client;
         $this->logger = $logger;
         $this->adapterFactory = $adapterFactory;
@@ -81,8 +82,6 @@ abstract class AbstractRemote
      * Return the likely "public" listen URL for the remote.
      *
      * @param Entity\StationRemote $remote
-     *
-     * @return string
      */
     public function getPublicUrl(Entity\StationRemote $remote): string
     {
@@ -98,8 +97,6 @@ abstract class AbstractRemote
      *
      * @param Entity\StationRemote $remote
      * @param string|null $custom_path
-     *
-     * @return string
      */
     protected function getRemoteUrl(Entity\StationRemote $remote, $custom_path = null): string
     {

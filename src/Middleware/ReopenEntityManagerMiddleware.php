@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Middleware;
 
 use App\Doctrine\DecoratedEntityManager;
-use App\Settings;
+use App\Environment;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -14,12 +15,12 @@ class ReopenEntityManagerMiddleware implements MiddlewareInterface
 {
     protected DecoratedEntityManager $em;
 
-    protected Settings $settings;
+    protected Environment $environment;
 
-    public function __construct(DecoratedEntityManager $em, Settings $settings)
+    public function __construct(DecoratedEntityManager $em, Environment $environment)
     {
         $this->em = $em;
-        $this->settings = $settings;
+        $this->environment = $environment;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -29,7 +30,7 @@ class ReopenEntityManagerMiddleware implements MiddlewareInterface
         try {
             return $handler->handle($request);
         } finally {
-            if (!$this->settings->isTesting()) {
+            if (!$this->environment->isTesting()) {
                 $this->em->getConnection()->close();
             }
 

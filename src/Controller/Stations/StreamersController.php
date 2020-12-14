@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Stations;
 
 use App\Entity;
@@ -16,7 +17,7 @@ class StreamersController
 
     protected AzuraCastCentral $ac_central;
 
-    protected Entity\Repository\SettingsRepository $settingsRepo;
+    protected Entity\Settings $settings;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -25,7 +26,7 @@ class StreamersController
     ) {
         $this->em = $em;
         $this->ac_central = $ac_central;
-        $this->settingsRepo = $settingsRepo;
+        $this->settings = $settingsRepo->readSettings();
     }
 
     public function __invoke(ServerRequest $request, Response $response): ResponseInterface
@@ -34,7 +35,7 @@ class StreamersController
         $backend = $request->getStationBackend();
 
         if (!$backend::supportsStreamers()) {
-            throw new StationUnsupportedException;
+            throw new StationUnsupportedException();
         }
 
         $view = $request->getView();
@@ -46,8 +47,10 @@ class StreamersController
                 $this->em->persist($station);
                 $this->em->flush();
 
-                $request->getFlash()->addMessage('<b>' . __('Streamers enabled!') . '</b><br>' . __('You can now set up streamer (DJ) accounts.'),
-                    Flash::SUCCESS);
+                $request->getFlash()->addMessage(
+                    '<b>' . __('Streamers enabled!') . '</b><br>' . __('You can now set up streamer (DJ) accounts.'),
+                    Flash::SUCCESS
+                );
 
                 return $response->withRedirect($request->getRouter()->fromHere('stations:streamers:index'));
             }
@@ -57,12 +60,16 @@ class StreamersController
 
         $be_settings = $station->getBackendConfig();
 
-        return $view->renderToResponse($response, 'stations/streamers/index', [
-            'server_url' => $this->settingsRepo->getSetting(Entity\Settings::BASE_URL, ''),
-            'stream_port' => $backend->getStreamPort($station),
-            'ip' => $this->ac_central->getIp(),
-            'dj_mount_point' => $be_settings['dj_mount_point'] ?? '/',
-            'station_tz' => $station->getTimezone(),
-        ]);
+        return $view->renderToResponse(
+            $response,
+            'stations/streamers/index',
+            [
+                'server_url' => $this->settings->getBaseUrl(),
+                'stream_port' => $backend->getStreamPort($station),
+                'ip' => $this->ac_central->getIp(),
+                'dj_mount_point' => $be_settings['dj_mount_point'] ?? '/',
+                'station_tz' => $station->getTimezone(),
+            ]
+        );
     }
 }

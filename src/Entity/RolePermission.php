@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -8,7 +11,7 @@ use JsonSerializable;
  * @ORM\Table(name="role_permissions", uniqueConstraints={
  *   @ORM\UniqueConstraint(name="role_permission_unique_idx", columns={"role_id","action_name","station_id"})
  * })
- * @ORM\Entity()
+ * @ORM\Entity(readOnly=true)
  */
 class RolePermission implements JsonSerializable
 {
@@ -16,7 +19,7 @@ class RolePermission implements JsonSerializable
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @var int
+     * @var int|null
      */
     protected $id;
 
@@ -66,7 +69,7 @@ class RolePermission implements JsonSerializable
         }
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -91,12 +94,15 @@ class RolePermission implements JsonSerializable
         return $this->action_name;
     }
 
-    public function setActionName(string $action_name)
+    public function setActionName(string $action_name): void
     {
         $this->action_name = $action_name;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         return [
             'action' => $this->action_name,

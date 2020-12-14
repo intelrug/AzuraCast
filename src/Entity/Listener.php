@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -17,8 +20,8 @@ class Listener
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @var int
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @var int|null
      */
     protected $id;
 
@@ -86,7 +89,7 @@ class Listener
         $this->listener_hash = self::calculateListenerHash($client);
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -146,22 +149,28 @@ class Listener
      *
      * @param array $clients
      *
-     * @return array
+     * @return mixed[]
      */
     public static function filterClients(array $clients): array
     {
-        return array_filter($clients, function ($client) {
-            // Ignore clients with the "Icecast" UA as those are relays and not listeners.
-            return !(false !== stripos($client['user_agent'], 'Icecast'));
-        });
+        return array_filter(
+            $clients,
+            function ($client) {
+                // Ignore clients with the "Icecast" UA as those are relays and not listeners.
+                return !(false !== stripos($client['user_agent'], 'Icecast'));
+            }
+        );
     }
 
     public static function getListenerSeconds(array $intervals): int
     {
         // Sort by start time.
-        usort($intervals, function ($a, $b) {
-            return $a['start'] <=> $b['start'];
-        });
+        usort(
+            $intervals,
+            function ($a, $b) {
+                return $a['start'] <=> $b['start'];
+            }
+        );
 
         $seconds = 0;
 
@@ -192,8 +201,6 @@ class Listener
 
     /**
      * @param array|Client $client
-     *
-     * @return string
      */
     public static function calculateListenerHash($client): string
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 trait AvailableStaticallyTrait
@@ -12,6 +13,13 @@ trait AvailableStaticallyTrait
     public static function getInstance()
     {
         return self::$instance;
+    }
+
+    /**
+     */
+    public static function hasInstance(): bool
+    {
+        return isset(self::$instance);
     }
 
     /**

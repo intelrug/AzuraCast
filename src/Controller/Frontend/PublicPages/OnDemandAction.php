@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Frontend\PublicPages;
 
 use App\Exception\StationNotFoundException;
@@ -22,16 +23,20 @@ class OnDemandAction
         $station = $request->getStation();
 
         if (!$station->getEnablePublicPage()) {
-            throw new StationNotFoundException;
+            throw new StationNotFoundException();
         }
 
         if (!$station->getEnableOnDemand()) {
-            throw new StationUnsupportedException;
+            throw new StationUnsupportedException();
         }
 
         // Get list of custom fields.
-        $customFieldsRaw = $em->createQuery(/** @lang DQL */ 'SELECT cf.id, cf.short_name, cf.name FROM App\Entity\CustomField cf ORDER BY cf.name ASC')
-            ->getArrayResult();
+        $customFieldsRaw = $em->createQuery(
+            <<<'DQL'
+                SELECT cf.id, cf.short_name, cf.name
+                FROM App\Entity\CustomField cf ORDER BY cf.name ASC
+            DQL
+        )->getArrayResult();
 
         $customFields = [];
         foreach ($customFieldsRaw as $row) {

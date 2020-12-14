@@ -1,13 +1,15 @@
 <?php
+
 namespace App\Http;
 
 use App\Entity;
+use App\Environment;
 use App\Exception;
 use App\Exception\NotLoggedInException;
 use App\Exception\PermissionDeniedException;
 use App\Session\Flash;
-use App\Settings;
-use App\ViewFactory;
+use App\View;
+use DI\FactoryInterface;
 use Gettext\Translator;
 use Mezzio\Session\SessionInterface;
 use Monolog\Logger;
@@ -30,21 +32,21 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
 
     protected Router $router;
 
-    protected ViewFactory $viewFactory;
+    protected FactoryInterface $factory;
 
-    protected Settings $settings;
+    protected Environment $environment;
 
     public function __construct(
         App $app,
+        FactoryInterface $factory,
         Logger $logger,
         Router $router,
-        ViewFactory $viewFactory,
-        Settings $settings
+        Environment $environment
     ) {
         parent::__construct($app->getCallableResolver(), $app->getResponseFactory(), $logger);
 
-        $this->settings = $settings;
-        $this->viewFactory = $viewFactory;
+        $this->environment = $environment;
+        $this->factory = $factory;
         $this->router = $router;
     }
 
@@ -65,8 +67,11 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
             $this->loggerLevel = LogLevel::WARNING;
         }
 
-        $this->showDetailed = (!$this->settings->isProduction() && !in_array($this->loggerLevel,
-                [LogLevel::DEBUG, LogLevel::INFO, LogLevel::NOTICE], true));
+        $this->showDetailed = (!$this->environment->isProduction() && !in_array(
+            $this->loggerLevel,
+            [LogLevel::DEBUG, LogLevel::INFO, LogLevel::NOTICE],
+            true
+        ));
         $this->returnJson = $this->shouldReturnJson($request);
 
         return parent::__invoke($request, $exception, $displayErrorDetails, $logErrors, $logErrorDetails);
@@ -76,13 +81,13 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
     {
         $xhr = $req->getHeaderLine('X-Requested-With') === 'XMLHttpRequest';
 
-        if ($xhr || $this->settings->isCli() || $this->settings->isTesting()) {
+        if ($xhr || $this->environment->isCli() || $this->environment->isTesting()) {
             return true;
         }
 
         if ($req->hasHeader('Accept')) {
-            $accept = $req->getHeader('Accept');
-            if (in_array('application/json', $accept)) {
+            $accept = $req->getHeaderLine('Accept');
+            if (false !== stripos($accept, 'application/json')) {
                 return true;
             }
         }
@@ -110,11 +115,7 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
             $context['trace'] = array_slice($this->exception->getTrace(), 0, 5);
         }
 
-        $this->logger->log($this->loggerLevel, $this->exception->getMessage(), [
-            'file' => $this->exception->getFile(),
-            'line' => $this->exception->getLine(),
-            'code' => $this->exception->getCode(),
-        ]);
+        $this->logger->log($this->loggerLevel, $this->exception->getMessage(), $context);
     }
 
     protected function respond(): ResponseInterface
@@ -130,8 +131,14 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
         if (false !== stripos($ua, 'curl')) {
             $response = $this->responseFactory->createResponse($this->statusCode);
 
-            $response->getBody()
-                ->write('Error: ' . $this->exception->getMessage() . ' on ' . $this->exception->getFile() . ' L' . $this->exception->getLine());
+            $response->getBody()->write(
+                sprintf(
+                    'Error: %s on %s L%s',
+                    $this->exception->getMessage(),
+                    $this->exception->getFile(),
+                    $this->exception->getLine()
+                )
+            );
 
             return $response;
         }
@@ -141,14 +148,17 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
             $response = $this->responseFactory->createResponse($this->exception->getCode());
 
             if ($this->returnJson) {
-                return $response->withJson(new Entity\Api\Error(
-                    $this->exception->getCode(),
-                    $this->exception->getMessage()
-                ));
+                $apiResponse = Entity\Api\Error::fromException($this->exception, $this->showDetailed);
+                return $response->withJson($apiResponse);
             }
 
             try {
-                $view = $this->viewFactory->create($this->request);
+                $view = $this->factory->make(
+                    View::class,
+                    [
+                        'request' => $this->request,
+                    ]
+                );
 
                 return $view->renderToResponse(
                     $response,
@@ -157,7 +167,7 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
                         'exception' => $this->exception,
                     ]
                 );
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 return parent::respond();
             }
         }
@@ -201,8 +211,10 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
             }
 
             // Bounce back to homepage for permission-denied users.
-            $flash->addMessage(__('You do not have permission to access this portion of the site.'),
-                Flash::ERROR);
+            $flash->addMessage(
+                __('You do not have permission to access this portion of the site.'),
+                Flash::ERROR
+            );
 
             return $response->withRedirect((string)$this->router->named('home'));
         }
@@ -211,28 +223,13 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
         $response = $this->responseFactory->createResponse(500);
 
         if ($this->returnJson) {
-            if ($this->showDetailed) {
-                return $response->withJson([
-                    'code' => $this->exception->getCode(),
-                    'message' => $this->exception->getMessage(),
-                    'file' => $this->exception->getFile(),
-                    'line' => $this->exception->getLine(),
-                    'trace' => $this->exception->getTrace(),
-                ]);
-            }
-
-            $api_response = new Entity\Api\Error(
-                $this->exception->getCode(),
-                $this->exception->getMessage(),
-                ($this->exception instanceof Exception) ? $this->exception->getFormattedMessage() : $this->exception->getMessage()
-            );
-
-            return $response->withJson($api_response);
+            $apiResponse = Entity\Api\Error::fromException($this->exception, $this->showDetailed);
+            return $response->withJson($apiResponse);
         }
 
         if ($this->showDetailed && class_exists(Run::class)) {
             // Register error-handler.
-            $handler = new PrettyPageHandler;
+            $handler = new PrettyPageHandler();
             $handler->setPageTitle('An error occurred!');
 
             if ($this->exception instanceof Exception) {
@@ -242,14 +239,19 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
                 }
             }
 
-            $run = new Run;
+            $run = new Run();
             $run->prependHandler($handler);
 
             return $response->write($run->handleException($this->exception));
         }
 
         try {
-            $view = $this->viewFactory->create($this->request);
+            $view = $this->factory->make(
+                View::class,
+                [
+                    'request' => $this->request,
+                ]
+            );
 
             return $view->renderToResponse(
                 $response,
@@ -258,7 +260,7 @@ class ErrorHandler extends \Slim\Handlers\ErrorHandler
                     'exception' => $this->exception,
                 ]
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return parent::respond();
         }
     }

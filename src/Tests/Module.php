@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Based on Herloct's Slim 3.0 Connector
  * https://github.com/herloct/codeception-slim-module
@@ -6,7 +7,7 @@
 
 namespace App\Tests;
 
-use App\Settings;
+use App\Environment;
 use Codeception\Configuration;
 use Codeception\Lib\Framework;
 use Codeception\Lib\Interfaces\DoctrineProvider;
@@ -33,8 +34,8 @@ class Module extends Framework implements DoctrineProvider
         $autoloader = $GLOBALS['autoloader'];
 
         $this->app = $container_class::create($autoloader, [
-            Settings::BASE_DIR => Configuration::projectDir(),
-            Settings::APP_ENV => Settings::ENV_TESTING,
+            Environment::BASE_DIR => Configuration::projectDir(),
+            Environment::APP_ENV => Environment::ENV_TESTING,
         ]);
 
         $this->container = $this->app->getContainer();

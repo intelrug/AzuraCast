@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Middleware;
 
+use App\Environment;
 use App\Http\ServerRequest;
 use App\Session\Csrf;
 use App\Session\Flash;
-use App\Settings;
 use Mezzio\Session\LazySession;
 use Mezzio\Session\SessionPersistenceInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -19,27 +20,25 @@ class InjectSession implements MiddlewareInterface
 {
     protected SessionPersistenceInterface $sessionPersistence;
 
-    protected Settings $settings;
+    protected Environment $environment;
 
     public function __construct(
         SessionPersistenceInterface $sessionPersistence,
-        Settings $settings
+        Environment $environment
     ) {
         $this->sessionPersistence = $sessionPersistence;
-        $this->settings = $settings;
+        $this->environment = $environment;
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
-     *
-     * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $session = new LazySession($this->sessionPersistence, $request);
 
-        $csrf = new Csrf($session, $this->settings);
+        $csrf = new Csrf($session, $this->environment);
         Csrf::setInstance($csrf);
 
         $flash = new Flash($session);

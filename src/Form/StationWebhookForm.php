@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Form;
 
 use App\Config;
 use App\Entity;
+use App\Environment;
 use App\Http\Router;
 use App\Http\ServerRequest;
-use App\Settings;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use Symfony\Component\Serializer\Serializer;
@@ -21,7 +22,7 @@ class StationWebhookForm extends EntityForm
         EntityManagerInterface $em,
         Serializer $serializer,
         ValidatorInterface $validator,
-        Settings $settings,
+        Environment $environment,
         Config $config,
         Router $router
     ) {
@@ -31,7 +32,7 @@ class StationWebhookForm extends EntityForm
         $config_injections = [
             'router' => $router,
             'triggers' => $webhook_config['triggers'],
-            'app_settings' => $settings,
+            'environment' => $environment,
         ];
 
         foreach ($webhook_config['webhooks'] as $webhook_key => $webhook_info) {
@@ -45,21 +46,34 @@ class StationWebhookForm extends EntityForm
         $this->entityClass = Entity\StationWebhook::class;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getConfig(): array
     {
         return $this->config;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getForms(): array
     {
         return $this->forms;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function process(ServerRequest $request, $record = null)
     {
         if (!$record instanceof Entity\StationWebhook) {
-            throw new InvalidArgumentException(sprintf('Record is not an instance of %s',
-                Entity\StationWebhook::class));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Record is not an instance of %s',
+                    Entity\StationWebhook::class
+                )
+            );
         }
 
         $this->configure($this->forms[$record->getType()]);

@@ -1,11 +1,13 @@
 <?php
+
 namespace App\Console\Command\MessageQueue;
 
 use App\Console\Command\CommandAbstract;
 use App\Doctrine\Messenger\ClearEntityManagerSubscriber;
 use App\EventDispatcher;
+use App\MessageQueue\LogWorkerExceptionSubscriber;
 use App\MessageQueue\QueueManager;
-use Doctrine\ORM\EntityManagerInterface;
+use App\MessageQueue\ReloadSettingsMiddleware;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\EventListener\StopWorkerOnTimeLimitListener;
 use Symfony\Component\Messenger\MessageBus;
@@ -18,19 +20,45 @@ class ProcessCommand extends CommandAbstract
         EventDispatcher $eventDispatcher,
         QueueManager $queueManager,
         LoggerInterface $logger,
-        EntityManagerInterface $em,
-        int $runtime = 0
-    ) {
+        int $runtime = 0,
+        ?string $workerName = null
+    ): int {
+        $logger->notice(
+            'Starting new Message Queue worker process.',
+            [
+                'runtime' => $runtime,
+                'workerName' => $workerName,
+            ]
+        );
+
+        if (null !== $workerName) {
+            $queueManager->setWorkerName($workerName);
+        }
+
         $receivers = $queueManager->getTransports();
 
-        $eventDispatcher->addSubscriber(new ClearEntityManagerSubscriber($em));
+        $eventDispatcher->addServiceSubscriber(ClearEntityManagerSubscriber::class);
+        $eventDispatcher->addServiceSubscriber(LogWorkerExceptionSubscriber::class);
+        $eventDispatcher->addServiceSubscriber(ReloadSettingsMiddleware::class);
 
         if ($runtime > 0) {
             $eventDispatcher->addSubscriber(new StopWorkerOnTimeLimitListener($runtime, $logger));
         }
 
-        $worker = new Worker($receivers, $messageBus, $eventDispatcher, $logger);
-        $worker->run();
+        try {
+            $worker = new Worker($receivers, $messageBus, $eventDispatcher, $logger);
+            $worker->run();
+        } catch (\Throwable $e) {
+            $logger->error(
+                sprintf('Message queue error: %s', $e->getMessage()),
+                [
+                    'workerName' => $workerName,
+                    'exception' => $e,
+                ]
+            );
+            return 1;
+        }
+
 
         return 0;
     }

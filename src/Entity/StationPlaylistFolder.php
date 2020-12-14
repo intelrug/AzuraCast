@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +16,7 @@ class StationPlaylistFolder
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @var int
+     * @var int|null
      */
     protected $id;
 
@@ -48,7 +51,7 @@ class StationPlaylistFolder
         $this->path = $path;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

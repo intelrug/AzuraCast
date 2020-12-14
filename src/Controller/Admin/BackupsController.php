@@ -1,58 +1,74 @@
 <?php
+
 namespace App\Controller\Admin;
 
 use App\Config;
 use App\Controller\AbstractLogViewerController;
-use App\Entity\Repository\SettingsRepository;
-use App\Entity\Settings;
+use App\Entity;
 use App\Exception\NotFoundException;
-use App\Flysystem\FilesystemGroup;
+use App\Flysystem\Filesystem;
 use App\Form\BackupSettingsForm;
 use App\Form\Form;
 use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Message\BackupMessage;
 use App\Session\Flash;
-use App\Sync\Task\Backup;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
+use App\Sync\Task\RunBackupTask;
+use App\Utilities\File;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Messenger\MessageBus;
 
 class BackupsController extends AbstractLogViewerController
 {
-    protected SettingsRepository $settingsRepo;
+    protected Entity\Settings $settings;
 
-    protected Backup $backupTask;
+    protected Entity\Repository\StorageLocationRepository $storageLocationRepo;
+
+    protected RunBackupTask $backupTask;
 
     protected MessageBus $messageBus;
-
-    protected Filesystem $backupFs;
 
     protected string $csrfNamespace = 'admin_backups';
 
     public function __construct(
-        SettingsRepository $settings_repo,
-        Backup $backup_task,
+        Entity\Repository\SettingsRepository $settingsRepo,
+        Entity\Repository\StorageLocationRepository $storageLocationRepo,
+        RunBackupTask $backup_task,
         MessageBus $messageBus
     ) {
-        $this->settingsRepo = $settings_repo;
-        $this->backupTask = $backup_task;
-        $this->backupFs = new Filesystem(new Local(Backup::BASE_DIR));
+        $this->storageLocationRepo = $storageLocationRepo;
+        $this->settings = $settingsRepo->readSettings();
 
+        $this->backupTask = $backup_task;
         $this->messageBus = $messageBus;
     }
 
     public function __invoke(ServerRequest $request, Response $response): ResponseInterface
     {
-        return $request->getView()->renderToResponse($response, 'admin/backups/index', [
-            'backups' => array_reverse($this->backupFs->listContents('', false)),
-            'is_enabled' => (bool)$this->settingsRepo->getSetting(Settings::BACKUP_ENABLED, false),
-            'last_run' => $this->settingsRepo->getSetting(Settings::BACKUP_LAST_RUN, 0),
-            'last_result' => $this->settingsRepo->getSetting(Settings::BACKUP_LAST_RESULT, 0),
-            'last_output' => $this->settingsRepo->getSetting(Settings::BACKUP_LAST_OUTPUT, ''),
-            'csrf' => $request->getCsrf()->generate($this->csrfNamespace),
-        ]);
+        $backups = [];
+        $storageLocations = $this->storageLocationRepo->findAllByType(Entity\StorageLocation::TYPE_BACKUP);
+        foreach ($storageLocations as $storageLocation) {
+            $fs = $storageLocation->getFilesystem();
+            foreach ($fs->listContents('', true) as $file) {
+                $file['storageLocationId'] = $storageLocation->getId();
+                $file['pathEncoded'] = base64_encode($storageLocation->getId() . '|' . $file['path']);
+                $backups[] = $file;
+            }
+        }
+        $backups = array_reverse($backups);
+
+        return $request->getView()->renderToResponse(
+            $response,
+            'admin/backups/index',
+            [
+                'backups' => $backups,
+                'is_enabled' => $this->settings->isBackupEnabled(),
+                'last_run' => $this->settings->getBackupLastRun(),
+                'last_result' => $this->settings->getBackupLastResult(),
+                'last_output' => $this->settings->getBackupLastOutput(),
+                'csrf' => $request->getCsrf()->generate($this->csrfNamespace),
+            ]
+        );
     }
 
     public function configureAction(
@@ -65,11 +81,15 @@ class BackupsController extends AbstractLogViewerController
             return $response->withRedirect($request->getRouter()->fromHere('admin:backups:index'));
         }
 
-        return $request->getView()->renderToResponse($response, 'system/form_page', [
-            'form' => $settingsForm,
-            'render_mode' => 'edit',
-            'title' => __('Configure Backups'),
-        ]);
+        return $request->getView()->renderToResponse(
+            $response,
+            'system/form_page',
+            [
+                'form' => $settingsForm,
+                'render_mode' => 'edit',
+                'title' => __('Configure Backups'),
+            ]
+        );
     }
 
     public function runAction(
@@ -77,41 +97,67 @@ class BackupsController extends AbstractLogViewerController
         Response $response,
         Config $config
     ): ResponseInterface {
-        $runForm = new Form($config->get('forms/backup_run'));
+        $runForm = new Form(
+            $config->get(
+                'forms/backup_run',
+                [
+                    'storageLocations' => $this->storageLocationRepo->fetchSelectByType(
+                        Entity\StorageLocation::TYPE_BACKUP,
+                        true
+                    ),
+                ]
+            )
+        );
 
         // Handle submission.
         if ($request->isPost() && $runForm->isValid($request->getParsedBody())) {
             $data = $runForm->getValues();
 
-            $tempFile = tempnam('/tmp', 'backup_');
+            $tempFile = File::generateTempPath('backup.log');
+
+            $storageLocationId = (int)$data['storage_location'];
+            if ($storageLocationId <= 0) {
+                $storageLocationId = null;
+            }
 
             $message = new BackupMessage();
+            $message->storageLocationId = $storageLocationId;
             $message->path = $data['path'];
             $message->excludeMedia = $data['exclude_media'];
             $message->outputPath = $tempFile;
 
             $this->messageBus->dispatch($message);
 
-            return $request->getView()->renderToResponse($response, 'admin/backups/run', [
-                'title' => __('Run Manual Backup'),
-                'path' => $data['path'],
-                'outputLog' => basename($tempFile),
-            ]);
+            return $request->getView()->renderToResponse(
+                $response,
+                'admin/backups/run',
+                [
+                    'title' => __('Run Manual Backup'),
+                    'path' => $data['path'],
+                    'outputLog' => basename($tempFile),
+                ]
+            );
         }
 
-        return $request->getView()->renderToResponse($response, 'system/form_page', [
-            'form' => $runForm,
-            'render_mode' => 'edit',
-            'title' => __('Run Manual Backup'),
-        ]);
+        return $request->getView()->renderToResponse(
+            $response,
+            'system/form_page',
+            [
+                'form' => $runForm,
+                'render_mode' => 'edit',
+                'title' => __('Run Manual Backup'),
+            ]
+        );
     }
 
     public function logAction(
         ServerRequest $request,
         Response $response,
-        $path
+        string $path
     ): ResponseInterface {
-        return $this->view($request, $response, '/tmp/' . $path, true);
+        $logPath = File::validateTempPath($path);
+
+        return $this->view($request, $response, $logPath, true);
     }
 
     public function downloadAction(
@@ -119,36 +165,52 @@ class BackupsController extends AbstractLogViewerController
         Response $response,
         $path
     ): ResponseInterface {
-        $path = $this->getFilePath($path);
-        $path = 'backup://' . $path;
+        [$path, $fs] = $this->getFile($path);
 
-        $fsGroup = new FilesystemGroup([
-            'backup' => $this->backupFs,
-        ]);
-
-        return $response->withNoCache()
-            ->withFlysystemFile($fsGroup, $path);
+        /** @var Filesystem $fs */
+        return $fs->streamToResponse($response->withNoCache(), $path);
     }
 
     public function deleteAction(ServerRequest $request, Response $response, $path, $csrf): ResponseInterface
     {
         $request->getCsrf()->verify($csrf, $this->csrfNamespace);
 
-        $path = $this->getFilePath($path);
-        $this->backupFs->delete($path);
+        [$path, $fs] = $this->getFile($path);
+
+        /** @var Filesystem $fs */
+        $fs->delete($path);
 
         $request->getFlash()->addMessage('<b>' . __('Backup deleted.') . '</b>', Flash::SUCCESS);
         return $response->withRedirect($request->getRouter()->named('admin:backups:index'));
     }
 
-    protected function getFilePath($raw_path): string
+    /**
+     * @param string $rawPath
+     *
+     * @return array{0: string, 1: Filesystem}
+     * @throws NotFoundException
+     */
+    protected function getFile(string $rawPath): array
     {
-        $path = basename(base64_decode($raw_path));
+        $pathStr = base64_decode($rawPath);
+        [$storageLocationId, $path] = explode('|', $pathStr);
 
-        if (!$this->backupFs->has($path)) {
+        $storageLocation = $this->storageLocationRepo->findByType(
+            Entity\StorageLocation::TYPE_BACKUP,
+            (int)$storageLocationId
+        );
+
+
+        if (!($storageLocation instanceof Entity\StorageLocation)) {
+            throw new \InvalidArgumentException('Invalid storage location.');
+        }
+
+        $fs = $storageLocation->getFilesystem();
+
+        if (!$fs->has($path)) {
             throw new NotFoundException(__('Backup not found.'));
         }
 
-        return $path;
+        return [$path, $fs];
     }
 }

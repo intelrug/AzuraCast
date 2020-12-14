@@ -26,8 +26,12 @@ return function (App $app) {
             $group->get('/clear-cache', Controller\Admin\DebugController::class . ':clearCacheAction')
                 ->setName('admin:debug:clear-cache');
 
-            $group->get('/clear-queue', Controller\Admin\DebugController::class . ':clearQueueAction')
+            $group->get('/clear-queue[/{queue}]',
+                Controller\Admin\DebugController::class . ':clearQueueAction')
                 ->setName('admin:debug:clear-queue');
+
+            $group->get('/log/{path}', Controller\Admin\DebugController::class . ':logAction')
+                ->setName('admin:debug:log');
 
             $group->group('/station/{station_id}', function (RouteCollectorProxy $group) {
 
@@ -140,7 +144,7 @@ return function (App $app) {
             $group->get('/delete/{id}/{csrf}', Controller\Admin\PermissionsController::class . ':deleteAction')
                 ->setName('admin:permissions:delete');
 
-        })->add(new Middleware\Permissions(Acl::GLOBAL_PERMISSIONS));
+        })->add(new Middleware\Permissions(Acl::GLOBAL_ALL));
 
         $group->get('/relays', Controller\Admin\RelaysController::class)
             ->setName('admin:relays:index')
@@ -169,6 +173,10 @@ return function (App $app) {
 
         })->add(new Middleware\Permissions(Acl::GLOBAL_STATIONS));
 
+        $group->get('/storage_locations', Controller\Admin\StorageLocationsController::class)
+            ->setName('admin:storage_locations:index')
+            ->add(new Middleware\Permissions(Acl::GLOBAL_STORAGE_LOCATIONS));
+
         $group->group('/users', function (RouteCollectorProxy $group) {
 
             $group->get('', Controller\Admin\UsersController::class . ':indexAction')
@@ -186,7 +194,7 @@ return function (App $app) {
             $group->get('/login-as/{id}/{csrf}', Controller\Admin\UsersController::class . ':impersonateAction')
                 ->setName('admin:users:impersonate');
 
-        })->add(new Middleware\Permissions(Acl::GLOBAL_USERS));
+        })->add(new Middleware\Permissions(Acl::GLOBAL_ALL));
 
         // END /admin GROUP
 

@@ -8,7 +8,7 @@ abstract class CestAbstract
 {
     protected ContainerInterface $di;
 
-    protected App\Settings $settings;
+    protected App\Environment $environment;
 
     protected Entity\Repository\SettingsRepository $settingsRepo;
 
@@ -27,7 +27,7 @@ abstract class CestAbstract
 
         $this->settingsRepo = $this->di->get(Entity\Repository\SettingsRepository::class);
         $this->stationRepo = $this->di->get(Entity\Repository\StationRepository::class);
-        $this->settings = $this->di->get(App\Settings::class);
+        $this->environment = $this->di->get(App\Environment::class);
     }
 
     public function _after(FunctionalTester $I): void
@@ -48,7 +48,11 @@ abstract class CestAbstract
     {
         $I->wantTo('Start with an incomplete setup.');
 
-        $this->settingsRepo->setSetting('setup_complete', 0);
+        $settings = $this->settingsRepo->readSettings(true);
+        $settings->setSetupCompleteTime(0);
+
+        $this->settingsRepo->writeSettings($settings);
+
         $this->_cleanTables();
     }
 
@@ -89,8 +93,10 @@ abstract class CestAbstract
         $this->test_station = $this->stationRepo->create($test_station);
 
         // Set settings.
-        $this->settingsRepo->setSetting('setup_complete', time());
-        $this->settingsRepo->setSetting('base_url', 'localhost');
+        $settings = $this->settingsRepo->readSettings(true);
+        $settings->updateSetupComplete();
+        $settings->setBaseUrl('localhost');
+        $this->settingsRepo->writeSettings($settings);
     }
 
     protected function getTestStation(): Entity\Station
@@ -105,6 +111,23 @@ abstract class CestAbstract
         }
 
         throw new RuntimeException('Test station is not established.');
+    }
+
+    protected function uploadTestSong(): Entity\StationMedia
+    {
+        $testStation = $this->getTestStation();
+
+        $songSrc = '/var/azuracast/www/resources/error.mp3';
+
+        $storageLocation = $testStation->getMediaStorageLocation();
+
+        $storageFs = $storageLocation->getFilesystem();
+        $storageFs->copyFromLocal($songSrc, 'test.mp3');
+
+        /** @var Entity\Repository\StationMediaRepository $mediaRepo */
+        $mediaRepo = $this->di->get(Entity\Repository\StationMediaRepository::class);
+
+        return $mediaRepo->getOrCreate($storageLocation, 'test.mp3');
     }
 
     protected function _cleanTables(): void
@@ -127,10 +150,13 @@ abstract class CestAbstract
         $I->amOnPage('/');
         $I->seeInCurrentUrl('/login');
 
-        $I->submitForm('#login-form', [
-            'username' => $this->login_username,
-            'password' => $this->login_password,
-        ]);
+        $I->submitForm(
+            '#login-form',
+            [
+                'username' => $this->login_username,
+                'password' => $this->login_password,
+            ]
+        );
 
         $I->seeInSource('Logged In');
     }

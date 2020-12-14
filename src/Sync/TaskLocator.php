@@ -1,32 +1,49 @@
 <?php
+
 namespace App\Sync;
 
 use App\Event\GetSyncTasks;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class TaskLocator implements EventSubscriberInterface
+class TaskLocator
 {
     protected ContainerInterface $di;
 
     protected array $tasks;
 
-    public function __construct(ContainerInterface $di, array $tasks)
+    public function __construct(ContainerInterface $di)
     {
         $this->di = $di;
-        $this->tasks = $tasks;
-    }
 
-    public static function getSubscribedEvents()
-    {
-        return [
-            GetSyncTasks::class => [
-                ['assignTasks', 0],
+        $this->tasks = [
+            GetSyncTasks::SYNC_NOWPLAYING => [
+                Task\BuildQueueTask::class,
+                Task\NowPlayingTask::class,
+                Task\ReactivateStreamerTask::class,
+            ],
+            GetSyncTasks::SYNC_SHORT => [
+                Task\CheckRequests::class,
+                Task\RunBackupTask::class,
+                Task\CleanupRelaysTask::class,
+            ],
+            GetSyncTasks::SYNC_MEDIUM => [],
+            GetSyncTasks::SYNC_LONG => [
+                Task\RunAnalyticsTask::class,
+                Task\RunAutomatedAssignmentTask::class,
+                Task\CleanupHistoryTask::class,
+                Task\CleanupStorageTask::class,
+                Task\RotateLogsTask::class,
+                Task\UpdateGeoLiteTask::class,
+                Task\CheckUpdatesTask::class,
+            ],
+            GetSyncTasks::SYNC_MANUAL => [
+                Task\CheckMediaTask::class,
+                Task\CheckFolderPlaylistsTask::class,
             ],
         ];
     }
 
-    public function assignTasks(GetSyncTasks $event): void
+    public function __invoke(GetSyncTasks $event): void
     {
         $type = $event->getType();
         if (!isset($this->tasks[$type])) {

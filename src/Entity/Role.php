@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
+
 namespace App\Entity;
 
 use App\Annotations\AuditLog;
@@ -19,16 +22,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Role implements JsonSerializable
 {
-    public const SUPER_ADMINISTRATOR_ROLE_ID = 1;
-
     use Traits\TruncateStrings;
+
+    public const SUPER_ADMINISTRATOR_ROLE_ID = 1;
 
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @OA\Property(example=1)
-     * @var int
+     * @var int|null
      */
     protected $id;
 
@@ -55,18 +58,17 @@ class Role implements JsonSerializable
 
     public function __construct()
     {
-        $this->users = new ArrayCollection;
-        $this->permissions = new ArrayCollection;
+        $this->users = new ArrayCollection();
+        $this->permissions = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * @AuditLog\AuditIdentifier()
-     * @return string
      */
     public function getName(): string
     {
@@ -88,7 +90,10 @@ class Role implements JsonSerializable
         return $this->permissions;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
     {
         $return = [
             'id' => $this->id,

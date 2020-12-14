@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
+
 namespace App\Entity;
 
 use App\Annotations\AuditLog;
@@ -28,7 +31,7 @@ class StationMount implements StationMountInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @OA\Property(example=1)
-     * @var int
+     * @var int|null
      */
     protected $id;
 
@@ -188,7 +191,7 @@ class StationMount implements StationMountInterface
         $this->station = $station;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -237,7 +240,7 @@ class StationMount implements StationMountInterface
         $this->fallback_mount = $fallback_mount;
     }
 
-    public function getRelayUrl()
+    public function getRelayUrl(): ?string
     {
         return $this->relay_url;
     }
@@ -391,14 +394,12 @@ class StationMount implements StationMountInterface
      *
      * @param AbstractFrontend $fa
      * @param UriInterface|null $base_url
-     *
-     * @return Api\StationMount
      */
     public function api(
         AbstractFrontend $fa,
         UriInterface $base_url = null
     ): Api\StationMount {
-        $response = new Api\StationMount;
+        $response = new Api\StationMount();
 
         $response->id = $this->id;
         $response->name = $this->getDisplayName();
@@ -406,10 +407,12 @@ class StationMount implements StationMountInterface
         $response->is_default = (bool)$this->is_default;
         $response->url = $fa->getUrlForMount($this->station, $this, $base_url);
 
-        $response->listeners = new Api\NowPlayingListeners([
-            'unique' => $this->listeners_unique,
-            'total' => $this->listeners_total,
-        ]);
+        $response->listeners = new Api\NowPlayingListeners(
+            [
+                'unique' => $this->listeners_unique,
+                'total' => $this->listeners_total,
+            ]
+        );
 
         if ($this->enable_autodj) {
             $response->bitrate = (int)$this->autodj_bitrate;
@@ -421,8 +424,6 @@ class StationMount implements StationMountInterface
 
     /**
      * @AuditLog\AuditIdentifier
-     *
-     * @return string
      */
     public function getDisplayName(): string
     {

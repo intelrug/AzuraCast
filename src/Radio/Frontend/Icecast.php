@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Radio\Frontend;
 
 use App\Entity;
+use App\Environment;
 use App\Logger;
 use App\Radio\CertificateLocator;
-use App\Settings;
 use App\Utilities;
 use App\Xml\Reader;
 use App\Xml\Writer;
@@ -26,7 +27,7 @@ class Icecast extends AbstractFrontend
         $feConfig = $station->getFrontendConfig();
         $radioPort = $feConfig->getPort();
 
-        $baseUrl = 'http://' . (Settings::getInstance()->isDocker() ? 'stations' : 'localhost') . ':' . $radioPort;
+        $baseUrl = 'http://' . ($this->environment->isDocker() ? 'stations' : 'localhost') . ':' . $radioPort;
 
         $npAdapter = $this->adapterFactory->getAdapter(
             AdapterFactory::ADAPTER_ICECAST,
@@ -68,20 +69,23 @@ class Icecast extends AbstractFrontend
 
     public function read(Entity\Station $station): bool
     {
-        $config = $this->_getConfig($station);
-        $station->setFrontendConfigDefaults($this->_loadFromConfig($station, $config));
+        $config = $this->getConfig($station);
+        $station->setFrontendConfigDefaults($this->loadFromConfig($station, $config));
         return true;
     }
 
-    protected function _getConfig(Entity\Station $station)
+    /**
+     * @return mixed[]
+     */
+    protected function getConfig(Entity\Station $station): array
     {
         $config_path = $station->getRadioConfigDir();
         $icecast_path = $config_path . '/icecast.xml';
 
-        $defaults = $this->_getDefaults($station);
+        $defaults = $this->getDefaults($station);
 
         if (file_exists($icecast_path)) {
-            $reader = new Reader;
+            $reader = new Reader();
             $data = $reader->fromFile($icecast_path);
 
             return self::arrayMergeRecursiveDistinct($defaults, $data);
@@ -94,12 +98,14 @@ class Icecast extends AbstractFrontend
      * Process Management
      */
 
-    protected function _getDefaults(Entity\Station $station): array
+    /**
+     * @return mixed[]
+     */
+    protected function getDefaults(Entity\Station $station): array
     {
         $config_dir = $station->getRadioConfigDir();
-        $settings = Settings::getInstance();
 
-        $settingsBaseUrl = $this->settingsRepo->getSetting(Entity\Settings::BASE_URL, 'http://localhost');
+        $settingsBaseUrl = $this->settings->getBaseUrl() ?: 'http://localhost';
         if (strpos($settingsBaseUrl, 'http') !== 0) {
             $settingsBaseUrl = 'http://' . $settingsBaseUrl;
         }
@@ -123,14 +129,14 @@ class Icecast extends AbstractFrontend
                 'burst-size' => 65535,
             ],
             'authentication' => [
-                'source-password' => Utilities::generatePassword(),
-                'relay-password' => Utilities::generatePassword(),
+                'source-password' => Utilities\Strings::generatePassword(),
+                'relay-password' => Utilities\Strings::generatePassword(),
                 'admin-user' => 'admin',
-                'admin-password' => Utilities::generatePassword(),
+                'admin-password' => Utilities\Strings::generatePassword(),
             ],
 
             'listen-socket' => [
-                'port' => $this->_getRadioPort($station),
+                'port' => $this->getRadioPort($station),
             ],
 
             'mount' => [],
@@ -147,14 +153,16 @@ class Icecast extends AbstractFrontend
                 ],
                 'ssl-private-key' => $certPaths->getKeyPath(),
                 'ssl-certificate' => $certPaths->getCertPath(),
+                // phpcs:disable Generic.Files.LineLength
                 'ssl-allowed-ciphers' => 'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS',
+                // phpcs:enable
                 'deny-ip' => $this->writeIpBansFile($station),
-                'x-forwarded-for' => $settings->isDocker() ? '172.*.*.*' : '127.0.0.1',
+                'x-forwarded-for' => $this->environment->isDocker() ? '172.*.*.*' : '127.0.0.1',
             ],
             'logging' => [
                 'accesslog' => 'icecast_access.log',
                 'errorlog' => '/dev/stderr',
-                'loglevel' => $settings->isProduction() ? self::LOGLEVEL_WARN : self::LOGLEVEL_INFO,
+                'loglevel' => $this->environment->isProduction() ? self::LOGLEVEL_WARN : self::LOGLEVEL_INFO,
                 'logsize' => 10000,
             ],
             'security' => [
@@ -182,8 +190,7 @@ class Icecast extends AbstractFrontend
             }
 
             if ($mount_row->getFrontendConfig()) {
-
-                $mount_conf = $this->_processCustomConfig($mount_row->getFrontendConfig());
+                $mount_conf = $this->processCustomConfig($mount_row->getFrontendConfig());
 
                 if (!empty($mount_conf)) {
                     $mount = self::arrayMergeRecursiveDistinct($mount, $mount_conf);
@@ -229,7 +236,8 @@ class Icecast extends AbstractFrontend
      * @param array $array1
      * @param array $array2
      *
-     * @return array
+     * @return mixed[]
+     *
      * @author Daniel <daniel (at) danielsmedegaardbuus (dot) dk>
      * @author Gabriel Sobrinho <gabriel (dot) sobrinho (at) gmail (dot) com>
      * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
@@ -252,7 +260,10 @@ class Icecast extends AbstractFrontend
      * Configuration
      */
 
-    protected function _loadFromConfig(Entity\Station $station, $config): array
+    /**
+     * @return mixed[]
+     */
+    protected function loadFromConfig(Entity\Station $station, $config): array
     {
         $frontend_config = $station->getFrontendConfig();
 
@@ -268,7 +279,7 @@ class Icecast extends AbstractFrontend
 
     public function write(Entity\Station $station): bool
     {
-        $config = $this->_getDefaults($station);
+        $config = $this->getDefaults($station);
 
         $frontend_config = $station->getFrontendConfig();
 
@@ -308,14 +319,14 @@ class Icecast extends AbstractFrontend
 
         $customConfig = $frontend_config->getCustomConfiguration();
         if (!empty($customConfig)) {
-            $custom_conf = $this->_processCustomConfig($customConfig);
+            $custom_conf = $this->processCustomConfig($customConfig);
             if (!empty($custom_conf)) {
                 $config = self::arrayMergeRecursiveDistinct($config, $custom_conf);
             }
         }
 
         // Set any unset values back to the DB config.
-        $station->setFrontendConfigDefaults($this->_loadFromConfig($station, $config));
+        $station->setFrontendConfigDefaults($this->loadFromConfig($station, $config));
 
         $this->em->persist($station);
         $this->em->flush();
@@ -323,7 +334,7 @@ class Icecast extends AbstractFrontend
         $config_path = $station->getRadioConfigDir();
         $icecast_path = $config_path . '/icecast.xml';
 
-        $writer = new Writer;
+        $writer = new Writer();
         $icecast_config_str = $writer->toString($config, 'icecast');
 
         // Strip the first line (the XML charset)
@@ -342,12 +353,15 @@ class Icecast extends AbstractFrontend
         return '/bin/false';
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function getBinary()
     {
         $new_path = '/usr/local/bin/icecast';
         $legacy_path = '/usr/bin/icecast2';
 
-        if (Settings::getInstance()->isDocker() || file_exists($new_path)) {
+        if (Environment::getInstance()->isDocker() || file_exists($new_path)) {
             return $new_path;
         }
 

@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,7 +28,7 @@ class Relay
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @OA\Property(example=1)
-     * @var int
+     * @var int|null
      */
     protected $id;
 
@@ -89,7 +92,7 @@ class Relay
         $this->created_at = time();
         $this->updated_at = time();
 
-        $this->remotes = new ArrayCollection;
+        $this->remotes = new ArrayCollection();
     }
 
     /**
@@ -100,7 +103,7 @@ class Relay
         $this->updated_at = time();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -130,6 +133,9 @@ class Relay
         $this->is_visible_on_public_pages = $is_visible_on_public_pages;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getNowplaying()
     {
         return $this->nowplaying;

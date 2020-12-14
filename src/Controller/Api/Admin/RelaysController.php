@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Api\Admin;
 
 use App\Acl;
@@ -38,8 +39,6 @@ class RelaysController
      *
      * @param ServerRequest $request
      * @param Response $response
-     *
-     * @return ResponseInterface
      */
     public function __invoke(ServerRequest $request, Response $response): ResponseInterface
     {
@@ -51,7 +50,7 @@ class RelaysController
         foreach ($stations as $station) {
             $fa = $this->adapters->getFrontendAdapter($station);
 
-            $row = new Entity\Api\Admin\Relay;
+            $row = new Entity\Api\Admin\Relay();
             $row->id = $station->getId();
             $row->name = $station->getName();
             $row->shortcode = $station->getShortName();
@@ -90,12 +89,15 @@ class RelaysController
      */
     protected function getManageableStations(ServerRequest $request): array
     {
-        $all_stations = $this->em->createQuery(/** @lang DQL */ 'SELECT s, sm 
-            FROM App\Entity\Station s 
-            JOIN s.mounts sm
-            WHERE s.is_enabled = 1
-            AND s.frontend_type != :remote_frontend')
-            ->setParameter('remote_frontend', Adapters::FRONTEND_REMOTE)
+        $all_stations = $this->em->createQuery(
+            <<<'DQL'
+                SELECT s, sm
+                FROM App\Entity\Station s
+                JOIN s.mounts sm
+                WHERE s.is_enabled = 1
+                AND s.frontend_type != :remote_frontend
+            DQL
+        )->setParameter('remote_frontend', Adapters::FRONTEND_REMOTE)
             ->execute();
 
         $acl = $request->getAcl();
@@ -180,6 +182,6 @@ class RelaysController
 
         $this->em->flush();
 
-        return $response->withJson(new Entity\Api\Status);
+        return $response->withJson(new Entity\Api\Status());
     }
 }

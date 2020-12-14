@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Api;
 
 use App\Entity;
@@ -16,7 +17,7 @@ class NowplayingController implements EventSubscriberInterface
 {
     protected EntityManagerInterface $em;
 
-    protected Entity\Repository\SettingsRepository $settingsRepo;
+    protected Entity\Settings $settings;
 
     protected CacheInterface $cache;
 
@@ -29,7 +30,7 @@ class NowplayingController implements EventSubscriberInterface
         EventDispatcher $dispatcher
     ) {
         $this->em = $em;
-        $this->settingsRepo = $settingsRepo;
+        $this->settings = $settingsRepo->readSettings();
         $this->cache = $cache;
         $this->dispatcher = $dispatcher;
     }
@@ -50,9 +51,9 @@ class NowplayingController implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return array The event names to listen to
+     * @return mixed[] The event names to listen to
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             LoadNowPlaying::class => [
@@ -90,8 +91,6 @@ class NowplayingController implements EventSubscriberInterface
      * @param ServerRequest $request
      * @param Response $response
      * @param int|string|null $station_id
-     *
-     * @return ResponseInterface
      */
     public function __invoke(ServerRequest $request, Response $response, $station_id = null): ResponseInterface
     {
@@ -123,9 +122,12 @@ class NowplayingController implements EventSubscriberInterface
 
         // If unauthenticated, hide non-public stations from full view.
         if ($request->getAttribute('user') === null) {
-            $np = array_filter($np, function ($np_row) {
-                return $np_row->station->is_public;
-            });
+            $np = array_filter(
+                $np,
+                function ($np_row) {
+                    return $np_row->station->is_public;
+                }
+            );
 
             // Prevent NP array from returning as an object.
             $np = array_values($np);
@@ -141,18 +143,21 @@ class NowplayingController implements EventSubscriberInterface
 
     public function loadFromCache(LoadNowPlaying $event): void
     {
-        $event->setNowPlaying((array)$this->cache->get(Entity\Settings::NOWPLAYING), 'redis');
+        $event->setNowPlaying((array)$this->cache->get('nowplaying'), 'redis');
     }
 
     public function loadFromSettings(LoadNowPlaying $event): void
     {
-        $event->setNowPlaying((array)$this->settingsRepo->getSetting(Entity\Settings::NOWPLAYING), 'settings');
+        $event->setNowPlaying((array)$this->settings->getNowplaying(), 'settings');
     }
 
     public function loadFromStations(LoadNowPlaying $event): void
     {
-        $nowplaying_db = $this->em->createQuery(/** @lang DQL */ 'SELECT s.nowplaying FROM App\Entity\Station s WHERE s.is_enabled = 1')
-            ->getArrayResult();
+        $nowplaying_db = $this->em->createQuery(
+            <<<'DQL'
+                SELECT s.nowplaying FROM App\Entity\Station s WHERE s.is_enabled = 1
+            DQL
+        )->getArrayResult();
 
         $np = [];
         foreach ($nowplaying_db as $np_row) {

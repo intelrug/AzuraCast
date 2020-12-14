@@ -1,5 +1,4 @@
 <?php
-use App\Entity;
 
 return [
     'groups' => [
@@ -9,7 +8,7 @@ return [
 
             'elements' => [
 
-                Entity\Settings::BACKUP_ENABLED => [
+                'backupEnabled' => [
                     'toggle',
                     [
                         'label' => __('Run Automatic Nightly Backups'),
@@ -18,31 +17,31 @@ return [
                         'deselected_text' => __('No'),
                         'default' => false,
                         'form_group_class' => 'col-md-6',
-                    ]
+                    ],
                 ],
 
-                Entity\Settings::BACKUP_TIME => [
+                'backupTimeCode' => [
                     'PlaylistTime',
                     [
                         'label' => __('Scheduled Backup Time'),
                         'description' => __('The time (in UTC) to run the automated backup, if enabled.'),
                         'form_group_class' => 'col-md-6',
-                    ]
+                    ],
                 ],
 
-                Entity\Settings::BACKUP_EXCLUDE_MEDIA => [
+                'backupExcludeMedia' => [
                     'toggle',
                     [
                         'label' => __('Exclude Media from Backups'),
-                        'description' => __('Excluding media from automated backups will save space, but you should make sure to back up your media elsewhere.'),
+                        'description' => __('Excluding media from automated backups will save space, but you should make sure to back up your media elsewhere. Note that only locally stored media will be backed up.'),
                         'selected_text' => __('Yes'),
                         'deselected_text' => __('No'),
                         'default' => false,
                         'form_group_class' => 'col-md-6',
-                    ]
+                    ],
                 ],
 
-                Entity\Settings::BACKUP_KEEP_COPIES => [
+                'backupKeepCopies' => [
                     'number',
                     [
                         'label' => __('Number of Backup Copies to Keep'),
@@ -51,7 +50,16 @@ return [
                         'max' => 365,
                         'default' => 0,
                         'form_group_class' => 'col-md-6',
-                    ]
+                    ],
+                ],
+
+                'backupStorageLocation' => [
+                    'select',
+                    [
+                        'label' => __('Storage Location'),
+                        'choices' => $storageLocations,
+                        'form_group_class' => 'col-md-12',
+                    ],
                 ],
 
             ],
@@ -65,7 +73,7 @@ return [
                         'type' => 'submit',
                         'label' => __('Save Changes'),
                         'class' => 'btn btn-lg btn-primary',
-                    ]
+                    ],
                 ],
             ],
         ],

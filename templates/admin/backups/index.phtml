@@ -1,7 +1,8 @@
 <?php
 /**
  * @var array $backups
- * @var \App\Assets $assets
+ * @var App\Assets $assets
+ * @var App\Environment $environment
  */
 
 $this->layout('main', [
@@ -66,7 +67,7 @@ $assets
         <div class="card-body">
             <p class="card-text"><?=__('To restore a backup from your host computer, run:')?></p>
 
-            <?php if (\App\Settings::getInstance()->isDocker()): ?>
+            <?php if ($environment->isDocker()): ?>
                 <pre><code>./docker.sh restore path_to_backup.zip</code></pre>
             <?php else: ?>
                 <pre><code>/var/azuracast/www/bin/console azuracast:restore path_to_backup.zip</code></pre>
@@ -108,9 +109,9 @@ $assets
                 <td>
                     <div class="btn-group btn-group-sm">
                         <a class="btn btn-sm btn-primary" href="<?=$router->fromHere('admin:backups:download',
-                            ['path' => base64_encode($row['path'])])?>" download="<?=$this->e($row['basename'])?>"><?=__('Download')?></a>
+                            ['path' => $row['pathEncoded']])?>" download="<?=$this->e($row['basename'])?>"><?=__('Download')?></a>
                         <a class="btn btn-sm btn-danger" href="<?=$router->fromHere('admin:backups:delete', [
-                            'path' => base64_encode($row['path']),
+                            'path' => $row['pathEncoded'],
                             'csrf' => $csrf,
                         ])?>" data-confirm-title="<?=$this->e(__('Delete backup "%s"?',
                             $row['filename']))?>"><?=__('Delete')?></a>

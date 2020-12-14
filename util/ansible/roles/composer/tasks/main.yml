@@ -1,14 +1,29 @@
 ---
 - name: Install Composer
-  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+  shell: curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
   args:
-    creates: /usr/bin/composer
     warn: no
 
-- name: Ensure vendor folder exists
-  file: path="{{ item }}" state=directory owner=azuracast group=www-data mode=0744
-  with_items:
-   - "{{ www_base }}/vendor"
+- name: Clear existing vendor folder
+  file:
+    path: "{{ www_base }}/vendor"
+    state: absent
+
+- name: Recreate vendor folder
+  file:
+    path: "{{ www_base }}/vendor"
+    state: directory
+    owner: azuracast
+    group: www-data
+    mode: 0744
+
+- name: Ensure composer.lock exists
+  file:
+    path: "{{ www_base }}/composer.lock"
+    state: file
+    owner: azuracast
+    group: www-data
+    mode: 0744
 
 - name: Install Composer Dependencies (Development)
   become: true

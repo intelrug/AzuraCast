@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console;
 
 use Symfony\Component\Console\Input\ArrayInput;
@@ -13,7 +14,7 @@ class Application extends \Silly\Edition\PhpDi\Application
      * @param array $args
      * @param string $outputFile
      *
-     * @return array [$return_code, $return_output]
+     * @return mixed[] [int $return_code, string $return_output]
      */
     public function runCommandWithArgs($command, array $args = [], string $outputFile = 'php://temp'): array
     {
@@ -29,6 +30,8 @@ class Application extends \Silly\Edition\PhpDi\Application
         rewind($temp_stream);
         $result_output = stream_get_contents($temp_stream);
         fclose($temp_stream);
+
+        $result_output = trim($result_output);
 
         return [
             $result_code,

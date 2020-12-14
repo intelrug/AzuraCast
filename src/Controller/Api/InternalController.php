@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Api;
 
 use App\Acl;
@@ -8,7 +9,7 @@ use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Radio\AutoDJ;
 use App\Radio\Backend\Liquidsoap;
-use App\Sync\Task\NowPlaying;
+use App\Sync\Task\NowPlayingTask;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 
@@ -16,7 +17,7 @@ class InternalController
 {
     protected Acl $acl;
 
-    protected NowPlaying $sync_nowplaying;
+    protected NowPlayingTask $sync_nowplaying;
 
     protected AutoDJ $autodj;
 
@@ -24,7 +25,7 @@ class InternalController
 
     public function __construct(
         Acl $acl,
-        NowPlaying $sync_nowplaying,
+        NowPlayingTask $sync_nowplaying,
         AutoDJ $autodj,
         Logger $logger
     ) {
@@ -36,7 +37,7 @@ class InternalController
 
     public function authAction(ServerRequest $request, Response $response): ResponseInterface
     {
-        $this->_checkStationAuth($request);
+        $this->checkStationAuth($request);
 
         $station = $request->getStation();
         if (!$station->getEnableStreamers()) {
@@ -63,7 +64,7 @@ class InternalController
         return $response;
     }
 
-    protected function _checkStationAuth(ServerRequest $request): void
+    protected function checkStationAuth(ServerRequest $request): void
     {
         $station = $request->getStation();
 
@@ -82,13 +83,13 @@ class InternalController
                 'station_name' => $station->getName(),
             ]);
 
-            throw new PermissionDeniedException;
+            throw new PermissionDeniedException();
         }
     }
 
     public function nextsongAction(ServerRequest $request, Response $response): ResponseInterface
     {
-        $this->_checkStationAuth($request);
+        $this->checkStationAuth($request);
 
         $params = $request->getParams();
         $as_autodj = isset($params['api_auth']);
@@ -99,7 +100,7 @@ class InternalController
 
     public function djonAction(ServerRequest $request, Response $response): ResponseInterface
     {
-        $this->_checkStationAuth($request);
+        $this->checkStationAuth($request);
 
         $adapter = $request->getStationBackend();
         if ($adapter instanceof Liquidsoap) {
@@ -122,7 +123,7 @@ class InternalController
 
     public function djoffAction(ServerRequest $request, Response $response): ResponseInterface
     {
-        $this->_checkStationAuth($request);
+        $this->checkStationAuth($request);
 
         $adapter = $request->getStationBackend();
         if ($adapter instanceof Liquidsoap) {
@@ -145,7 +146,7 @@ class InternalController
 
     public function feedbackAction(ServerRequest $request, Response $response): ResponseInterface
     {
-        $this->_checkStationAuth($request);
+        $this->checkStationAuth($request);
 
         $station = $request->getStation();
 

@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Entity\Repository;
 
 use App\Doctrine\Repository;
 use App\Entity;
+use App\Environment;
 use App\Radio\AutoDJ\Scheduler;
-use App\Settings;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,11 +19,11 @@ class StationScheduleRepository extends Repository
     public function __construct(
         EntityManagerInterface $em,
         Serializer $serializer,
-        Settings $settings,
+        Environment $environment,
         LoggerInterface $logger,
         Scheduler $scheduler
     ) {
-        parent::__construct($em, $serializer, $settings, $logger);
+        parent::__construct($em, $serializer, $environment, $logger);
 
         $this->scheduler = $scheduler;
     }
@@ -95,14 +96,16 @@ class StationScheduleRepository extends Repository
 
         $events = [];
 
-        $scheduleItems = $this->em->createQuery(/** @lang DQL */ 'SELECT
-                ssc, sp, sst
+        $scheduleItems = $this->em->createQuery(
+            <<<'DQL'
+                SELECT ssc, sp, sst
                 FROM App\Entity\StationSchedule ssc
                 LEFT JOIN ssc.playlist sp
                 LEFT JOIN ssc.streamer sst
                 WHERE (sp.station = :station AND sp.is_jingle = 0 AND sp.is_enabled = 1)
                 OR (sst.station = :station AND sst.is_active = 1)
-            ')->setParameter('station', $station)
+            DQL
+        )->setParameter('station', $station)
             ->execute();
 
         foreach ($scheduleItems as $scheduleItem) {
@@ -110,10 +113,12 @@ class StationScheduleRepository extends Repository
             $i = $startDate;
 
             while ($i <= $endDate) {
-                $dayOfWeek = (int)$i->format('N');
+                $dayOfWeek = $i->dayOfWeekIso;
 
-                if ($this->scheduler->shouldSchedulePlayOnCurrentDate($scheduleItem, $i)
-                    && $this->scheduler->isScheduleScheduledToPlayToday($scheduleItem, $dayOfWeek)) {
+                if (
+                    $this->scheduler->shouldSchedulePlayOnCurrentDate($scheduleItem, $i)
+                    && $this->scheduler->isScheduleScheduledToPlayToday($scheduleItem, $dayOfWeek)
+                ) {
                     $start = Entity\StationSchedule::getDateTime($scheduleItem->getStartTime(), $i);
                     $end = Entity\StationSchedule::getDateTime($scheduleItem->getEndTime(), $i);
 
@@ -128,7 +133,7 @@ class StationScheduleRepository extends Repository
                         continue;
                     }
 
-                    $row = new Entity\Api\StationSchedule;
+                    $row = new Entity\Api\StationSchedule();
                     $row->id = $scheduleItem->getId();
                     $row->start_timestamp = $start->getTimestamp();
                     $row->start = $start->toIso8601String();

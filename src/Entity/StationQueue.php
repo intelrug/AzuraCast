@@ -1,40 +1,27 @@
 <?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
+
 namespace App\Entity;
 
-use App\ApiUtilities;
 use Doctrine\ORM\Mapping as ORM;
-use Psr\Http\Message\UriInterface;
 
 /**
  * @ORM\Table(name="station_queue")
  * @ORM\Entity()
  */
-class StationQueue
+class StationQueue implements SongInterface
 {
     use Traits\TruncateInts;
+    use Traits\HasSongFields;
 
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @var int
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @var int|null
      */
     protected $id;
-
-    /**
-     * @ORM\Column(name="song_id", type="string", length=50)
-     * @var string
-     */
-    protected $song_id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Song", inversedBy="history")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="song_id", referencedColumnName="id", onDelete="CASCADE")
-     * })
-     * @var Song
-     */
-    protected $song;
 
     /**
      * @ORM\Column(name="station_id", type="integer")
@@ -126,22 +113,17 @@ class StationQueue
      */
     protected $log;
 
-    public function __construct(Station $station, Song $song)
+    public function __construct(Station $station, SongInterface $song)
     {
-        $this->song = $song;
+        $this->setSong($song);
         $this->station = $station;
 
         $this->sent_to_autodj = false;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSong(): Song
-    {
-        return $this->song;
     }
 
     public function getStation(): Station
@@ -228,6 +210,9 @@ class StationQueue
         $this->sent_to_autodj = true;
     }
 
+    /**
+     * @return string[]|null
+     */
     public function getLog(): ?array
     {
         return $this->log;
@@ -249,31 +234,10 @@ class StationQueue
         return true;
     }
 
-    public function api(ApiUtilities $api, UriInterface $base_url = null): Api\StationQueue
-    {
-        $response = new Api\StationQueue;
-        $response->cued_at = $this->timestamp_cued;
-
-        $response->duration = (int)$this->duration;
-        $response->is_request = $this->request !== null;
-
-        if ($this->playlist instanceof StationPlaylist) {
-            $response->playlist = $this->playlist->getName();
-        } else {
-            $response->playlist = '';
-        }
-
-        $response->song = ($this->media)
-            ? $this->media->api($api, $base_url)
-            : $this->song->api($api, $this->station, $base_url);
-
-        return $response;
-    }
-
-    public function __toString()
+    public function __toString(): string
     {
         return (null !== $this->media)
             ? (string)$this->media
-            : (string)$this->song;
+            : (string)(new Song($this));
     }
 }

@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Controller\Stations;
 
+use App\Environment;
 use App\Exception\AdvancedFeatureException;
 use App\Exception\StationUnsupportedException;
 use App\Form\Form;
@@ -8,7 +10,6 @@ use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Radio\Backend\Liquidsoap;
 use App\Session\Flash;
-use App\Settings;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -18,17 +19,17 @@ class EditLiquidsoapConfigController
         ServerRequest $request,
         Response $response,
         EntityManagerInterface $em,
-        Settings $settings
+        Environment $settings
     ): ResponseInterface {
         $station = $request->getStation();
         $backend = $request->getStationBackend();
 
         if (!$settings->enableAdvancedFeatures()) {
-            throw new AdvancedFeatureException;
+            throw new AdvancedFeatureException();
         }
 
         if (!($backend instanceof Liquidsoap)) {
-            throw new StationUnsupportedException;
+            throw new StationUnsupportedException();
         }
 
         $configSections = [

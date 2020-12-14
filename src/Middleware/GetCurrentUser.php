@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Middleware;
 
 use App\Auth;
 use App\Customization;
 use App\Entity;
 use App\Http\ServerRequest;
+use DI\FactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -15,22 +17,22 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class GetCurrentUser implements MiddlewareInterface
 {
-    protected Entity\Repository\UserRepository $userRepo;
+    protected FactoryInterface $factory;
 
-    protected Entity\Repository\SettingsRepository $settingsRepo;
-
-    public function __construct(
-        Entity\Repository\UserRepository $userRepo,
-        Entity\Repository\SettingsRepository $settingsRepo
-    ) {
-        $this->userRepo = $userRepo;
-        $this->settingsRepo = $settingsRepo;
+    public function __construct(FactoryInterface $factory)
+    {
+        $this->factory = $factory;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         // Initialize the Auth for this request.
-        $auth = new Auth($this->userRepo, $request->getAttribute(ServerRequest::ATTR_SESSION));
+        $auth = $this->factory->make(
+            Auth::class,
+            [
+                'session' => $request->getAttribute(ServerRequest::ATTR_SESSION),
+            ]
+        );
         $user = ($auth->isLoggedIn()) ? $auth->getLoggedInUser() : null;
 
         $request = $request
@@ -39,7 +41,12 @@ class GetCurrentUser implements MiddlewareInterface
             ->withAttribute('is_logged_in', (null !== $user));
 
         // Initialize Customization (timezones, locales, etc) based on the current logged in user.
-        $customization = new Customization($this->settingsRepo, $request);
+        $customization = $this->factory->make(
+            Customization::class,
+            [
+                'request' => $request,
+            ]
+        );
 
         $request = $request
             ->withAttribute('locale', $customization->getLocale())

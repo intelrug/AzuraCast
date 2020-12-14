@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Event;
 
 use App\Acl;
 use App\Entity\User;
+use App\Environment;
 use App\Http\RouterInterface;
-use App\Settings;
 use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class AbstractBuildMenu extends Event
@@ -15,7 +16,7 @@ abstract class AbstractBuildMenu extends Event
 
     protected RouterInterface $router;
 
-    protected Settings $settings;
+    protected Environment $environment;
 
     protected array $menu = [];
 
@@ -24,7 +25,7 @@ abstract class AbstractBuildMenu extends Event
         $this->acl = $acl;
         $this->user = $user;
         $this->router = $router;
-        $this->settings = Settings::getInstance();
+        $this->environment = Environment::getInstance();
     }
 
     public function getAcl(): Acl
@@ -37,9 +38,9 @@ abstract class AbstractBuildMenu extends Event
         return $this->router;
     }
 
-    public function getSettings(): Settings
+    public function getEnvironment(): Environment
     {
-        return $this->settings;
+        return $this->environment;
     }
 
     /**
@@ -64,7 +65,7 @@ abstract class AbstractBuildMenu extends Event
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getFilteredMenu(): array
     {
@@ -81,8 +82,6 @@ abstract class AbstractBuildMenu extends Event
 
     /**
      * @param array $item
-     *
-     * @return bool
      */
     protected function filterMenuItem(array $item): bool
     {
@@ -103,8 +102,6 @@ abstract class AbstractBuildMenu extends Event
 
     /**
      * @param string $permission_name
-     *
-     * @return bool
      */
     public function checkPermission(string $permission_name): bool
     {

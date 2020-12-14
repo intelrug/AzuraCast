@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use App\Entity;
@@ -7,17 +8,20 @@ use App\Service\NChan;
 use Gettext\Translator;
 use Locale;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
 
 class Customization
 {
-    public const DEFAULT_TIMEZONE = 'UTC';
     public const DEFAULT_LOCALE = 'en_US.UTF-8';
     public const DEFAULT_THEME = 'light';
 
+    public const THEME_LIGHT = 'light';
+    public const THEME_DARK = 'dark';
+
     protected ?Entity\User $user = null;
 
-    protected Entity\Repository\SettingsRepository $settingsRepo;
+    protected Entity\Settings $settings;
+
+    protected Environment $environment;
 
     protected string $locale = self::DEFAULT_LOCALE;
 
@@ -29,10 +33,13 @@ class Customization
 
     public function __construct(
         Entity\Repository\SettingsRepository $settingsRepo,
+        Environment $environment,
         ServerRequestInterface $request
     ) {
-        $this->settingsRepo = $settingsRepo;
-        $this->instanceName = (string)$this->settingsRepo->getSetting(Entity\Settings::INSTANCE_NAME, '');
+        $this->settings = $settingsRepo->readSettings();
+        $this->environment = $environment;
+
+        $this->instanceName = $this->settings->getInstanceName() ?? '';
 
         // Register current user
         $this->user = $request->getAttribute(ServerRequest::ATTR_USER);
@@ -45,7 +52,7 @@ class Customization
         if (!empty($queryParams['theme'])) {
             $this->publicTheme = $this->theme = $queryParams['theme'];
         } else {
-            $this->publicTheme = $this->settingsRepo->getSetting(Entity\Settings::PUBLIC_THEME, $this->publicTheme);
+            $this->publicTheme = $this->settings->getPublicTheme() ?? $this->publicTheme;
 
             if (null !== $this->user && !empty($this->user->getTheme())) {
                 $this->theme = (string)$this->user->getTheme();
@@ -55,7 +62,7 @@ class Customization
         // Set up the PHP translator
         $translator = new Translator();
 
-        $locale_base = Settings::getInstance()->getBaseDirectory() . '/resources/locale/compiled';
+        $locale_base = $environment->getBaseDirectory() . '/resources/locale/compiled';
         $locale_path = $locale_base . '/' . $this->locale . '.php';
 
         if (file_exists($locale_path)) {
@@ -71,15 +78,11 @@ class Customization
     /**
      * Return the user-customized, browser-specified or system default locale.
      *
-     * @param Request|null $request
-     *
-     * @return string
+     * @param ServerRequestInterface|null $request
      */
-    protected function initLocale(?Request $request = null): string
+    protected function initLocale(?ServerRequestInterface $request = null): string
     {
-        $settings = Settings::getInstance();
-
-        $supported_locales = $settings['locale']['supported'];
+        $supported_locales = $this->environment->getSupportedLocales();
         $try_locales = [];
 
         // Prefer user-based profile locale.
@@ -88,7 +91,7 @@ class Customization
         }
 
         // Attempt to load from browser headers.
-        if ($request instanceof Request) {
+        if ($request instanceof ServerRequestInterface) {
             $server_params = $request->getServerParams();
             $browser_locale = Locale::acceptFromHttp($server_params['HTTP_ACCEPT_LANGUAGE'] ?? null);
 
@@ -98,9 +101,9 @@ class Customization
         }
 
         // Attempt to load from environment variable.
-        $env_locale = getenv('LANG');
-        if (!empty($env_locale)) {
-            $try_locales[] = substr($env_locale, 0, 5) . '.UTF-8';
+        $envLocale = $this->environment->getLang();
+        if (!empty($envLocale)) {
+            $try_locales[] = substr($envLocale, 0, 5) . '.UTF-8';
         }
 
         foreach ($try_locales as $exact_locale) {
@@ -121,9 +124,6 @@ class Customization
         return self::DEFAULT_LOCALE;
     }
 
-    /**
-     * @return string
-     */
     public function getLocale(): string
     {
         return $this->locale;
@@ -139,8 +139,6 @@ class Customization
 
     /**
      * Returns the user-customized or system default theme.
-     *
-     * @return string
      */
     public function getTheme(): string
     {
@@ -149,8 +147,6 @@ class Customization
 
     /**
      * Get the instance name for this AzuraCast instance.
-     *
-     * @return string
      */
     public function getInstanceName(): string
     {
@@ -159,8 +155,6 @@ class Customization
 
     /**
      * Get the theme name to be used in public (non-logged-in) pages.
-     *
-     * @return string
      */
     public function getPublicTheme(): string
     {
@@ -169,65 +163,53 @@ class Customization
 
     /**
      * Return the administrator-supplied custom CSS for public (minimal layout) pages, if specified.
-     *
-     * @return string
      */
     public function getCustomPublicCss(): string
     {
-        return (string)$this->settingsRepo->getSetting(Entity\Settings::CUSTOM_CSS_PUBLIC, '');
+        return $this->settings->getPublicCustomCss() ?? '';
     }
 
     /**
      * Return the administrator-supplied custom JS for public (minimal layout) pages, if specified.
-     *
-     * @return string
      */
     public function getCustomPublicJs(): string
     {
-        return (string)$this->settingsRepo->getSetting(Entity\Settings::CUSTOM_JS_PUBLIC, '');
+        return $this->settings->getPublicCustomJs() ?? '';
     }
 
     /**
      * Return the administrator-supplied custom CSS for internal (full layout) pages, if specified.
-     *
-     * @return string
      */
     public function getCustomInternalCss(): string
     {
-        return (string)$this->settingsRepo->getSetting(Entity\Settings::CUSTOM_CSS_INTERNAL, '');
+        return $this->settings->getInternalCustomCss() ?? '';
     }
 
     /**
      * Return whether to show or hide album art on public pages.
-     *
-     * @return bool
      */
     public function hideAlbumArt(): bool
     {
-        return (bool)$this->settingsRepo->getSetting(Entity\Settings::HIDE_ALBUM_ART, false);
+        return $this->settings->getHideAlbumArt();
     }
 
     /**
      * Return the calculated page title given branding settings and the application environment.
      *
      * @param string|null $title
-     *
-     * @return string
      */
     public function getPageTitle($title = null): string
     {
-        $settings = Settings::getInstance();
-
         if (!$this->hideProductName()) {
             if ($title) {
-                $title .= ' - ' . $settings[Settings::APP_NAME];
+                $title .= ' - ' . $this->environment->getAppName();
             } else {
-                $title = $settings[Settings::APP_NAME];
+                $title = $this->environment->getAppName();
             }
         }
 
-        if (!$settings->isProduction()) {
-            $title = '(' . ucfirst($settings[Settings::APP_ENV]) . ') ' . $title;
+        if (!$this->environment->isProduction()) {
+            $title = '(' . ucfirst($this->environment->getAppEnvironment()) . ') ' . $title;
         }
 
         return $title;
@@ -235,24 +217,19 @@ class Customization
 
     /**
      * Return whether to show or hide the AzuraCast name from public-facing pages.
-     *
-     * @return bool
      */
     public function hideProductName(): bool
     {
-        return (bool)$this->settingsRepo->getSetting(Entity\Settings::HIDE_PRODUCT_NAME, false);
+        return $this->settings->getHideProductName();
     }
 
-    /**
-     * @return bool
-     */
     public function useWebSocketsForNowPlaying(): bool
     {
         if (!NChan::isSupported()) {
             return false;
         }
 
-        return (bool)$this->settingsRepo->getSetting(Entity\Settings::NOWPLAYING_USE_WEBSOCKETS, false);
+        return $this->settings->getEnableWebsockets();
     }
 
     /**
@@ -261,18 +238,6 @@ class Customization
     public static function initCli(): void
     {
         $translator = new Translator();
-
-        /*
-         * TODO: Load translations from environment locale.
-        $locale_base = Settings::getInstance()->getBaseDirectory() . '/resources/locale/compiled';
-        $locale_path = $locale_base . '/' . $this->locale . '.php';
-
-        if (file_exists($locale_path)) {
-            $translator->loadTranslations($locale_path);
-        }
-        */
-
         $translator->register();
     }
-
 }

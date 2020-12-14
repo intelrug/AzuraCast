@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Entity\Api;
 
-use App\File;
+use App\Utilities\File;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 

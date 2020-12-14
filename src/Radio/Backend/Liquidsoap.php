@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Radio\Backend;
 
 use App\Entity;
+use App\Environment;
 use App\Event\Radio\WriteLiquidsoapConfiguration;
 use App\EventDispatcher;
 use App\Exception;
 use App\Radio\Backend\Liquidsoap\ConfigWriter;
-use App\Settings;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\UriInterface;
 use Supervisor\Supervisor;
@@ -16,12 +17,13 @@ class Liquidsoap extends AbstractBackend
     protected Entity\Repository\StationStreamerRepository $streamerRepo;
 
     public function __construct(
+        Environment $environment,
         EntityManagerInterface $em,
         Supervisor $supervisor,
         EventDispatcher $dispatcher,
         Entity\Repository\StationStreamerRepository $streamerRepo
     ) {
-        parent::__construct($em, $supervisor, $dispatcher);
+        parent::__construct($environment, $em, $supervisor, $dispatcher);
 
         $this->streamerRepo = $streamerRepo;
     }
@@ -32,8 +34,6 @@ class Liquidsoap extends AbstractBackend
      * Special thanks to the team of PonyvilleFM for assisting with Liquidsoap configuration and debugging.
      *
      * @param Entity\Station $station
-     *
-     * @return bool
      */
     public function write(Entity\Station $station): bool
     {
@@ -102,7 +102,7 @@ class Liquidsoap extends AbstractBackend
      *
      * @param Entity\StationMedia $media
      *
-     * @return array
+     * @return mixed[]
      */
     public function annotateMedia(Entity\StationMedia $media): array
     {
@@ -130,7 +130,7 @@ class Liquidsoap extends AbstractBackend
                 $annotation_types['liq_cue_out'] = max(0, $annotation_types['duration'] - $cue_out);
             }
         }
-        if (($annotation_types['liq_cue_in'] + $annotation_types['liq_cue_out']) > $annotation_types['duration']) {
+        if ($annotation_types['liq_cue_out'] > $annotation_types['duration']) {
             $annotation_types['liq_cue_out'] = null;
         }
         if ($annotation_types['liq_cue_in'] > $annotation_types['duration']) {
@@ -171,13 +171,19 @@ class Liquidsoap extends AbstractBackend
      * @param Entity\Station $station
      * @param string $command_str
      *
-     * @return array
+     * @return string[]
+     *
      * @throws Exception
      */
     public function command(Entity\Station $station, $command_str): array
     {
-        $fp = stream_socket_client('tcp://' . (Settings::getInstance()->isDocker() ? 'stations' : 'localhost') . ':' . $this->getTelnetPort($station),
-            $errno, $errstr, 20);
+        $hostname = ($this->environment->isDocker() ? 'stations' : 'localhost');
+        $fp = stream_socket_client(
+            'tcp://' . $hostname . ':' . $this->getTelnetPort($station),
+            $errno,
+            $errstr,
+            20
+        );
 
         if (!$fp) {
             throw new Exception('Telnet failure: ' . $errstr . ' (' . $errno . ')');
@@ -209,14 +215,14 @@ class Liquidsoap extends AbstractBackend
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public static function getBinary()
     {
         // Docker revisions 3 and later use the `radio` container.
-        $settings = Settings::getInstance();
+        $environment = Environment::getInstance();
 
-        if ($settings->isDocker() && $settings[Settings::DOCKER_REVISION] < 3) {
+        if ($environment->isDocker() && !$environment->isDockerRevisionAtLeast(3)) {
             return '/var/azuracast/.opam/system/bin/liquidsoap';
         }
 
@@ -232,6 +238,9 @@ class Liquidsoap extends AbstractBackend
         return empty($queue[0]);
     }
 
+    /**
+     * @return string[]
+     */
     public function enqueue(Entity\Station $station, $music_file): array
     {
         return $this->command(
@@ -240,6 +249,9 @@ class Liquidsoap extends AbstractBackend
         );
     }
 
+    /**
+     * @return string[]
+     */
     public function skip(Entity\Station $station): array
     {
         return $this->command(
@@ -248,6 +260,9 @@ class Liquidsoap extends AbstractBackend
         );
     }
 
+    /**
+     * @return string[]
+     */
     public function updateMetadata(Entity\Station $station, array $newMeta): array
     {
         $metaStr = [];
@@ -266,7 +281,7 @@ class Liquidsoap extends AbstractBackend
      *
      * @param Entity\Station $station
      *
-     * @return array
+     * @return string[]
      */
     public function disconnectStreamer(Entity\Station $station): array
     {

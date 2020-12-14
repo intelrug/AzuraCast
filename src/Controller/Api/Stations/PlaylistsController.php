@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Api\Stations;
 
 use App\Entity;
@@ -132,26 +133,30 @@ class PlaylistsController extends AbstractScheduledEntityController
      *
      * @param ServerRequest $request
      * @param Response $response
-     *
-     * @return ResponseInterface
      */
     public function scheduleAction(ServerRequest $request, Response $response): ResponseInterface
     {
         $station = $request->getStation();
 
-        $scheduleItems = $this->em->createQuery(/** @lang DQL */ 'SELECT
-            ssc, sp
-            FROM App\Entity\StationSchedule ssc
-            JOIN ssc.playlist sp
-            WHERE sp.station = :station AND sp.is_jingle = 0 AND sp.is_enabled = 1
-        ')->setParameter('station', $station)
+        $scheduleItems = $this->em->createQuery(
+            <<<'DQL'
+                SELECT ssc, sp
+                FROM App\Entity\StationSchedule ssc
+                JOIN ssc.playlist sp
+                WHERE sp.station = :station AND sp.is_jingle = 0 AND sp.is_enabled = 1
+            DQL
+        )->setParameter('station', $station)
             ->execute();
 
         return $this->renderEvents(
             $request,
             $response,
             $scheduleItems,
-            function (Entity\StationSchedule $scheduleItem, CarbonInterface $start, CarbonInterface $end) use (
+            function (
+                Entity\StationSchedule $scheduleItem,
+                CarbonInterface $start,
+                CarbonInterface $end
+            ) use (
                 $request,
                 $station
             ) {
@@ -183,17 +188,22 @@ class PlaylistsController extends AbstractScheduledEntityController
             throw new NotFoundException(__('Playlist not found.'));
         }
 
-        if ($record->getSource() !== Entity\StationPlaylist::SOURCE_SONGS
-            || $record->getOrder() !== Entity\StationPlaylist::ORDER_SEQUENTIAL) {
+        if (
+            $record->getSource() !== Entity\StationPlaylist::SOURCE_SONGS
+            || $record->getOrder() !== Entity\StationPlaylist::ORDER_SEQUENTIAL
+        ) {
             throw new Exception(__('This playlist is not a sequential playlist.'));
         }
 
-        $media_items = $this->em->createQuery(/** @lang DQL */ 'SELECT spm, sm 
-            FROM App\Entity\StationPlaylistMedia spm
-            JOIN spm.media sm
-            WHERE spm.playlist_id = :playlist_id
-            ORDER BY spm.weight ASC')
-            ->setParameter('playlist_id', $id)
+        $media_items = $this->em->createQuery(
+            <<<'DQL'
+                SELECT spm, sm
+                FROM App\Entity\StationPlaylistMedia spm
+                JOIN spm.media sm
+                WHERE spm.playlist_id = :playlist_id
+                ORDER BY spm.weight ASC
+            DQL
+        )->setParameter('playlist_id', $id)
             ->getArrayResult();
 
         return $response->withJson($media_items);
@@ -211,8 +221,10 @@ class PlaylistsController extends AbstractScheduledEntityController
             throw new NotFoundException(__('Playlist not found.'));
         }
 
-        if ($record->getSource() !== Entity\StationPlaylist::SOURCE_SONGS
-            || $record->getOrder() !== Entity\StationPlaylist::ORDER_SEQUENTIAL) {
+        if (
+            $record->getSource() !== Entity\StationPlaylist::SOURCE_SONGS
+            || $record->getOrder() !== Entity\StationPlaylist::ORDER_SEQUENTIAL
+        ) {
             throw new Exception(__('This playlist is not a sequential playlist.'));
         }
 
@@ -284,10 +296,12 @@ class PlaylistsController extends AbstractScheduledEntityController
         $this->em->persist($record);
         $this->em->flush();
 
-        return $response->withJson(new Entity\Api\Status(
-            true,
-            __('Playlist reshuffled.')
-        ));
+        return $response->withJson(
+            new Entity\Api\Status(
+                true,
+                __('Playlist reshuffled.')
+            )
+        );
     }
 
     public function importAction(
@@ -323,14 +337,18 @@ class PlaylistsController extends AbstractScheduledEntityController
 
         if (!empty($paths)) {
             $station = $request->getStation();
+            $storageLocation = $station->getMediaStorageLocation();
 
             // Assemble list of station media to match against.
             $media_lookup = [];
 
-            $media_info_raw = $this->em->createQuery(/** @lang DQL */ 'SELECT sm.id, sm.path 
-                FROM App\Entity\StationMedia sm 
-                WHERE sm.station = :station')
-                ->setParameter('station', $station)
+            $media_info_raw = $this->em->createQuery(
+                <<<'DQL'
+                    SELECT sm.id, sm.path
+                    FROM App\Entity\StationMedia sm
+                    WHERE sm.storage_location = :storageLocation
+                DQL
+            )->setParameter('storageLocation', $storageLocation)
                 ->getArrayResult();
 
             foreach ($media_info_raw as $row) {
@@ -359,19 +377,30 @@ class PlaylistsController extends AbstractScheduledEntityController
 
             // Assign all matched media to the playlist.
             if (!empty($matches)) {
-                $matched_media = $this->em->createQuery(/** @lang DQL */ 'SELECT sm 
-                    FROM App\Entity\StationMedia sm
-                    WHERE sm.station = :station AND sm.id IN (:matched_ids)')
-                    ->setParameter('station', $station)
+                $matchedMediaRaw = $this->em->createQuery(
+                    <<<'DQL'
+                        SELECT sm
+                        FROM App\Entity\StationMedia sm
+                        WHERE sm.storage_location = :storageLocation AND sm.id IN (:matched_ids)
+                    DQL
+                )->setParameter('storageLocation', $storageLocation)
                     ->setParameter('matched_ids', $matches)
                     ->execute();
 
+                /** @var Entity\StationMedia[] $mediaById */
+                $mediaById = [];
+                foreach ($matchedMediaRaw as $row) {
+                    /** @var Entity\StationMedia $row */
+                    $mediaById[$row->getId()] = $row;
+                }
+
                 $weight = $playlistMediaRepo->getHighestSongWeight($playlist);
 
-                foreach ($matched_media as $media) {
+                // Split this process to preserve the order of the imported items.
+                foreach ($matches as $mediaId) {
                     $weight++;
 
-                    /** @var Entity\StationMedia $media */
+                    $media = $mediaById[$mediaId];
                     $playlistMediaRepo->addMediaToPlaylist($media, $playlist, $weight);
 
                     $foundPaths++;
@@ -381,13 +410,22 @@ class PlaylistsController extends AbstractScheduledEntityController
             $this->em->flush();
         }
 
-        return $response->withJson(new Entity\Api\Status(
-            true,
-            __('Playlist successfully imported; %d of %d files were successfully matched.', $foundPaths, $totalPaths)
-        ));
+        return $response->withJson(
+            new Entity\Api\Status(
+                true,
+                __(
+                    'Playlist successfully imported; %d of %d files were successfully matched.',
+                    $foundPaths,
+                    $totalPaths
+                )
+            )
+        );
     }
 
-    protected function viewRecord($record, ServerRequest $request)
+    /**
+     * @return mixed[]
+     */
+    protected function viewRecord($record, ServerRequest $request): array
     {
         if (!($record instanceof $this->entityClass)) {
             throw new InvalidArgumentException(sprintf('Record must be an instance of %s.', $this->entityClass));
@@ -395,12 +433,14 @@ class PlaylistsController extends AbstractScheduledEntityController
 
         $return = $this->toArray($record);
 
-        $song_totals = $this->em->createQuery(/** @lang DQL */ '
-            SELECT count(sm.id) AS num_songs, sum(sm.length) AS total_length
-            FROM App\Entity\StationMedia sm
-            JOIN sm.playlists spm
-            WHERE spm.playlist = :playlist')
-            ->setParameter('playlist', $record)
+        $song_totals = $this->em->createQuery(
+            <<<'DQL'
+                SELECT count(sm.id) AS num_songs, sum(sm.length) AS total_length
+                FROM App\Entity\StationMedia sm
+                JOIN sm.playlists spm
+                WHERE spm.playlist = :playlist
+            DQL
+        )->setParameter('playlist', $record)
             ->getArrayResult();
 
         $return['num_songs'] = (int)$song_totals[0]['num_songs'];
@@ -412,8 +452,12 @@ class PlaylistsController extends AbstractScheduledEntityController
         $return['links'] = [
             'toggle' => $router->fromHere('api:stations:playlist:toggle', ['id' => $record->getId()], [], !$isInternal),
             'order' => $router->fromHere('api:stations:playlist:order', ['id' => $record->getId()], [], !$isInternal),
-            'reshuffle' => $router->fromHere('api:stations:playlist:reshuffle', ['id' => $record->getId()], [],
-                !$isInternal),
+            'reshuffle' => $router->fromHere(
+                'api:stations:playlist:reshuffle',
+                ['id' => $record->getId()],
+                [],
+                !$isInternal
+            ),
             'import' => $router->fromHere('api:stations:playlist:import', ['id' => $record->getId()], [], !$isInternal),
             'self' => $router->fromHere($this->resourceRouteName, ['id' => $record->getId()], [], !$isInternal),
         ];
@@ -430,12 +474,19 @@ class PlaylistsController extends AbstractScheduledEntityController
         return $return;
     }
 
-    protected function toArray($record, array $context = [])
+    /**
+     * @return mixed[]
+     */
+    protected function toArray($record, array $context = []): array
     {
-        return parent::toArray($record, array_merge($context, [
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['queue'],
-        ]));
+        return parent::toArray(
+            $record,
+            array_merge(
+                $context,
+                [
+                    AbstractNormalizer::IGNORED_ATTRIBUTES => ['queue'],
+                ]
+            )
+        );
     }
-
-
 }

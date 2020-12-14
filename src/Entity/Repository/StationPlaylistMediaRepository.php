@@ -1,13 +1,33 @@
 <?php
+
 namespace App\Entity\Repository;
 
 use App\Doctrine\Repository;
 use App\Entity;
+use App\Entity\StationPlaylist;
+use App\Environment;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\Serializer\Serializer;
 
 class StationPlaylistMediaRepository extends Repository
 {
+    protected StationQueueRepository $queueRepo;
+
+    public function __construct(
+        EntityManagerInterface $em,
+        Serializer $serializer,
+        Environment $environment,
+        LoggerInterface $logger,
+        StationQueueRepository $queueRepo
+    ) {
+        parent::__construct($em, $serializer, $environment, $logger);
+
+        $this->queueRepo = $queueRepo;
+    }
+
     /**
      * Add the specified media to the specified playlist.
      * Must flush the EntityManager after using.
@@ -53,7 +73,7 @@ class StationPlaylistMediaRepository extends Repository
         }
 
         // Add the newly added song into the cached queue.
-        $playlist->setQueue(null);
+        $playlist->addToQueue($media);
         $this->em->persist($playlist);
 
         return $weight;
@@ -62,11 +82,13 @@ class StationPlaylistMediaRepository extends Repository
     public function getHighestSongWeight(Entity\StationPlaylist $playlist): int
     {
         try {
-            $highest_weight = $this->em->createQuery(/** @lang DQL */ 'SELECT 
-                MAX(e.weight) 
-                FROM App\Entity\StationPlaylistMedia e 
-                WHERE e.playlist_id = :playlist_id')
-                ->setParameter('playlist_id', $playlist->getId())
+            $highest_weight = $this->em->createQuery(
+                <<<'DQL'
+                    SELECT MAX(e.weight)
+                    FROM App\Entity\StationPlaylistMedia e
+                    WHERE e.playlist_id = :playlist_id
+                DQL
+            )->setParameter('playlist_id', $playlist->getId())
                 ->getSingleScalarResult();
         } catch (NoResultException $e) {
             $highest_weight = 1;
@@ -80,38 +102,26 @@ class StationPlaylistMediaRepository extends Repository
      *
      * @param Entity\StationMedia $media
      *
-     * @return array The IDs and records for all affected playlists.
+     * @return StationPlaylist[] The IDs as keys and records as values for all affected playlists.
      */
     public function clearPlaylistsFromMedia(Entity\StationMedia $media): array
     {
-        $affected_playlists = [];
-        $playlists = $this->em->createQuery(/** @lang DQL */ 'SELECT e, p 
-            FROM App\Entity\StationPlaylistMedia e JOIN e.playlist p 
-            WHERE e.media_id = :media_id')
-            ->setParameter('media_id', $media->getId())
-            ->execute();
+        $affectedPlaylists = [];
 
-        foreach ($playlists as $row) {
-            /** @var Entity\StationPlaylistMedia $row */
-            $playlist = $row->getPlaylist();
-            $affected_playlists[$playlist->getId()] = $playlist->getId();
+        foreach ($media->getPlaylists() as $spmRow) {
+            $playlist = $spmRow->getPlaylist();
+
+            $playlist->removeFromQueue($media);
+            $this->em->persist($playlist);
+
+            $affectedPlaylists[$playlist->getId()] = $playlist;
+
+            $this->queueRepo->clearForMediaAndPlaylist($media, $playlist);
+
+            $this->em->remove($spmRow);
         }
 
-        // Clear the playback queue.
-        if (!empty($affected_playlists)) {
-            $this->em->createQuery(/** @lang DQL */ 'UPDATE App\Entity\StationPlaylist sp
-            SET sp.queue=null WHERE sp.id IN (:ids)')
-                ->setParameter('ids', array_keys($affected_playlists))
-                ->execute();
-        }
-
-        $this->em->createQuery(/** @lang DQL */ 'DELETE 
-            FROM App\Entity\StationPlaylistMedia e
-            WHERE e.media_id = :media_id')
-            ->setParameter('media_id', $media->getId())
-            ->execute();
-
-        return $affected_playlists;
+        return $affectedPlaylists;
     }
 
     /**
@@ -126,12 +136,14 @@ class StationPlaylistMediaRepository extends Repository
      */
     public function setMediaOrder(Entity\StationPlaylist $playlist, $mapping): void
     {
-        $update_query = $this->em->createQuery(/** @lang DQL */ 'UPDATE 
-            App\Entity\StationPlaylistMedia e 
-            SET e.weight = :weight
-            WHERE e.playlist_id = :playlist_id 
-            AND e.id = :id')
-            ->setParameter('playlist_id', $playlist->getId());
+        $update_query = $this->em->createQuery(
+            <<<'DQL'
+                UPDATE App\Entity\StationPlaylistMedia e
+                SET e.weight = :weight
+                WHERE e.playlist_id = :playlist_id
+                AND e.id = :id
+            DQL
+        )->setParameter('playlist_id', $playlist->getId());
 
         foreach ($mapping as $id => $weight) {
             $update_query->setParameter('id', $id)
@@ -140,20 +152,25 @@ class StationPlaylistMediaRepository extends Repository
         }
 
         // Clear the playback queue.
-        $playlist->setQueue(null);
+        $playlist->setQueue($this->getPlayableMedia($playlist));
         $this->em->persist($playlist);
         $this->em->flush();
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getPlayableMedia(Entity\StationPlaylist $playlist): array
     {
-        $all_media = $this->em->createQuery(/** @lang DQL */ 'SELECT 
-            sm.id, sm.song_id, sm.artist, sm.title
-            FROM App\Entity\StationMedia sm
-            JOIN sm.playlists spm
-            WHERE spm.playlist_id = :playlist_id
-            ORDER BY spm.weight ASC')
-            ->setParameter('playlist_id', $playlist->getId())
+        $all_media = $this->em->createQuery(
+            <<<'DQL'
+                SELECT sm.id, sm.song_id, sm.artist, sm.title
+                FROM App\Entity\StationMedia sm
+                JOIN sm.playlists spm
+                WHERE spm.playlist_id = :playlist_id
+                ORDER BY spm.weight ASC
+            DQL
+        )->setParameter('playlist_id', $playlist->getId())
             ->getArrayResult();
 
         if ($playlist->getOrder() !== Entity\StationPlaylist::ORDER_SEQUENTIAL) {

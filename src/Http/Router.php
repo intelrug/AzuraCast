@@ -1,13 +1,15 @@
 <?php
+
 namespace App\Http;
 
 use App\Entity;
-use App\Settings;
+use App\Environment;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use Slim\App;
 use Slim\Interfaces\RouteInterface;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Routing\RouteContext;
@@ -16,31 +18,29 @@ class Router implements RouterInterface
 {
     protected RouteParserInterface $routeParser;
 
-    protected Settings $settings;
+    protected Environment $environment;
 
     protected ?ServerRequestInterface $currentRequest = null;
 
-    protected Entity\Repository\SettingsRepository $settingsRepo;
+    protected Entity\Settings $settings;
 
     public function __construct(
-        Settings $settings,
-        RouteParserInterface $routeParser,
+        Environment $environment,
+        App $app,
         Entity\Repository\SettingsRepository $settingsRepo
     ) {
-        $this->settingsRepo = $settingsRepo;
-        $this->settings = $settings;
-        $this->routeParser = $routeParser;
+        $this->environment = $environment;
+        $this->settings = $settingsRepo->readSettings();
+        $this->routeParser = $app->getRouteCollector()->getRouteParser();
     }
 
     /**
-     * Compose a URL, returning an absolute URL (including base URL) if the current settings or this function's parameters
-     * indicate an absolute URL is necessary
+     * Compose a URL, returning an absolute URL (including base URL) if the current settings or
+     * this function's parameters indicate an absolute URL is necessary
      *
      * @param UriInterface $base
      * @param UriInterface|string $rel
      * @param bool $absolute
-     *
-     * @return UriInterface
      */
     public static function resolveUri(UriInterface $base, $rel, bool $absolute = false): UriInterface
     {
@@ -64,9 +64,6 @@ class Router implements RouterInterface
         return UriResolver::resolve($base, $rel);
     }
 
-    /**
-     * @return ServerRequestInterface
-     */
     public function getCurrentRequest(): ServerRequestInterface
     {
         return $this->currentRequest;
@@ -87,8 +84,6 @@ class Router implements RouterInterface
      * @param array $route_params
      * @param array $query_params
      * @param bool $absolute
-     *
-     * @return string
      */
     public function fromHereWithQuery(
         $route_name = null,
@@ -110,8 +105,6 @@ class Router implements RouterInterface
      * @param array $route_params
      * @param array $query_params
      * @param bool $absolute
-     *
-     * @return string
      */
     public function fromHere(
         $route_name = null,
@@ -130,7 +123,9 @@ class Router implements RouterInterface
             if ($route instanceof RouteInterface) {
                 $route_name = $route->getName();
             } else {
-                throw new InvalidArgumentException('Cannot specify a null route name if no existing route is configured.');
+                throw new InvalidArgumentException(
+                    'Cannot specify a null route name if no existing route is configured.'
+                );
             }
         }
 
@@ -148,18 +143,19 @@ class Router implements RouterInterface
      * @param array $route_params
      * @param array $query_params
      * @param boolean $absolute Whether to include the full URL.
-     *
-     * @return UriInterface
      */
     public function named($route_name, $route_params = [], array $query_params = [], $absolute = false): UriInterface
     {
-        return self::resolveUri($this->getBaseUrl(),
-            $this->routeParser->relativeUrlFor($route_name, $route_params, $query_params), $absolute);
+        return self::resolveUri(
+            $this->getBaseUrl(),
+            $this->routeParser->relativeUrlFor($route_name, $route_params, $query_params),
+            $absolute
+        );
     }
 
     public function getBaseUrl(bool $useRequest = true): UriInterface
     {
-        $settingsBaseUrl = $this->settingsRepo->getSetting(Entity\Settings::BASE_URL, '');
+        $settingsBaseUrl = $this->settings->getBaseUrl();
         if (!empty($settingsBaseUrl)) {
             if (strpos($settingsBaseUrl, 'http') !== 0) {
                 $settingsBaseUrl = 'http://' . $settingsBaseUrl;
@@ -170,7 +166,7 @@ class Router implements RouterInterface
             $baseUrl = new Uri('');
         }
 
-        $useHttps = (bool)$this->settingsRepo->getSetting(Entity\Settings::ALWAYS_USE_SSL, 0);
+        $useHttps = $this->settings->getAlwaysUseSsl();
 
         if ($useRequest && $this->currentRequest instanceof ServerRequestInterface) {
             $currentUri = $this->currentRequest->getUri();
@@ -179,7 +175,7 @@ class Router implements RouterInterface
                 $useHttps = true;
             }
 
-            $preferBrowserUrl = (bool)$this->settingsRepo->getSetting(Entity\Settings::PREFER_BROWSER_URL, 0);
+            $preferBrowserUrl = $this->settings->getPreferBrowserUrl();
             if ($preferBrowserUrl || $baseUrl->getHost() === '') {
                 $ignoredHosts = ['web', 'nginx', 'localhost'];
                 if (!in_array($currentUri->getHost(), $ignoredHosts, true)) {

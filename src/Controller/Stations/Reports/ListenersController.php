@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Stations\Reports;
 
 use App\Entity;
@@ -17,16 +18,20 @@ class ListenersController
     ): ResponseInterface {
         $view = $request->getView();
 
-        $analytics_level = $settingsRepo->getSetting(Entity\Settings::LISTENER_ANALYTICS,
-            Entity\Analytics::LEVEL_ALL);
+        $settings = $settingsRepo->readSettings();
+        $analytics_level = $settings->getAnalytics();
 
         if ($analytics_level !== Entity\Analytics::LEVEL_ALL) {
             return $view->renderToResponse($response, 'stations/reports/restricted');
         }
 
         $attribution = $ipGeo->getAttribution();
-        return $view->renderToResponse($response, 'stations/reports/listeners', [
-            'attribution' => $attribution,
-        ]);
+        return $view->renderToResponse(
+            $response,
+            'stations/reports/listeners',
+            [
+                'attribution' => $attribution,
+            ]
+        );
     }
 }

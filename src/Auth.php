@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use App\Entity\Repository\UserRepository;
@@ -19,6 +20,8 @@ class Auth
 
     protected UserRepository $userRepo;
 
+    protected Environment $environment;
+
     /** @var User|bool|null */
     protected $user;
 
@@ -27,10 +30,12 @@ class Auth
 
     public function __construct(
         UserRepository $userRepo,
-        SessionInterface $session
+        SessionInterface $session,
+        Environment $environment
     ) {
         $this->userRepo = $userRepo;
         $this->session = $session;
+        $this->environment = $environment;
     }
 
     /**
@@ -38,8 +43,6 @@ class Auth
      *
      * @param string $username
      * @param string $password
-     *
-     * @return User|null
      */
     public function authenticate($username, $password): ?User
     {
@@ -58,7 +61,6 @@ class Auth
      *
      * @param bool $real_user_only
      *
-     * @return User|null
      * @throws Exception
      */
     public function getLoggedInUser($real_user_only = false): ?User
@@ -76,8 +78,6 @@ class Auth
 
     /**
      * Check if the current user is masquerading as another account.
-     *
-     * @return bool
      */
     public function isMasqueraded(): bool
     {
@@ -111,12 +111,10 @@ class Auth
 
     /**
      * Check if a user account is currently authenticated.
-     *
-     * @return bool
      */
     public function isLoggedIn(): bool
     {
-        if (Settings::getInstance()->isCli() && !Settings::getInstance()->isTesting()) {
+        if ($this->environment->isCli() && !$this->environment->isTesting()) {
             return false;
         }
 
@@ -131,8 +129,6 @@ class Auth
     /**
      * Indicate whether login is "complete", i.e. whether any necessary
      * second-factor authentication steps have been completed.
-     *
-     * @return bool
      */
     public function isLoginComplete(): bool
     {
@@ -142,7 +138,6 @@ class Auth
     /**
      * Get the authenticated user entity.
      *
-     * @return User|null
      * @throws Exception
      */
     public function getUser(): ?User
@@ -166,9 +161,13 @@ class Auth
             }
         }
 
-        return ($this->user instanceof User)
-            ? $this->userRepo->getRepository()->find($this->user->getId())
-            : null;
+        if (!$this->user instanceof User) {
+            return null;
+        }
+
+        /** @var User|null $user */
+        $user = $this->userRepo->getRepository()->find($this->user->getId());
+        return $user;
     }
 
     /**
@@ -202,8 +201,6 @@ class Auth
 
     /**
      * Return the currently masqueraded user, if one is set.
-     *
-     * @return User|null
      */
     public function getMasquerade(): ?User
     {
@@ -242,15 +239,13 @@ class Auth
      * Verify a supplied one-time password.
      *
      * @param string $otp
-     *
-     * @return bool
      */
     public function verifyTwoFactor(string $otp): bool
     {
         $user = $this->getUser();
 
         if (!($user instanceof User)) {
-            throw new NotLoggedInException;
+            throw new NotLoggedInException();
         }
 
         if ($user->verifyTwoFactor($otp)) {

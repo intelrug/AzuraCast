@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Middleware\Module;
 
 use App\Entity;
 use App\Http\Response;
 use App\Http\ServerRequest;
+use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -14,14 +16,14 @@ class Api
 {
     protected Entity\Repository\ApiKeyRepository $api_repo;
 
-    protected Entity\Repository\SettingsRepository $settings_repo;
+    protected Entity\Repository\SettingsRepository $settingsRepo;
 
     public function __construct(
         Entity\Repository\ApiKeyRepository $apiKeyRepository,
-        Entity\Repository\SettingsRepository $settingsRepository
+        Entity\Repository\SettingsRepository $settingsRepo
     ) {
         $this->api_repo = $apiKeyRepository;
-        $this->settings_repo = $settingsRepository;
+        $this->settingsRepo = $settingsRepo;
     }
 
     public function __invoke(ServerRequest $request, RequestHandlerInterface $handler): ResponseInterface
@@ -38,27 +40,39 @@ class Api
         }
 
         // Set default cache control for API pages.
-        $prefer_browser_url = (bool)$this->settings_repo->getSetting(Entity\Settings::PREFER_BROWSER_URL, 0);
+        $settings = $this->settingsRepo->readSettings();
+
+        $prefer_browser_url = $settings->getPreferBrowserUrl();
 
         $response = $handler->handle($request);
 
         // Check for a user-set CORS header override.
-        $acao_header = trim($this->settings_repo->getSetting(Entity\Settings::API_ACCESS_CONTROL));
+        $acao_header = trim($settings->getApiAccessControl());
         if (!empty($acao_header)) {
             if ('*' === $acao_header) {
                 $response = $response->withHeader('Access-Control-Allow-Origin', '*');
             } else {
                 // Return the proper ACAO header matching the origin (if one exists).
                 $origin = $request->getHeaderLine('Origin');
+
                 if (!empty($origin)) {
-                    $origins = array_map('trim', explode(',', $acao_header));
+                    $rawOrigins = array_map('trim', explode(',', $acao_header));
+                    $rawOrigins[] = $settings->getBaseUrl();
 
-                    $base_url = $this->settings_repo->getSetting(Entity\Settings::BASE_URL);
-                    $origins[] = 'http://' . $base_url;
-                    $origins[] = 'https://' . $base_url;
+                    $origins = [];
+                    foreach ($rawOrigins as $rawOrigin) {
+                        $uri = new Uri($rawOrigin);
+                        if (empty($uri->getScheme())) {
+                            $origins[] = (string)($uri->withScheme('http'));
+                            $origins[] = (string)($uri->withScheme('https'));
+                        } else {
+                            $origins[] = (string)$uri;
+                        }
+                    }
 
+                    $origins = array_unique($origins);
                     if (in_array($origin, $origins, true)) {
-                        $response
+                        $response = $response
                             ->withHeader('Access-Control-Allow-Origin', $origin)
                             ->withHeader('Vary', 'Origin');
                     }
@@ -84,8 +98,6 @@ class Api
 
     /**
      * @param ServerRequest $request
-     *
-     * @return string|null
      */
     protected function getApiKey(ServerRequest $request): ?string
     {
