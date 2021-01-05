@@ -117,10 +117,9 @@ class StationStreamerRepository extends Repository
             if ($fs->has($tempPath)) {
                 $fs->copy($tempPath, $destPath);
             }
-
-            $broadcast->setTimestampEnd(time());
-            $this->em->persist($broadcast);
         }
+
+        $this->broadcastRepo->endAllActiveBroadcasts($station);
 
         $station->setIsStreamerLive(false);
         $station->setCurrentStreamer(null);
