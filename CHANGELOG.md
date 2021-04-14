@@ -3,6 +3,196 @@
 These changes have not yet been incorporated into a stable release, but if you are on the latest version of the rolling
 release channel, you can take advantage of these new features and fixes.
 
+## New Features/Changes
+
+There have been no new features since the last stable release.
+
+## Code Quality/Technical Changes
+
+There have been no technical changes since the last stable release.
+
+## Bug Fixes
+
+There have been no new bug fixes since the last stable release.
+
+---
+
+# AzuraCast 0.12.2 (Mar 9, 2021)
+
+## New Features/Changes
+
+- **E-mail Delivery**: System administrators can now configure SMTP for e-mail delivery via the system settings page. If
+  SMTP is enabled for your installation, the following functionality is added:
+
+    - **Self-Service Password Reset**: Users can request a password recovery token to reset their own passwords.
+
+    - **E-mail Web Hook**: You can dispatch an e-mail to specified recipients as a web hook when specific triggers
+      occur.
+
+- Web Hooks can now be triggered to dispatch when a station goes offline or comes online.
+
+- You can now generate listener reports for specific time periods instead of just day ranges.
+
+- For sequential or shuffled playlists, you can now view the internal queue that the AzuraCast AutoDJ uses to track its
+  song playback order from the "More" dropdown next to the playlist.
+
+## Code Quality/Technical Changes
+
+- We have removed the "?12345678" cache-busting timestamp query strings appended to the end of stream URLs. These have
+  caused a fair amount of confusion over the years, and with our modern playback controls (and with modern browsers)
+  it's far less necessary than it used to be.
+
+- Logging has been improved for critical errors (i.e. "out of memory" or "execution time exceeded").
+
+- We have improved the visibility and usability of our password strength meter where it is used.
+
+- **API Change**: The Now Playing API response now has a boolean "is_online" value to indicate whether we are currently
+  detecting a broadcast from the station.
+
+- Liquidsoap has been updated to version 1.4.4 stable, and the SFTPGo library has been updated to its latest version.
+
+## Bug Fixes
+
+- An issue with some stations crashing shortly after startup has been resolved. This was caused by a safety check we
+  added to the AutoDJ to check that AzuraCast was up and running at the same time; however, this caused issues with
+  stations that don't use the AzuraCast AutoDJ (i.e. stations that stream live or use remote playlists).
+
+- We have identified an issue that would prevent backups from older than a few months ago from restoring correctly; this
+  issue has been resolved, so backups should now restore without any issue regardless of the backup's age.
+
+- Several issues causing slowness in the Listener Report (especially the CSV generation) have been improved, so stations
+  with large listener counts should still be able to take advantage of this report in more scenarios.
+
+- Fixed a bug in the Now Playing adapter that would cause stations to return as offline when using the Icecast adapter
+  with no administrator password set.
+
+- Fixed a bug that prevented metadata from writing back to media files when album art was set.
+
+- A bug preventing the charts on the dashboard from showing or hiding properly has been fixed.
+
+---
+
+# AzuraCast 0.12.1 (Feb 19, 2021)
+
+## New Features/Changes
+
+- In the Now Playing API response, the station's public-facing URL and URLs to download the PLS and M3U playlists for
+  the station are included in the response.
+
+## Code Quality/Technical Changes
+
+- Across all AzuraCast repositories, the `master` branch has been renamed to `main`.
+
+- A new section has been added to the "Edit Liquidsoap Configuration" panel at the very bottom of the configuration,
+  after all broadcasts are sent out.
+
+- The "Enable Advanced Features" environment variable, which never actually worked correctly, has been moved to a
+  database-managed setting manageable via the "System Settings" page, and now works as intended. For new installations,
+  this option is unchecked by default, but can easily be enabled for "power users".
+
+## Bug Fixes
+
+- Calling `DELETE` on the files API endpoint properly deletes the file itself (#3813).
+
+- An issue with the updated dashboard has been fixed, bringing the dashboard appearance closer to the old visual style
+  but while still being a modern Vue component.
+
+- Changes to the weighted shuffle algorithm were reverted after further evaluation.
+
+- The AutoDJ queue timing has been reworked and simplified and issues have been fixed relating to cue timing.
+
+- Playlist weighting (1-25) now properly weights playlists with 1 being the _least_ frequently played and 25 being the _
+  most_ frequently played, as is intended and described in the documentation. (#3735)
+
+- Safety checks have been added to the AutoDJ to prevent the same track from being played consecutively. (#3682)
+
+- All web hooks now implement a rate limit to never send more than once every 10 seconds.
+
+---
+
+# AzuraCast 0.12 (Jan 27, 2021)
+
+This update introduces significant new features and fixes a number of bugs reported by the community.
+
+## New Features/Changes
+
+- **Remote Album Art Retrieval**: If enabled in the system settings panel, AzuraCast will now check remote services to
+  attempt to retrieve album art if it is missing, or not provided (i.e. for live DJs). By default, this system uses the
+  MusicBrainz database, which is comprehensive but can be slow; if you provide an API key for the last.fm API, AzuraCast
+  will prefer the last.fm API for album art instead.
+
+- **Media Manager Improvements:** Some changes have been made to the media manager to improve the user experience and
+  accessibility:
+    - You can now edit the playlists associated with a track from directly within the "Edit" modal dialog box for that
+      track.
+    - If all tracks/directories selected are in a playlist, that playlist will be checked by default in the "Set
+      Playlists" dropdown.
+    - Media uploaded via the Media Manager and Station programmatic names will no longer aggressively escape UTF-8
+      characters, and will instead leave them intact in most cases.
+    - You can now instruct AzuraCast to re-analyze and reprocess the selected media files in the Media Manager.
+
+- The "Duplicate Songs" report has been merged into the Media Manager, so you can take full advantage of the rich
+  filtering and other tools available in the Media Manager when addressing duplicate tracks.
+
+- You can now view all "Unprocessable" media in a single report; this includes non-music files (like images) and any
+  media that has errors that prevent us from processing them.
+
+- You can disable the "Download" button on the "On-Demand" media page while leaving streaming enabled by editing the
+  station profile.
+
+- You can show or hide the charts on the dashboard, and sort and filter stations listed there.
+
+- Listeners are now tracked by the mount point/remote stream they're connected to, which is shown in reports.
+
+- **Google Analytics**: A new webhook has been created that will automatically post live listeners to your Analytics
+  property. This is only compatible with "Universal Analytics" properties (codes that begin with GA-).
+
+## Code Quality/Technical Changes
+
+- Mount points that are hidden from public view are also hidden on the Icecast status overview page.
+
+- Unprocessable media is now stored in a separate database table along with the date/time processed and the relevant
+  error that prevented the file from being processed. This will prevent a situation where numerous files are non-
+  processable but are processed in every 5-minute sync. AzuraCast will automatically re-check files marked as
+  "unprocessable" if their modified time updates (i.e. the file is reuploaded) or approximately a week passes.
+
+- In preparation for the PHP 8.0 update and for other technical reasons, we have made some library changes:
+    - Switched PSR-6/PSR-16 cache implementation to the `symfony/cache` component.
+    - Removed the `studio24/rotate` and replaced with custom implementation for Flysystem.
+    - Switched from custom paginator to the `pagerfanta` library.
+    - Switched from custom image manipulation to the `intervention/image` library.
+    - Switched from custom crawler/bot detection to the `matomo/device-detector` library.
+
+  If you are building a plugin that uses the cache, as long as you are using the PSR interfaces, no change will be
+  required, but other updates may be required to your codebase.
+
+- The Docker Utility Script (`./docker.sh`) will now ask before running `docker system prune` post-update.
+
+- For more advanced setups, you can now set the following environment variables in `azuracast.env` to use a third-party
+  Redis service instead of the one bundled with AzuraCast:
+    - `REDIS_HOST` (default: `redis` for Docker, `localhost` for Ansible)
+    - `REDIS_PORT` (default: 6379)
+    - `REDIS_DB` for the database index (default: 1)
+
+- There is a new debug CLI command, `azuracast:debug:optimize-tables`, which optimizes all tables in the MariaDB
+  database and can recover space that's no longer in use.
+
+## Bug Fixes
+
+- Hidden mount points and relays will still be shown on the profile page.
+
+- If your browser sends a locale like `fr` instead of `fr_FR`, it will now be supported and detected (#3558).
+
+- Fixed a bug where sometimes changes to media metadata would be saved, only for the next 5-minute synchronization
+  process to revert to the previous data (#3553).
+
+- Issues with the Media Manager not showing files correctly when they were shared between stations has been fixed.
+  (#3618)
+
+- Fixed a bug where the first theme switch doesn't actually switch the theme.
+
+- Fixed an issue with Ogg Opus streams not continuing to play. (#3597)
+
 ---
 
 # AzuraCast 0.11.2 (Dec 11, 2020)
@@ -32,6 +222,8 @@ recommended for all users.
 - Importing playlists from existing M3U/PLS files works correctly again (#3528).
 
 - A bug preventing stations from being cloned has been fixed (#3501).
+
+- The SoundExchange royalties report has been updated and is working again (#3552).
 
 ---
 
@@ -514,7 +706,7 @@ This release includes some infrastructural changes to the application, along wit
   leaving the main media manager page.
 
 - You can now customize even more of the AzuraCast Docker installation parameters by modifying configuration lines in
-  your local [azuracast.env](https://github.com/AzuraCast/AzuraCast/blob/master/azuracast.sample.env#L70-L80) file.
+  your local [azuracast.env](https://github.com/AzuraCast/AzuraCast/blob/main/azuracast.sample.env#L70-L80) file.
 
 ## Bug Fixes
 
@@ -642,7 +834,7 @@ important updates to the software in that time, especially in the fields of reli
   the "Now Playing" API, which is a rich summary of the state of a radio station at the moment. To improve performance
   of more popular stations using our software, we've introduced two new methods of accessing this data: a static JSON
   file and a live Websocket/EventSource-driven plugin. You can read more on our
-  new [Now Playing Data APIs Guide](https://www.azuracast.com/developers/nowplaying.html).
+  new [Now Playing Data APIs Guide](https://docs.azuracast.com/en/developers/apis/now-playing-data).
 
 ## Bug Fixes and Minor Updates
 
@@ -846,7 +1038,7 @@ features and bug fixes.
   are convenient and secure: just scan the provided QR code with an app on your smartphone (FreeOTP, Authy, or any other
   TOTP app) and it will generate a unique code every few seconds. You will be asked for this code any time you log in.
   If you lose access to your authenticator at any time, you can follow
-  the [password reset instructions](https://github.com/AzuraCast/AzuraCast/blob/master/SUPPORT.md#reset-an-account-password)
+  the [password reset instructions](https://github.com/AzuraCast/AzuraCast/blob/main/SUPPORT.md#reset-an-account-password)
   to recover your account.
 
 - **Automatically Send Error Reports**: Thanks to our friends at [Sentry](https://sentry.io/), we've added the ability

@@ -5,22 +5,6 @@ use App\Console\Command;
 use App\Environment;
 
 return function (Application $console) {
-    // Set console version and name.
-    $di = $console->getContainer();
-
-    /** @var App\Version $version */
-    $version = $di->get(App\Version::class);
-
-    /** @var Environment $environment */
-    $environment = $di->get(Environment::class);
-
-    $console->setName($environment->getAppName() . ' Command Line Tools (' . $environment->getAppEnvironment() . ')');
-    $console->setVersion($version->getVersion());
-
-    /*
-     * Register commands.
-     */
-
     // Liquidsoap Internal CLI commands
     $console->command(
         'azuracast:internal:auth station-id [--dj-user=] [--dj-password=]',
@@ -55,9 +39,11 @@ return function (Application $console) {
     $console->command(
         'azuracast:internal:nextsong station-id [as-autodj]',
         Command\Internal\NextSongCommand::class
-    )->defaults([
-        'as-autodj' => true,
-    ])->setDescription('Return the next song to the AutoDJ.');
+    )->defaults(
+        [
+            'as-autodj' => true,
+        ]
+    )->setDescription('Return the next song to the AutoDJ.');
 
     $console->command(
         'azuracast:internal:ip',
@@ -98,7 +84,7 @@ return function (Application $console) {
     )->setDescription('Restart all radio stations, or a single one if specified.');
 
     $console->command(
-        'sync:run [task]',
+        'sync:run [--force] [task]',
         Command\SyncCommand::class
     )->setDescription(__('Run one or more scheduled synchronization tasks.'));
 
@@ -121,6 +107,11 @@ return function (Application $console) {
         'azuracast:api:docs',
         Command\GenerateApiDocsCommand::class
     )->setDescription('Trigger regeneration of AzuraCast API documentation.');
+
+    $console->command(
+        'azuracast:debug:optimize-tables',
+        Command\Debug\OptimizeTablesCommand::class
+    )->setDescription('Optimize all tables in the database.');
 
     // User-side tools
     $console->command(

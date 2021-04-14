@@ -2,45 +2,32 @@
 
 namespace App\Event;
 
-use App\Acl;
-use App\Entity\User;
-use App\Environment;
-use App\Http\RouterInterface;
+use App\Entity\Settings;
+use App\Http\ServerRequest;
 use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class AbstractBuildMenu extends Event
 {
-    protected Acl $acl;
+    protected ServerRequest $request;
 
-    protected User $user;
-
-    protected RouterInterface $router;
-
-    protected Environment $environment;
+    protected Settings $settings;
 
     protected array $menu = [];
 
-    public function __construct(Acl $acl, User $user, RouterInterface $router)
+    public function __construct(ServerRequest $request, Settings $settings)
     {
-        $this->acl = $acl;
-        $this->user = $user;
-        $this->router = $router;
-        $this->environment = Environment::getInstance();
+        $this->request = $request;
+        $this->settings = $settings;
     }
 
-    public function getAcl(): Acl
+    public function getRequest(): ServerRequest
     {
-        return $this->acl;
+        return $this->request;
     }
 
-    public function getRouter(): RouterInterface
+    public function getSettings(): Settings
     {
-        return $this->router;
-    }
-
-    public function getEnvironment(): Environment
-    {
-        return $this->environment;
+        return $this->settings;
     }
 
     /**
@@ -49,7 +36,7 @@ abstract class AbstractBuildMenu extends Event
      * @param string $item_id
      * @param array $item_details
      */
-    public function addItem($item_id, array $item_details): void
+    public function addItem(string $item_id, array $item_details): void
     {
         $this->merge([$item_id => $item_details]);
     }
@@ -100,11 +87,9 @@ abstract class AbstractBuildMenu extends Event
         return true;
     }
 
-    /**
-     * @param string $permission_name
-     */
     public function checkPermission(string $permission_name): bool
     {
-        return $this->acl->userAllowed($this->user, $permission_name);
+        $acl = $this->request->getAcl();
+        return $acl->isAllowed($permission_name);
     }
 }

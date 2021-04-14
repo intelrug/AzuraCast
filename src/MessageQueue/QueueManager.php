@@ -39,7 +39,9 @@ class QueueManager implements SendersLocatorInterface
         $message = $envelope->getMessage();
 
         if (!$message instanceof AbstractMessage) {
-            return [];
+            return [
+                $this->getTransport(self::QUEUE_NORMAL_PRIORITY),
+            ];
         }
 
         $queue = $message->getQueue();
@@ -66,6 +68,19 @@ class QueueManager implements SendersLocatorInterface
             $this->getConnection($queueName),
             new PhpSerializer()
         );
+    }
+
+    /**
+     * @param string $queueName
+     *
+     * @return \Generator|AbstractMessage[]
+     */
+    public function getMessagesInTransport(string $queueName): \Generator
+    {
+        $transport = $this->getTransport($queueName);
+        foreach ($transport->all() as $envelope) {
+            yield $envelope->getMessage();
+        }
     }
 
     /**

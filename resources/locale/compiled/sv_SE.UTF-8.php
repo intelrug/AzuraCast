@@ -14,60 +14,56 @@ Language-Team: Swedish
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-POT-Creation-Date: 2020-11-25T01:26:50+00:00
-PO-Revision-Date: 2020-11-25 07:46
+POT-Creation-Date: 2021-03-08T13:22:42+00:00
+PO-Revision-Date: 2021-03-09 04:27
 Language: sv_SE
 Plural-Forms: nplurals=2; plural=(n != 1);
 X-Crowdin-Project: azuracast
 X-Crowdin-Project-ID: 217396
 X-Crowdin-Language: sv-SE
-X-Crowdin-File: /master/resources/locale/default.pot
+X-Crowdin-File: /main/resources/locale/default.pot
 X-Crowdin-File-ID: 4
 ',
       ),
-      'IP Geolocation by DB-IP' => 
+      'Now Playing Data' => 
       array (
-        0 => '',
+        0 => 'Nu spelas Data',
       ),
-      'This product includes GeoLite2 data created by MaxMind, available from %s.' => 
+      '1-Minute Sync' => 
       array (
-        0 => '',
+        0 => '1-minuts synkronisering',
       ),
-      'GeoLite database not configured for this installation. See System Administration for instructions.' => 
+      'Song Requests Queue' => 
       array (
-        0 => '',
+        0 => 'Kö för låtönskningar',
       ),
-      'Search engine crawlers are not permitted to use this feature.' => 
+      '5-Minute Sync' => 
       array (
-        0 => '',
+        0 => '5-minuters synkronisering',
       ),
-      'This station does not accept requests currently.' => 
+      'Check Media Folders' => 
       array (
-        0 => 'Denna station accepterar inte önskningar för närvarande.',
+        0 => 'Kontrollera mediamappar',
       ),
-      'The song ID you specified could not be found in the station.' => 
+      '1-Hour Sync' => 
       array (
-        0 => '',
+        0 => '1-Timmes synkronisering',
       ),
-      'The song ID you specified cannot be requested for this station.' => 
+      'Analytics/Statistics' => 
       array (
-        0 => '',
+        0 => 'Analytiker/Statistik',
       ),
-      'You have submitted a request too recently! Please wait before submitting another one.' => 
+      'Cleanup' => 
       array (
-        0 => '',
+        0 => 'Rensa',
       ),
-      'Duplicate request: this song was already requested and will play soon.' => 
+      'All Stations' => 
       array (
-        0 => '',
+        0 => 'Alla stationer',
       ),
-      'This song or artist has been played too recently. Wait a while before requesting it again.' => 
+      'Listeners' => 
       array (
-        0 => '',
-      ),
-      'None' => 
-      array (
-        0 => '',
+        0 => 'Lyssnare',
       ),
       'Record not found!' => 
       array (
@@ -84,6 +80,18 @@ X-Crowdin-File-ID: 4
       'You cannot remove yourself.' => 
       array (
         0 => 'Du kan inte ta bort dig själv.',
+      ),
+      'This station does not accept requests currently.' => 
+      array (
+        0 => 'Denna station accepterar inte önskningar för närvarande.',
+      ),
+      'Request submitted successfully.' => 
+      array (
+        0 => 'Önskning skickad.',
+      ),
+      'This station is out of available storage space.' => 
+      array (
+        0 => 'Denna station har slut på tillgängligt lagringsutrymme.',
       ),
       'Station restarted.' => 
       array (
@@ -121,49 +129,13 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'Backend startades om.',
       ),
-      'This station is out of available storage space.' => 
+      'Playlist successfully imported; %d of %d files were successfully matched.' => 
       array (
-        0 => 'Denna station har slut på tillgängligt lagringsutrymme.',
+        0 => 'Spellistan importerades; %d av %d filer matchades framgångsrikt.',
       ),
-      'Record not found.' => 
-      array (
-        0 => 'Posten hittades inte.',
-      ),
-      'This station does not support on-demand streaming.' => 
-      array (
-        0 => 'Denna station stöder inte on-demand streaming.',
-      ),
-      'File not found.' => 
-      array (
-        0 => 'Filen hittades inte.',
-      ),
-      'File not specified.' => 
-      array (
-        0 => 'Fil ej angiven.',
-      ),
-      'New path not specified.' => 
-      array (
-        0 => 'Ingen ny sökväg angiven.',
-      ),
-      'Path "%s" is not a folder.' => 
-      array (
-        0 => 'Sökväg "%s" är inte en mapp.',
-      ),
-      'Directory' => 
-      array (
-        0 => 'Katalog',
-      ),
-      'File Not Processed' => 
-      array (
-        0 => 'Filen är inte bearbetad',
-      ),
-      'No directory specified' => 
+      'Playlist queue cleared.' => 
       array (
         0 => '',
-      ),
-      'Directory "%s" was not created' => 
-      array (
-        0 => 'Katalog "%s" skapades inte',
       ),
       'Playlist not found.' => 
       array (
@@ -172,10 +144,6 @@ X-Crowdin-File-ID: 4
       'This playlist is not a sequential playlist.' => 
       array (
         0 => 'Denna spellista är inte en sekventiell spellista.',
-      ),
-      'Format not found.' => 
-      array (
-        0 => 'Formatet hittades inte.',
       ),
       'Playlist enabled.' => 
       array (
@@ -189,101 +157,169 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'Spellista omfördelad.',
       ),
-      'Playlist successfully imported; %d of %d files were successfully matched.' => 
+      'This station does not support on-demand streaming.' => 
       array (
-        0 => 'Spellistan importerades; %d av %d filer matchades framgångsrikt.',
+        0 => 'Denna station stöder inte on-demand streaming.',
       ),
-      'Request submitted successfully.' => 
+      'File not found.' => 
       array (
-        0 => 'Önskning skickad.',
+        0 => 'Filen hittades inte.',
+      ),
+      'Record not found.' => 
+      array (
+        0 => 'Posten hittades inte.',
       ),
       'No recording available.' => 
       array (
         0 => 'Ingen inspelning tillgänglig.',
       ),
+      'Directory' => 
+      array (
+        0 => 'Katalog',
+      ),
+      'File Not Processed: %s' => 
+      array (
+        0 => '',
+      ),
+      'File Processing' => 
+      array (
+        0 => '',
+      ),
+      'No directory specified' => 
+      array (
+        0 => '',
+      ),
+      'Directory "%s" was not created' => 
+      array (
+        0 => 'Katalog "%s" skapades inte',
+      ),
+      'File not specified.' => 
+      array (
+        0 => 'Fil ej angiven.',
+      ),
+      'New path not specified.' => 
+      array (
+        0 => 'Ingen ny sökväg angiven.',
+      ),
+      'Path "%s" is not a folder.' => 
+      array (
+        0 => 'Sökväg "%s" är inte en mapp.',
+      ),
+      'Too many login attempts' => 
+      array (
+        0 => 'För många inloggningsförsök',
+      ),
+      'You have attempted to log in too many times. Please wait 30 seconds and try again.' => 
+      array (
+        0 => 'Du har försökt att logga in för många gånger. Vänligen vänta 30 sekunder och försök igen.',
+      ),
+      'Logged in successfully.' => 
+      array (
+        0 => 'Inloggad framgångsrikt.',
+      ),
+      'Complete the setup process to get started.' => 
+      array (
+        0 => 'Slutför installationsprocessen för att komma igång.',
+      ),
+      'Login unsuccessful' => 
+      array (
+        0 => 'Inloggningen misslyckades',
+      ),
+      'Your credentials could not be verified.' => 
+      array (
+        0 => 'Dina uppgifter kunde inte verifieras.',
+      ),
+      'Invalid token specified.' => 
+      array (
+        0 => '',
+      ),
+      'Logged in using account recovery token' => 
+      array (
+        0 => '',
+      ),
+      'Your password has been updated.' => 
+      array (
+        0 => '',
+      ),
+      'Too many forgot password attempts' => 
+      array (
+        0 => '',
+      ),
+      'You have attempted to reset your password too many times. Please wait 30 seconds and try again.' => 
+      array (
+        0 => '',
+      ),
+      'Account Recovery Link' => 
+      array (
+        0 => '',
+      ),
+      'Account recovery e-mail sent.' => 
+      array (
+        0 => '',
+      ),
+      'If the e-mail address you provided is in the system, check your inbox for a password reset message.' => 
+      array (
+        0 => '',
+      ),
+      'Setup has already been completed!' => 
+      array (
+        0 => 'Installationen har redan slutförts!',
+      ),
+      'Super Administrator' => 
+      array (
+        0 => 'Super administratör',
+      ),
+      'Setup is now complete!' => 
+      array (
+        0 => 'Installationen är nu klar!',
+      ),
+      'Continue setting up your station in the main AzuraCast app.' => 
+      array (
+        0 => 'Fortsätt konfigurera din station i AzuraCast-appen.',
+      ),
+      'API Key not found.' => 
+      array (
+        0 => 'API-nyckel hittades inte.',
+      ),
+      'API Key updated.' => 
+      array (
+        0 => 'API-nyckel uppdaterad.',
+      ),
+      'Edit API Key' => 
+      array (
+        0 => 'Redigera API-nyckel',
+      ),
+      'Add API Key' => 
+      array (
+        0 => 'Lägg till API-nyckel',
+      ),
+      'API Key deleted.' => 
+      array (
+        0 => 'API-nyckel borttagen.',
+      ),
+      'Profile saved!' => 
+      array (
+        0 => 'Profil sparad!',
+      ),
+      'Edit Profile' => 
+      array (
+        0 => 'Redigera profil',
+      ),
+      'The token you supplied is invalid. Please try again.' => 
+      array (
+        0 => 'Den token du angav är ogiltig. Försök igen.',
+      ),
+      'Two-factor authentication enabled.' => 
+      array (
+        0 => 'Tvåfaktorsautentisering aktiverad.',
+      ),
+      'Two-factor authentication disabled.' => 
+      array (
+        0 => 'Tvåfaktorsautentisering inaktiverad.',
+      ),
       'Changes saved.' => 
       array (
         0 => 'Ändringar sparade.',
-      ),
-      'System Settings' => 
-      array (
-        0 => 'Systeminställningar',
-      ),
-      'Configure Backups' => 
-      array (
-        0 => 'Konfigurera säkerhetskopior',
-      ),
-      'Run Manual Backup' => 
-      array (
-        0 => 'Kör manuell säkerhetskopiering',
-      ),
-      'Backup deleted.' => 
-      array (
-        0 => 'Säkerhetskopia borttagen.',
-      ),
-      'Backup not found.' => 
-      array (
-        0 => 'Säkerhetskopian hittades inte.',
-      ),
-      'SHOUTcast version "%s" is currently installed.' => 
-      array (
-        0 => 'SHOUTcast version "%s" är för närvarande installerad.',
-      ),
-      'Install SHOUTcast' => 
-      array (
-        0 => 'Installera SHOUTcast',
-      ),
-      'Permission updated.' => 
-      array (
-        0 => 'Behörighet uppdaterad.',
-      ),
-      'Permission added.' => 
-      array (
-        0 => 'Behörighet tillagd.',
-      ),
-      'Edit Permission' => 
-      array (
-        0 => 'Redigera behörighet',
-      ),
-      'Add Permission' => 
-      array (
-        0 => 'Lägg till behörighet',
-      ),
-      'Permission deleted.' => 
-      array (
-        0 => 'Behörighet borttagen.',
-      ),
-      'Custom Field updated.' => 
-      array (
-        0 => 'Anpassat fält uppdaterat.',
-      ),
-      'Custom Field added.' => 
-      array (
-        0 => 'Anpassat fält tillagt.',
-      ),
-      'Edit Custom Field' => 
-      array (
-        0 => 'Redigera anpassat fält',
-      ),
-      'Add Custom Field' => 
-      array (
-        0 => 'Lägg till anpassat fält',
-      ),
-      'Custom Field deleted.' => 
-      array (
-        0 => 'Anpassat fält borttaget.',
-      ),
-      'An error occurred while downloading the GeoLite database: %s' => 
-      array (
-        0 => 'Ett fel inträffade vid nedladdning av GeoLite-databasen: %s',
-      ),
-      'Install GeoLite IP Database' => 
-      array (
-        0 => 'Installera GeoLite IP-databas',
-      ),
-      'GeoLite database uninstalled.' => 
-      array (
-        0 => 'GeoLite-databasen avinstallerad.',
       ),
       'Station updated.' => 
       array (
@@ -309,25 +345,101 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'Klona Station: %s',
       ),
-      'API Key updated.' => 
+      'System Settings' => 
       array (
-        0 => 'API-nyckel uppdaterad.',
+        0 => 'Systeminställningar',
       ),
-      'Edit API Key' => 
+      'Permission updated.' => 
       array (
-        0 => 'Redigera API-nyckel',
+        0 => 'Behörighet uppdaterad.',
       ),
-      'API Key deleted.' => 
+      'Permission added.' => 
       array (
-        0 => 'API-nyckel borttagen.',
+        0 => 'Behörighet tillagd.',
       ),
-      'Sync Task Output' => 
+      'Edit Permission' => 
       array (
-        0 => 'Synkronisera uppgiftens utdata',
+        0 => 'Redigera behörighet',
+      ),
+      'Add Permission' => 
+      array (
+        0 => 'Lägg till behörighet',
+      ),
+      'Permission deleted.' => 
+      array (
+        0 => 'Behörighet borttagen.',
+      ),
+      'Run Synchronized Task' => 
+      array (
+        0 => '',
       ),
       'Debug Output' => 
       array (
         0 => 'Debug Output',
+      ),
+      'AzuraCast Application Log' => 
+      array (
+        0 => 'AzuraCast-applikationslogg',
+      ),
+      'Nginx Access Log' => 
+      array (
+        0 => 'Nginx åtkomstlogg',
+      ),
+      'Nginx Error Log' => 
+      array (
+        0 => 'Nginx fellogg',
+      ),
+      'PHP Application Log' => 
+      array (
+        0 => 'PHP-applikationslogg',
+      ),
+      'Supervisord Log' => 
+      array (
+        0 => 'Handledningslogg',
+      ),
+      'SHOUTcast version "%s" is currently installed.' => 
+      array (
+        0 => 'SHOUTcast version "%s" är för närvarande installerad.',
+      ),
+      'Install SHOUTcast' => 
+      array (
+        0 => 'Installera SHOUTcast',
+      ),
+      'Configure Backups' => 
+      array (
+        0 => 'Konfigurera säkerhetskopior',
+      ),
+      'Run Manual Backup' => 
+      array (
+        0 => 'Kör manuell säkerhetskopiering',
+      ),
+      'Backup deleted.' => 
+      array (
+        0 => 'Säkerhetskopia borttagen.',
+      ),
+      'Backup not found.' => 
+      array (
+        0 => 'Säkerhetskopian hittades inte.',
+      ),
+      'Custom Field updated.' => 
+      array (
+        0 => 'Anpassat fält uppdaterat.',
+      ),
+      'Custom Field added.' => 
+      array (
+        0 => 'Anpassat fält tillagt.',
+      ),
+      'Edit Custom Field' => 
+      array (
+        0 => 'Redigera anpassat fält',
+      ),
+      'Add Custom Field' => 
+      array (
+        0 => 'Lägg till anpassat fält',
+      ),
+      'Custom Field deleted.' => 
+      array (
+        0 => 'Anpassat fält borttaget.',
       ),
       'User updated.' => 
       array (
@@ -361,145 +473,17 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'Användaren hittades inte.',
       ),
-      'Logged in successfully.' => 
+      'An error occurred while downloading the GeoLite database: %s' => 
       array (
-        0 => 'Inloggad framgångsrikt.',
+        0 => 'Ett fel inträffade vid nedladdning av GeoLite-databasen: %s',
       ),
-      'AzuraCast Application Log' => 
+      'Install GeoLite IP Database' => 
       array (
-        0 => 'AzuraCast-applikationslogg',
+        0 => 'Installera GeoLite IP-databas',
       ),
-      'Nginx Access Log' => 
+      'GeoLite database uninstalled.' => 
       array (
-        0 => 'Nginx åtkomstlogg',
-      ),
-      'Nginx Error Log' => 
-      array (
-        0 => 'Nginx fellogg',
-      ),
-      'PHP Application Log' => 
-      array (
-        0 => 'PHP-applikationslogg',
-      ),
-      'Supervisord Log' => 
-      array (
-        0 => 'Handledningslogg',
-      ),
-      'Setup has already been completed!' => 
-      array (
-        0 => 'Installationen har redan slutförts!',
-      ),
-      'Super Administrator' => 
-      array (
-        0 => 'Super administratör',
-      ),
-      'Setup is now complete!' => 
-      array (
-        0 => 'Installationen är nu klar!',
-      ),
-      'Continue setting up your station in the main AzuraCast app.' => 
-      array (
-        0 => 'Fortsätt konfigurera din station i AzuraCast-appen.',
-      ),
-      'API Key not found.' => 
-      array (
-        0 => 'API-nyckel hittades inte.',
-      ),
-      'Add API Key' => 
-      array (
-        0 => 'Lägg till API-nyckel',
-      ),
-      'All Stations' => 
-      array (
-        0 => 'Alla stationer',
-      ),
-      'Listeners' => 
-      array (
-        0 => 'Lyssnare',
-      ),
-      'Song Title' => 
-      array (
-        0 => 'Låttitel',
-      ),
-      'Song Artist' => 
-      array (
-        0 => 'Låtartist',
-      ),
-      'Two-factor authentication disabled.' => 
-      array (
-        0 => 'Tvåfaktorsautentisering inaktiverad.',
-      ),
-      'The token you supplied is invalid. Please try again.' => 
-      array (
-        0 => 'Den token du angav är ogiltig. Försök igen.',
-      ),
-      'Two-factor authentication enabled.' => 
-      array (
-        0 => 'Tvåfaktorsautentisering aktiverad.',
-      ),
-      'Profile saved!' => 
-      array (
-        0 => 'Profil sparad!',
-      ),
-      'Edit Profile' => 
-      array (
-        0 => 'Redigera profil',
-      ),
-      'Login unsuccessful' => 
-      array (
-        0 => 'Inloggningen misslyckades',
-      ),
-      'Your credentials could not be verified.' => 
-      array (
-        0 => 'Dina uppgifter kunde inte verifieras.',
-      ),
-      'Too many login attempts' => 
-      array (
-        0 => 'För många inloggningsförsök',
-      ),
-      'You have attempted to log in too many times. Please wait 30 seconds and try again.' => 
-      array (
-        0 => 'Du har försökt att logga in för många gånger. Vänligen vänta 30 sekunder och försök igen.',
-      ),
-      'Complete the setup process to get started.' => 
-      array (
-        0 => 'Slutför installationsprocessen för att komma igång.',
-      ),
-      'Liquidsoap Log' => 
-      array (
-        0 => 'Liquidsoap Logg',
-      ),
-      'Liquidsoap Configuration' => 
-      array (
-        0 => 'Liquidsoap konfiguration',
-      ),
-      'Icecast Access Log' => 
-      array (
-        0 => 'Icecast Access Logg',
-      ),
-      'Icecast Error Log' => 
-      array (
-        0 => 'Icecast fellogg',
-      ),
-      'Icecast Configuration' => 
-      array (
-        0 => 'Icecast konfiguration',
-      ),
-      'SHOUTcast Log' => 
-      array (
-        0 => 'Logg för SHOUTcast',
-      ),
-      'SHOUTcast Configuration' => 
-      array (
-        0 => 'Konfiguration för SHOUTcast',
-      ),
-      'Save Changes' => 
-      array (
-        0 => 'Spara ändringar',
-      ),
-      'Edit Liquidsoap Configuration' => 
-      array (
-        0 => 'Redigera Liquidsoap konfiguration',
+        0 => 'GeoLite-databasen avinstallerad.',
       ),
       'Web Hook added.' => 
       array (
@@ -533,45 +517,13 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'Web Hook borttagen.',
       ),
-      'Remote Relay updated.' => 
+      'Save Changes' => 
       array (
-        0 => '',
+        0 => 'Spara ändringar',
       ),
-      'Remote Relay added.' => 
+      'Edit Liquidsoap Configuration' => 
       array (
-        0 => '',
-      ),
-      'Edit Remote Relay' => 
-      array (
-        0 => '',
-      ),
-      'Add Remote Relay' => 
-      array (
-        0 => '',
-      ),
-      'Remote Relay deleted.' => 
-      array (
-        0 => '',
-      ),
-      'This record cannot be edited.' => 
-      array (
-        0 => 'Denna post kan inte redigeras.',
-      ),
-      'This feature is not currently supported on this station.' => 
-      array (
-        0 => 'Denna funktion stöds för närvarande inte på den här stationen.',
-      ),
-      'Edit Mount Point' => 
-      array (
-        0 => '',
-      ),
-      'Add Mount Point' => 
-      array (
-        0 => '',
-      ),
-      'Mount Point deleted.' => 
-      array (
-        0 => '',
+        0 => 'Redigera Liquidsoap konfiguration',
       ),
       'Streamers enabled!' => 
       array (
@@ -589,21 +541,21 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Edit SFTP User' => 
+      'This feature is not currently supported on this station.' => 
       array (
-        0 => 'Redigera SFTP-användare',
+        0 => 'Denna funktion stöds för närvarande inte på den här stationen.',
       ),
-      'Add SFTP User' => 
+      'Edit Mount Point' => 
       array (
-        0 => 'Lägg till SFTP-användare',
+        0 => '',
       ),
-      'SFTP User deleted.' => 
+      'Add Mount Point' => 
       array (
-        0 => 'SFTP-användare borttagen.',
+        0 => '',
       ),
-      'SoundExchange Report' => 
+      'Mount Point deleted.' => 
       array (
-        0 => 'SoundExchange rapport',
+        0 => '',
       ),
       'Listeners by Day' => 
       array (
@@ -645,101 +597,113 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'Lyssnare per timme',
       ),
-      'Now Playing Data' => 
+      'SoundExchange Report' => 
       array (
-        0 => 'Nu spelas Data',
+        0 => 'SoundExchange rapport',
       ),
-      '1-Minute Sync' => 
+      'Edit SFTP User' => 
       array (
-        0 => '1-minuts synkronisering',
+        0 => 'Redigera SFTP-användare',
       ),
-      'Song Requests Queue' => 
+      'Add SFTP User' => 
       array (
-        0 => 'Kö för låtönskningar',
+        0 => 'Lägg till SFTP-användare',
       ),
-      '5-Minute Sync' => 
+      'SFTP User deleted.' => 
       array (
-        0 => '5-minuters synkronisering',
+        0 => 'SFTP-användare borttagen.',
       ),
-      'Check Media Folders' => 
-      array (
-        0 => 'Kontrollera mediamappar',
-      ),
-      '1-Hour Sync' => 
-      array (
-        0 => '1-Timmes synkronisering',
-      ),
-      'Analytics/Statistics' => 
-      array (
-        0 => 'Analytiker/Statistik',
-      ),
-      'Cleanup' => 
-      array (
-        0 => 'Rensa',
-      ),
-      'The port %s is in use by another station.' => 
-      array (
-        0 => 'Porten %s används av en annan station.',
-      ),
-      'This storage location could not be validated: %s' => 
+      'Remote Relay updated.' => 
       array (
         0 => '',
       ),
-      'Synchronized Task Not Recently Run' => 
+      'Remote Relay added.' => 
       array (
         0 => '',
       ),
-      'The "%s" synchronization task has not run recently. This may indicate an error with your installation. <a href="%s" target="_blank">Manually run the task</a> to check for errors.' => 
+      'Edit Remote Relay' => 
       array (
         0 => '',
       ),
-      'Follow the <a href="%s" target="_blank">update instructions</a> to update your installation.' => 
+      'Add Remote Relay' => 
       array (
-        0 => 'Följ <a href="%s" target="_blank">instruktionerna</a> för att uppdatera din installation.',
+        0 => '',
       ),
-      'AzuraCast <a href="%s" target="_blank">version %s</a> is now available.' => 
+      'Remote Relay deleted.' => 
       array (
-        0 => 'Azuracast <a href="%s" target="_blank">version%s</a> är nu tillgänglig.',
+        0 => '',
       ),
-      'You are currently running version %s. Updating is highly recommended.' => 
+      'This record cannot be edited.' => 
       array (
-        0 => 'Du kör för närvarande version %s. Vi rekommenderar starkt att du uppdaterar.',
+        0 => 'Denna post kan inte redigeras.',
       ),
-      'New AzuraCast Release Version Available' => 
+      'Liquidsoap Log' => 
       array (
-        0 => 'Ny AzuraCast version tillgänglig',
+        0 => 'Liquidsoap Logg',
       ),
-      'The following improvements have been made since your last update:' => 
+      'Liquidsoap Configuration' => 
       array (
-        0 => 'Följande förändringar har skett sedan din senaste uppdatering:',
+        0 => 'Liquidsoap konfiguration',
       ),
-      'Your installation is currently %d update(s) behind the latest version.' => 
+      'Icecast Access Log' => 
       array (
-        0 => 'Du ligger för närvarande %d uppdatering(är) bakom den senaste versionen.',
+        0 => 'Icecast Access Logg',
       ),
-      'You should update to take advantage of bug and security fixes.' => 
+      'Icecast Error Log' => 
       array (
-        0 => 'Du bör uppdatera för att dra nytta av fel- och säkerhetsrättelser.',
+        0 => 'Icecast fellogg',
       ),
-      'New AzuraCast Updates Available' => 
+      'Icecast Configuration' => 
       array (
-        0 => 'Nya AzuraCast-uppdateringar tillgängliga',
+        0 => 'Icecast konfiguration',
       ),
-      'Your <code>docker-compose.yml</code> file is out of date!' => 
+      'SHOUTcast Log' => 
       array (
-        0 => 'Din <code>docker-compose.yml</code> fil är föråldrad!',
+        0 => 'Logg för SHOUTcast',
       ),
-      'You should update your <code>docker-compose.yml</code> file to reflect the newest changes. View the <a href="%s" target="_blank">latest version of the file</a> and update your file accordingly.<br>You can also use the <code>./docker.sh</code> utility script to automatically update your file.' => 
+      'SHOUTcast Configuration' => 
       array (
-        0 => 'Du bör uppdatera din <code>docker-compose.yml</code> fil för att återspegla de senaste ändringarna. Visa den <a href="%s" target="_blank">senaste versionen av filen</a> och uppdatera din fil med detta.<br>Du kan också använda verktyget <code>./docker.sh</code> för att automatiskt uppdatera din fil.',
+        0 => 'Konfiguration för SHOUTcast',
       ),
-      'Installation Not Recently Backed Up' => 
+      'GeoLite database not configured for this installation. See System Administration for instructions.' => 
       array (
-        0 => 'Installationen är inte nyligen säkerhetskopierad',
+        0 => '',
       ),
-      'This installation has not been backed up in the last two weeks. Visit the <a href="%s" target="_blank">Backups</a> page to run a new backup.' => 
+      'This product includes GeoLite2 data created by MaxMind, available from %s.' => 
       array (
-        0 => 'Denna installation har inte säkerhetskopierats under de senaste två veckorna. Besök sidan <a href="%s" target="_blank">Säkerhetskopior</a> för att köra en ny säkerhetskopia.',
+        0 => '',
+      ),
+      'IP Geolocation by DB-IP' => 
+      array (
+        0 => '',
+      ),
+      'None' => 
+      array (
+        0 => '',
+      ),
+      'Search engine crawlers are not permitted to use this feature.' => 
+      array (
+        0 => '',
+      ),
+      'The song ID you specified could not be found in the station.' => 
+      array (
+        0 => '',
+      ),
+      'The song ID you specified cannot be requested for this station.' => 
+      array (
+        0 => '',
+      ),
+      'You have submitted a request too recently! Please wait before submitting another one.' => 
+      array (
+        0 => '',
+      ),
+      'Duplicate request: this song was already requested and will play soon.' => 
+      array (
+        0 => '',
+      ),
+      'This song or artist has been played too recently. Wait a while before requesting it again.' => 
+      array (
+        0 => '',
       ),
       'All Permissions' => 
       array (
@@ -821,7 +785,67 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Configuration already set up.' => 
+      'This storage location could not be validated: %s' => 
+      array (
+        0 => '',
+      ),
+      'The port %s is in use by another station.' => 
+      array (
+        0 => 'Porten %s används av en annan station.',
+      ),
+      'Welcome to the AzuraCast Liquidsoap configuration editor.' => 
+      array (
+        0 => 'Välkommen till konfigurationsredigeraren AzuraCast Liquidsoap.',
+      ),
+      'Using this page, you can customize several sections of the Liquidsoap configuration.' => 
+      array (
+        0 => '',
+      ),
+      'The non-editable sections are automatically generated by AzuraCast.' => 
+      array (
+        0 => 'De icke-redigerbara sektionerna genereras automatiskt av AzuraCast.',
+      ),
+      'Use <b>%s</b> on this server' => 
+      array (
+        0 => 'Använd <b>%s</b> på denna server',
+      ),
+      'Connect to a <b>remote radio server</b>' => 
+      array (
+        0 => 'Anslut till en <b>fjärradioserver</b>',
+      ),
+      '<b>Do not use</b> an AutoDJ service' => 
+      array (
+        0 => '<b>Använd inte</b> en AutoDJ-tjänst',
+      ),
+      '%s is not recognized as a service.' => 
+      array (
+        0 => '%s känns inte igen som en tjänst.',
+      ),
+      'It may not be registered with Supervisor yet. Restarting broadcasting may help.' => 
+      array (
+        0 => '',
+      ),
+      '%s cannot start' => 
+      array (
+        0 => '%s kan inte starta',
+      ),
+      'It is already running.' => 
+      array (
+        0 => 'Den är redan igång.',
+      ),
+      '%s cannot stop' => 
+      array (
+        0 => '%s kan inte stoppas',
+      ),
+      'It is not running.' => 
+      array (
+        0 => 'Den körs inte.',
+      ),
+      '%s encountered an error' => 
+      array (
+        0 => '%s stötte på ett fel',
+      ),
+      'Check the log for details.' => 
       array (
         0 => '',
       ),
@@ -829,59 +853,7 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'AzuraCast Setup' => 
-      array (
-        0 => '',
-      ),
-      'Welcome to AzuraCast. Please wait while some key dependencies of AzuraCast are set up...' => 
-      array (
-        0 => 'Välkommen till AzuraCast. Vänta medan några nyckelberoenden för AzuraCast är inställda...',
-      ),
-      'Environment: %s' => 
-      array (
-        0 => '',
-      ),
-      'Installation Method: %s' => 
-      array (
-        0 => '',
-      ),
-      'Running in update mode.' => 
-      array (
-        0 => '',
-      ),
-      'Migrating Legacy Configuration' => 
-      array (
-        0 => '',
-      ),
-      'Running Database Migrations' => 
-      array (
-        0 => '',
-      ),
-      'Generating Database Proxy Classes' => 
-      array (
-        0 => '',
-      ),
-      'Installing Data Fixtures' => 
-      array (
-        0 => '',
-      ),
-      'Reload System Data' => 
-      array (
-        0 => '',
-      ),
-      'Refreshing All Stations' => 
-      array (
-        0 => '',
-      ),
-      'AzuraCast is now updated to the latest version!' => 
-      array (
-        0 => '',
-      ),
-      'AzuraCast installation complete!' => 
-      array (
-        0 => '',
-      ),
-      'Visit %s to complete setup.' => 
+      'Fixtures loaded.' => 
       array (
         0 => '',
       ),
@@ -917,7 +889,11 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Fixtures loaded.' => 
+      'The account associated with e-mail address "%s" has been set as an administrator' => 
+      array (
+        0 => '',
+      ),
+      'Account not found.' => 
       array (
         0 => '',
       ),
@@ -925,11 +901,55 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'The account associated with e-mail address "%s" has been set as an administrator' => 
+      'AzuraCast Setup' => 
       array (
         0 => '',
       ),
-      'Account not found.' => 
+      'Welcome to AzuraCast. Please wait while some key dependencies of AzuraCast are set up...' => 
+      array (
+        0 => 'Välkommen till AzuraCast. Vänta medan några nyckelberoenden för AzuraCast är inställda...',
+      ),
+      'Environment: %s' => 
+      array (
+        0 => '',
+      ),
+      'Installation Method: %s' => 
+      array (
+        0 => '',
+      ),
+      'Running in update mode.' => 
+      array (
+        0 => '',
+      ),
+      'Running Database Migrations' => 
+      array (
+        0 => '',
+      ),
+      'Generating Database Proxy Classes' => 
+      array (
+        0 => '',
+      ),
+      'Installing Data Fixtures' => 
+      array (
+        0 => '',
+      ),
+      'Reload System Data' => 
+      array (
+        0 => '',
+      ),
+      'Refreshing All Stations' => 
+      array (
+        0 => '',
+      ),
+      'AzuraCast is now updated to the latest version!' => 
+      array (
+        0 => '',
+      ),
+      'AzuraCast installation complete!' => 
+      array (
+        0 => '',
+      ),
+      'Visit %s to complete setup.' => 
       array (
         0 => '',
       ),
@@ -945,73 +965,81 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Select...' => 
+      'Update Instructions' => 
       array (
         0 => '',
       ),
-      'You must be logged in to access this page.' => 
+      'AzuraCast <a href="%s" target="_blank">version %s</a> is now available.' => 
+      array (
+        0 => 'Azuracast <a href="%s" target="_blank">version%s</a> är nu tillgänglig.',
+      ),
+      'You are currently running version %s. Updating is highly recommended.' => 
+      array (
+        0 => 'Du kör för närvarande version %s. Vi rekommenderar starkt att du uppdaterar.',
+      ),
+      'New AzuraCast Release Version Available' => 
+      array (
+        0 => 'Ny AzuraCast version tillgänglig',
+      ),
+      'Your installation is currently %d update(s) behind the latest version.' => 
+      array (
+        0 => 'Du ligger för närvarande %d uppdatering(är) bakom den senaste versionen.',
+      ),
+      'View the changelog for full details.' => 
       array (
         0 => '',
       ),
-      'You do not have permission to access this portion of the site.' => 
+      'You should update to take advantage of bug and security fixes.' => 
+      array (
+        0 => 'Du bör uppdatera för att dra nytta av fel- och säkerhetsrättelser.',
+      ),
+      'New AzuraCast Updates Available' => 
+      array (
+        0 => 'Nya AzuraCast-uppdateringar tillgängliga',
+      ),
+      'Installation Not Recently Backed Up' => 
+      array (
+        0 => 'Installationen är inte nyligen säkerhetskopierad',
+      ),
+      'This installation has not been backed up in the last two weeks.' => 
       array (
         0 => '',
       ),
-      '%s is not recognized as a service.' => 
-      array (
-        0 => '%s känns inte igen som en tjänst.',
-      ),
-      'It may not be registered with Supervisor yet. Restarting broadcasting may help.' => 
+      'Backups' => 
       array (
         0 => '',
       ),
-      '%s cannot start' => 
-      array (
-        0 => '%s kan inte starta',
-      ),
-      'It is already running.' => 
-      array (
-        0 => 'Den är redan igång.',
-      ),
-      '%s cannot stop' => 
-      array (
-        0 => '%s kan inte stoppas',
-      ),
-      'It is not running.' => 
-      array (
-        0 => 'Den körs inte.',
-      ),
-      '%s encountered an error' => 
-      array (
-        0 => '%s stötte på ett fel',
-      ),
-      'Check the log for details.' => 
+      'Synchronized Task Not Recently Run' => 
       array (
         0 => '',
       ),
-      'Use <b>%s</b> on this server' => 
-      array (
-        0 => 'Använd <b>%s</b> på denna server',
-      ),
-      'Connect to a <b>remote radio server</b>' => 
-      array (
-        0 => 'Anslut till en <b>fjärradioserver</b>',
-      ),
-      '<b>Do not use</b> an AutoDJ service' => 
-      array (
-        0 => '<b>Använd inte</b> en AutoDJ-tjänst',
-      ),
-      'Welcome to the AzuraCast Liquidsoap configuration editor.' => 
-      array (
-        0 => 'Välkommen till konfigurationsredigeraren AzuraCast Liquidsoap.',
-      ),
-      'Using this page, you can customize several sections of the Liquidsoap configuration.' => 
+      'The "%s" synchronization task has not run recently. This may indicate an error with your installation.' => 
       array (
         0 => '',
       ),
-      'The non-editable sections are automatically generated by AzuraCast.' => 
+      'Manually Run Task' => 
       array (
-        0 => 'De icke-redigerbara sektionerna genereras automatiskt av AzuraCast.',
+        0 => '',
+      ),
+      'You should update your <code>docker-compose.yml</code> file to reflect the newest changes.' => 
+      array (
+        0 => '',
+      ),
+      'If you manually maintain this file, review the <a href="%s" target="_blank">latest version of the file</a> and make any changes needed.' => 
+      array (
+        0 => '',
+      ),
+      'Otherwise, update your installation and answer "Y" when prompted to update the file.' => 
+      array (
+        0 => '',
+      ),
+      'Your <code>docker-compose.yml</code> file is out of date!' => 
+      array (
+        0 => 'Din <code>docker-compose.yml</code> fil är föråldrad!',
+      ),
+      'Select File' => 
+      array (
+        0 => 'Välj fil',
       ),
       'Visit this page from a secure connection to enforce secure URLs on all pages.' => 
       array (
@@ -1029,9 +1057,812 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Select File' => 
+      'Select...' => 
       array (
-        0 => 'Välj fil',
+        0 => '',
+      ),
+      'You must be logged in to access this page.' => 
+      array (
+        0 => '',
+      ),
+      'You do not have permission to access this portion of the site.' => 
+      array (
+        0 => '',
+      ),
+      'Are you sure?' => 
+      array (
+        0 => '',
+      ),
+      'Advanced' => 
+      array (
+        0 => 'Avancerat',
+      ),
+      'Enter a password to continue.' => 
+      array (
+        0 => '',
+      ),
+      'No problems detected.' => 
+      array (
+        0 => '',
+      ),
+      'System Maintenance' => 
+      array (
+        0 => '',
+      ),
+      'Custom Branding' => 
+      array (
+        0 => '',
+      ),
+      'System Logs' => 
+      array (
+        0 => '',
+      ),
+      'Storage Locations' => 
+      array (
+        0 => '',
+      ),
+      'System Debugger' => 
+      array (
+        0 => '',
+      ),
+      'Users' => 
+      array (
+        0 => '',
+      ),
+      'User Accounts' => 
+      array (
+        0 => '',
+      ),
+      'Permissions' => 
+      array (
+        0 => '',
+      ),
+      'Audit Log' => 
+      array (
+        0 => '',
+      ),
+      'API Keys' => 
+      array (
+        0 => '',
+      ),
+      'Stations' => 
+      array (
+        0 => '',
+      ),
+      'Custom Fields' => 
+      array (
+        0 => '',
+      ),
+      'Connected AzuraRelays' => 
+      array (
+        0 => '',
+      ),
+      'Start Station' => 
+      array (
+        0 => '',
+      ),
+      'Ready to start broadcasting? Click to start your station.' => 
+      array (
+        0 => '',
+      ),
+      'Restart broadcasting? This will disconnect any current listeners.' => 
+      array (
+        0 => '',
+      ),
+      'Restart to Apply Changes' => 
+      array (
+        0 => '',
+      ),
+      'Click to restart your station and apply configuration changes.' => 
+      array (
+        0 => '',
+      ),
+      'Profile' => 
+      array (
+        0 => 'Profil',
+      ),
+      'Public Page' => 
+      array (
+        0 => 'Offentlig sida',
+      ),
+      'On-Demand Media' => 
+      array (
+        0 => '',
+      ),
+      'Music Files' => 
+      array (
+        0 => 'Musikfiler',
+      ),
+      'Playlists' => 
+      array (
+        0 => 'Spellistor',
+      ),
+      'Streamer/DJ Accounts' => 
+      array (
+        0 => 'DJ konton',
+      ),
+      'Web DJ' => 
+      array (
+        0 => '',
+      ),
+      'Mount Points' => 
+      array (
+        0 => '',
+      ),
+      'Remote Relays' => 
+      array (
+        0 => '',
+      ),
+      'Web Hooks' => 
+      array (
+        0 => 'Web Hookar',
+      ),
+      'Reports' => 
+      array (
+        0 => 'Rapporter',
+      ),
+      'Statistics Overview' => 
+      array (
+        0 => 'Statistisk översikt',
+      ),
+      'Song Requests' => 
+      array (
+        0 => '',
+      ),
+      'Song Playback Timeline' => 
+      array (
+        0 => '',
+      ),
+      'Song Listener Impact' => 
+      array (
+        0 => '',
+      ),
+      'Duplicate Songs' => 
+      array (
+        0 => '',
+      ),
+      'Unprocessable Files' => 
+      array (
+        0 => '',
+      ),
+      'SoundExchange Royalties' => 
+      array (
+        0 => '',
+      ),
+      'Utilities' => 
+      array (
+        0 => 'Verktyg',
+      ),
+      'SFTP Users' => 
+      array (
+        0 => '',
+      ),
+      'Automated Assignment' => 
+      array (
+        0 => '',
+      ),
+      'Log Viewer' => 
+      array (
+        0 => '',
+      ),
+      'Upcoming Song Queue' => 
+      array (
+        0 => '',
+      ),
+      'Restart Broadcasting' => 
+      array (
+        0 => '',
+      ),
+      'Generic Web Hook' => 
+      array (
+        0 => '',
+      ),
+      'Automatically send a message to any URL when your station data changes.' => 
+      array (
+        0 => '',
+      ),
+      'Send E-mail' => 
+      array (
+        0 => '',
+      ),
+      'Send an e-mail to specified address(es).' => 
+      array (
+        0 => '',
+      ),
+      'TuneIn AIR' => 
+      array (
+        0 => '',
+      ),
+      'Send song metadata changes to TuneIn.' => 
+      array (
+        0 => '',
+      ),
+      'Discord Webhook' => 
+      array (
+        0 => '',
+      ),
+      'Automatically send a customized message to your Discord server.' => 
+      array (
+        0 => '',
+      ),
+      'Telegram Chat Message' => 
+      array (
+        0 => '',
+      ),
+      'Use the Telegram Bot API to send a message to a channel.' => 
+      array (
+        0 => '',
+      ),
+      'Twitter Post' => 
+      array (
+        0 => '',
+      ),
+      'Automatically send a tweet.' => 
+      array (
+        0 => '',
+      ),
+      'Google Analytics Integration' => 
+      array (
+        0 => '',
+      ),
+      'Send stream listener details to Google Analytics.' => 
+      array (
+        0 => '',
+      ),
+      'Any time the currently playing song changes' => 
+      array (
+        0 => '',
+      ),
+      'Any time the listener count increases' => 
+      array (
+        0 => '',
+      ),
+      'Any time the listener count decreases' => 
+      array (
+        0 => '',
+      ),
+      'Any time a live streamer/DJ connects to the stream' => 
+      array (
+        0 => '',
+      ),
+      'Any time a live streamer/DJ disconnects from the stream' => 
+      array (
+        0 => '',
+      ),
+      'When the station broadcast goes offline.' => 
+      array (
+        0 => '',
+      ),
+      'When the station broadcast comes online.' => 
+      array (
+        0 => '',
+      ),
+      'Username' => 
+      array (
+        0 => 'Användarnamn',
+      ),
+      'New Password' => 
+      array (
+        0 => 'Nytt lösenord',
+      ),
+      'Leave blank to use the current password.' => 
+      array (
+        0 => 'Lämna tomt för att använda det aktuella lösenordet.',
+      ),
+      'SSH Public Keys' => 
+      array (
+        0 => 'Offentliga SSH-nycklar',
+      ),
+      'Optionally supply SSH public keys this user can use to connect instead of a password. Enter one key per line.' => 
+      array (
+        0 => 'Som tillval tillhandahåller SSH publika nycklar som användaren kan använda för att ansluta istället för ett lösenord. Ange en nyckel per rad.',
+      ),
+      'Run Automatic Nightly Backups' => 
+      array (
+        0 => '',
+      ),
+      'Enable to have AzuraCast automatically run nightly backups at the time specified.' => 
+      array (
+        0 => '',
+      ),
+      'Yes' => 
+      array (
+        0 => 'Ja',
+      ),
+      'No' => 
+      array (
+        0 => 'Nej',
+      ),
+      'Scheduled Backup Time' => 
+      array (
+        0 => '',
+      ),
+      'The time (in UTC) to run the automated backup, if enabled.' => 
+      array (
+        0 => '',
+      ),
+      'Exclude Media from Backups' => 
+      array (
+        0 => '',
+      ),
+      'Excluding media from automated backups will save space, but you should make sure to back up your media elsewhere. Note that only locally stored media will be backed up.' => 
+      array (
+        0 => '',
+      ),
+      'Number of Backup Copies to Keep' => 
+      array (
+        0 => '',
+      ),
+      'Copies older than the specified number of days will automatically be deleted. Set to zero to disable automatic deletion.' => 
+      array (
+        0 => '',
+      ),
+      'Storage Location' => 
+      array (
+        0 => '',
+      ),
+      'Instructions' => 
+      array (
+        0 => 'Instruktioner',
+      ),
+      'You can upload the MaxMind GeoLite database in order to provide geolocation of the IP addresses of your listeners. This will allow you to view the listeners on each station\'s "Listeners" report. To download the GeoLite database:' => 
+      array (
+        0 => '',
+      ),
+      'Create an account on <a href="%s" target="_blank">the MaxMind developer site</a>.' => 
+      array (
+        0 => '',
+      ),
+      'Visit the "My License Key" page under the "Services" section.' => 
+      array (
+        0 => '',
+      ),
+      'Click "Generate new license key".' => 
+      array (
+        0 => '',
+      ),
+      'Paste the generated license key into the field on this page.' => 
+      array (
+        0 => '',
+      ),
+      'MaxMind License Key' => 
+      array (
+        0 => '',
+      ),
+      'Use Browser Default' => 
+      array (
+        0 => 'Använd webbläsarens standard',
+      ),
+      'Name' => 
+      array (
+        0 => 'Namn',
+      ),
+      'E-mail Address' => 
+      array (
+        0 => 'E-postadress',
+      ),
+      'Reset Password' => 
+      array (
+        0 => 'Återställ lösenord',
+      ),
+      'Leave these fields blank to continue using your current password.' => 
+      array (
+        0 => 'Lämna dessa fält tomma för att fortsätta använda ditt nuvarande lösenord.',
+      ),
+      'Current Password' => 
+      array (
+        0 => 'Nuvarande lösenord',
+      ),
+      'Confirm New Password' => 
+      array (
+        0 => 'Bekräfta nytt lösenord',
+      ),
+      'Customization' => 
+      array (
+        0 => 'Anpassning',
+      ),
+      'Language' => 
+      array (
+        0 => 'Språk',
+      ),
+      'Site Theme' => 
+      array (
+        0 => 'Tema för sidan',
+      ),
+      'Light' => 
+      array (
+        0 => 'Ljus',
+      ),
+      'Default' => 
+      array (
+        0 => 'Standard',
+      ),
+      'Dark' => 
+      array (
+        0 => 'Mörk',
+      ),
+      'Account Information' => 
+      array (
+        0 => 'Kontoinformation',
+      ),
+      'Password' => 
+      array (
+        0 => 'Lösenord',
+      ),
+      'Create Account' => 
+      array (
+        0 => 'Skapa konto',
+      ),
+      'Show on Public Pages' => 
+      array (
+        0 => '',
+      ),
+      'Enable to allow listeners to select this relay on this station\'s public pages.' => 
+      array (
+        0 => '',
+      ),
+      'Remote Station Type' => 
+      array (
+        0 => '',
+      ),
+      'Display Name' => 
+      array (
+        0 => '',
+      ),
+      'The display name assigned to this relay when viewing it on administrative or public pages. Leave blank to automatically generate one.' => 
+      array (
+        0 => '',
+      ),
+      'Remote Station Listening URL' => 
+      array (
+        0 => '',
+      ),
+      'Example: if the remote radio URL is %s, enter <code>%s</code>.' => 
+      array (
+        0 => '',
+      ),
+      'Remote Station Listening Mountpoint/SID' => 
+      array (
+        0 => '',
+      ),
+      'Specify a mountpoint (i.e. <code>%s</code>) or a Shoutcast SID (i.e. <code>%s</code>) to specify a specific stream to use for statistics or broadcasting.' => 
+      array (
+        0 => '',
+      ),
+      'Remote Station Administrator Password' => 
+      array (
+        0 => '',
+      ),
+      'To retrieve detailed unique listeners and client details, an administrator password is often required.' => 
+      array (
+        0 => '',
+      ),
+      'Broadcast AutoDJ to Remote Station' => 
+      array (
+        0 => '',
+      ),
+      'If enabled, the AutoDJ on this installation will automatically play music to this mount point.' => 
+      array (
+        0 => '',
+      ),
+      'Configure AutoDJ Broadcasting' => 
+      array (
+        0 => '',
+      ),
+      'AutoDJ Format' => 
+      array (
+        0 => '',
+      ),
+      'AutoDJ Bitrate (kbps)' => 
+      array (
+        0 => '',
+      ),
+      'Remote Station Source Port' => 
+      array (
+        0 => '',
+      ),
+      'If the port you broadcast to is different from the one you listed in the URL above, specify the source port here.' => 
+      array (
+        0 => '',
+      ),
+      'Remote Station Source Mountpoint/SID' => 
+      array (
+        0 => '',
+      ),
+      'If the mountpoint (i.e. <code>/radio.mp3</code>) or Shoutcast SID (i.e. <code>2</code>) you broadcast to is different from the one listed above, specify the source mount point here.' => 
+      array (
+        0 => '',
+      ),
+      'Remote Station Source Username' => 
+      array (
+        0 => '',
+      ),
+      'If you are broadcasting using AutoDJ, enter the source username here. This may be blank.' => 
+      array (
+        0 => '',
+      ),
+      'Remote Station Source Password' => 
+      array (
+        0 => '',
+      ),
+      'If you are broadcasting using AutoDJ, enter the source password here.' => 
+      array (
+        0 => '',
+      ),
+      'Publish to "Yellow Pages" Directories' => 
+      array (
+        0 => '',
+      ),
+      'Enable to advertise this mount point on "Yellow Pages" public radio directories.' => 
+      array (
+        0 => '',
+      ),
+      'New Station Name' => 
+      array (
+        0 => 'Nytt Stationsnamn',
+      ),
+      'New Station Description' => 
+      array (
+        0 => 'Ny Stationsbeskrivning',
+      ),
+      'Customize Station Cloning' => 
+      array (
+        0 => 'Anpassa Station kloning',
+      ),
+      'Copy Media?' => 
+      array (
+        0 => 'Kopiera media?',
+      ),
+      'Choose how media should be duplicated from the old station.' => 
+      array (
+        0 => 'Välj hur media ska dupliceras från den gamla stationen.',
+      ),
+      'Do not share media between the stations' => 
+      array (
+        0 => '',
+      ),
+      'Share the same folder on disk between the stations' => 
+      array (
+        0 => 'Dela samma mapp på disk mellan stationerna',
+      ),
+      'Copy Playlists?' => 
+      array (
+        0 => 'Kopiera spellistor?',
+      ),
+      'Copy Streamer/DJ Accounts?' => 
+      array (
+        0 => 'Kopiera Streamer/DJ-konton?',
+      ),
+      'Copy Permissions?' => 
+      array (
+        0 => 'Kopiera behörigheter?',
+      ),
+      'Selecting "Yes" will assign any users with permissions to the current station to have permissions to the new one.' => 
+      array (
+        0 => 'Att välja "Ja" kommer att tilldela alla användare med rättigheter till den aktuella stationen för att ha rättigheter till den nya.',
+      ),
+      'Create New Station' => 
+      array (
+        0 => 'Skapa ny station',
+      ),
+      'Web Hook Name' => 
+      array (
+        0 => '',
+      ),
+      'Choose a name for this webhook that will help you distinguish it from others. This will only be shown on the administration page.' => 
+      array (
+        0 => '',
+      ),
+      'Bot Token' => 
+      array (
+        0 => '',
+      ),
+      'See the <a href="%s" target="_blank">Telegram Documentation</a> for more details.' => 
+      array (
+        0 => '',
+      ),
+      'Chat ID' => 
+      array (
+        0 => '',
+      ),
+      'Unique identifier for the target chat or username of the target channel (in the format @channelusername).' => 
+      array (
+        0 => '',
+      ),
+      'Custom API Base URL' => 
+      array (
+        0 => '',
+      ),
+      'Leave blank to use the default Telegram API URL (recommended). Specify the full URL, like <code>https://api.pwrtelegram.xyz/</code>.' => 
+      array (
+        0 => '',
+      ),
+      'Web Hook Triggers' => 
+      array (
+        0 => '',
+      ),
+      'Customize Message' => 
+      array (
+        0 => '',
+      ),
+      'Variables are in the form of <code>{{ var.name }}</code>. All values in the <a href="%s" target="_blank">Now Playing API response</a> are avaliable for use. Any empty fields are ignored.' => 
+      array (
+        0 => '',
+      ),
+      'Main Message Content' => 
+      array (
+        0 => '',
+      ),
+      'Now playing on %s: %s by %s! Tune in now.' => 
+      array (
+        0 => '',
+      ),
+      'Message parsing mode' => 
+      array (
+        0 => '',
+      ),
+      'Discord Web Hook URL' => 
+      array (
+        0 => '',
+      ),
+      'This URL is provided within the Discord application.' => 
+      array (
+        0 => '',
+      ),
+      'Now playing on %s:' => 
+      array (
+        0 => '',
+      ),
+      'Title' => 
+      array (
+        0 => 'Titel',
+      ),
+      'Description' => 
+      array (
+        0 => 'Beskrivning',
+      ),
+      'URL' => 
+      array (
+        0 => 'URL',
+      ),
+      'Author Name' => 
+      array (
+        0 => '',
+      ),
+      'Thumbnail Image URL' => 
+      array (
+        0 => '',
+      ),
+      'Footer Text' => 
+      array (
+        0 => '',
+      ),
+      'Powered by %s' => 
+      array (
+        0 => 'Drivs av %s',
+      ),
+      'GA Property Tracking ID' => 
+      array (
+        0 => '',
+      ),
+      'The property ID used to track live listeners.' => 
+      array (
+        0 => '',
+      ),
+      'Message Recipient(s)' => 
+      array (
+        0 => '',
+      ),
+      'E-mail addresses can be separated by commas.' => 
+      array (
+        0 => '',
+      ),
+      'Message Subject' => 
+      array (
+        0 => '',
+      ),
+      'Message Body' => 
+      array (
+        0 => '',
+      ),
+      'Twitter Account Details' => 
+      array (
+        0 => '',
+      ),
+      'Steps for configuring a Twitter application:<br>
+                <ol type="1">
+                    <li>Create a new app on the <a href="%s" target="_blank">Twitter Applications site</a>.
+                    Use this installation\'s base URL as the application URL.</li>
+                    <li>In the newly created application, click the "Keys and Access Tokens" tab.</li>
+                    <li>At the bottom of the page, click "Create my access token".</li>
+                </ol>
+                <p>Once these steps are completed, enter the information from the "Keys and Access Tokens" page into the fields below.</p>' => 
+      array (
+        0 => '',
+      ),
+      'Consumer Key (API Key)' => 
+      array (
+        0 => '',
+      ),
+      'Consumer Secret (API Secret)' => 
+      array (
+        0 => '',
+      ),
+      'Access Token' => 
+      array (
+        0 => '',
+      ),
+      'Access Token Secret' => 
+      array (
+        0 => '',
+      ),
+      'Only Send One Tweet Every...' => 
+      array (
+        0 => '',
+      ),
+      'No Limit' => 
+      array (
+        0 => '',
+      ),
+      '%d seconds' => 
+      array (
+        0 => '',
+      ),
+      '%d minutes' => 
+      array (
+        0 => '',
+      ),
+      'TuneIn Station ID' => 
+      array (
+        0 => '',
+      ),
+      'The station ID will be a numeric string that starts with the letter S.' => 
+      array (
+        0 => '',
+      ),
+      'TuneIn Partner ID' => 
+      array (
+        0 => '',
+      ),
+      'TuneIn Partner Key' => 
+      array (
+        0 => '',
+      ),
+      'Web Hook Details' => 
+      array (
+        0 => '',
+      ),
+      'Web hooks automatically send a HTTP POST request to the URL you specify to
+                notify it any time one of the triggers you specify occurs on your station. The body of the POST message
+                is the exact same as the <a href="%s" target="_blank">Now Playing API response</a> for your station.
+                In order to process quickly, web hooks have a short timeout, so the responding service should be
+                optimized to handle the request in under 2 seconds.' => 
+      array (
+        0 => '',
+      ),
+      'Web Hook URL' => 
+      array (
+        0 => '',
+      ),
+      'The URL that will receive the POST messages any time an event is triggered.' => 
+      array (
+        0 => '',
+      ),
+      'Optional: HTTP Basic Authentication Username' => 
+      array (
+        0 => '',
+      ),
+      'If your web hook requires HTTP basic authentication, provide the username here.' => 
+      array (
+        0 => '',
+      ),
+      'Optional: HTTP Basic Authentication Password' => 
+      array (
+        0 => '',
+      ),
+      'If your web hook requires HTTP basic authentication, provide the password here.' => 
+      array (
+        0 => '',
       ),
       'Field Name' => 
       array (
@@ -1161,10 +1992,6 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Language' => 
-      array (
-        0 => 'Språk',
-      ),
       'Length' => 
       array (
         0 => 'Längd',
@@ -1269,10 +2096,6 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Title' => 
-      array (
-        0 => 'Titel',
-      ),
       'Title Sort Order' => 
       array (
         0 => 'Sortera efter titel',
@@ -1317,99 +2140,79 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'År',
       ),
-      'Account Information' => 
+      'Base Theme for Public Pages' => 
       array (
-        0 => 'Kontoinformation',
+        0 => 'Bastema för offentliga sidor',
       ),
-      'E-mail Address' => 
+      'Select a theme to use as a base for station public pages and the login page.' => 
       array (
-        0 => 'E-postadress',
+        0 => 'Välj ett tema att använda som bas för offentliga sidor och inloggningssidan.',
       ),
-      'Password' => 
+      'Hide Album Art on Public Pages' => 
       array (
-        0 => 'Lösenord',
+        0 => 'Dölj skivomslag på offentliga sidor',
       ),
-      'Create Account' => 
+      'If selected, album art will not display on public-facing radio pages.' => 
       array (
-        0 => 'Skapa konto',
+        0 => 'Om vald, kommer skivomslag inte visas på offentliga radio sidor.',
       ),
-      'Mount Point URL' => 
+      'Homepage Redirect URL' => 
       array (
-        0 => '',
+        0 => 'URL för omdirigering',
       ),
-      'This name should always begin with a slash (/), and must be a valid URL, such as /autodj.mp3' => 
+      'If a visitor is not signed in and visits the AzuraCast homepage, you can automatically redirect them to the URL specified here. Leave blank to redirect them to the login screen by default.' => 
       array (
-        0 => '',
+        0 => 'Om en besökare inte är inloggad och besöker AzuraCasts hemsida, kan du automatiskt omdirigera dem till den URL som anges här. Lämna tomt för att omdirigera dem till inloggningsskärmen som standard.',
       ),
-      'Display Name' => 
+      'Default Album Art URL' => 
       array (
-        0 => '',
+        0 => 'Standard-skivomslag URL',
       ),
-      'The display name assigned to this mount point when viewing it on administrative or public pages. Leave blank to automatically generate one.' => 
+      'If a song has no album art, this URL will be listed instead. Leave blank to use the standard placeholder art.' => 
       array (
-        0 => '',
+        0 => 'Om en låt inte har något skivomslag, kommer denna URL att listas istället. Lämna tomt för att använda det förvalda skivomslaget.',
       ),
-      'Show on Public Pages' => 
+      'Hide AzuraCast Branding on Public Pages' => 
       array (
-        0 => '',
+        0 => 'Dölj AzuraCast Branding på offentliga sidor',
       ),
-      'Enable to allow listeners to select this mount point on this station\'s public pages.' => 
+      'If selected, this will remove the AzuraCast branding from public-facing pages.' => 
       array (
-        0 => '',
+        0 => 'Om vald, kommer detta att ta bort AzuraCast branding från offentliga sidor.',
       ),
-      'Yes' => 
-      array (
-        0 => 'Ja',
-      ),
-      'No' => 
-      array (
-        0 => 'Nej',
-      ),
-      'Set as Default Mount Point' => 
+      'Custom CSS for Public Pages' => 
       array (
         0 => '',
       ),
-      'If this mount is the default, it will be played on the radio preview and the public radio page in this system.' => 
+      'This CSS will be applied to the station public pages and login page.' => 
       array (
         0 => '',
       ),
-      'Relay Stream URL' => 
+      'Custom JS for Public Pages' => 
       array (
         0 => '',
       ),
-      'Enter the full URL of another stream to relay its broadcast through this mount point.' => 
+      'This javascript code will be applied to the station public pages and login page.' => 
       array (
         0 => '',
       ),
-      'Publish to "Yellow Pages" Directories' => 
+      'Custom CSS for Internal Pages' => 
       array (
         0 => '',
       ),
-      'Enable to advertise this mount point on "Yellow Pages" public radio directories.' => 
+      'This CSS will be applied to the main management pages, like this one.' => 
       array (
         0 => '',
       ),
-      'Enable AutoDJ' => 
+      'Stream path cannot include reserved keywords: %s' => 
       array (
         0 => '',
       ),
-      'If enabled, the AutoDJ will automatically play music to this mount point.' => 
+      'YP Directory Authorization Hash' => 
       array (
         0 => '',
       ),
-      'AutoDJ Format' => 
-      array (
-        0 => '',
-      ),
-      'AutoDJ Bitrate (kbps)' => 
-      array (
-        0 => '',
-      ),
-      'Custom Stream URL' => 
-      array (
-        0 => '',
-      ),
-      'You can set a custom URL for this stream that AzuraCast will use when referring to it. Leave empty to use the default value.' => 
+      'If your stream is set to advertise to YP directories above, you must specify an authorization hash. You can manage authhashes <a href="%s" target="_blank">on the SHOUTcast web site</a>.' => 
       array (
         0 => '',
       ),
@@ -1429,25 +2232,69 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Stream path cannot include reserved keywords: %s' => 
+      'Mount Point URL' => 
       array (
         0 => '',
       ),
-      'YP Directory Authorization Hash' => 
+      'This name should always begin with a slash (/), and must be a valid URL, such as /autodj.mp3' => 
       array (
         0 => '',
       ),
-      'If your stream is set to advertise to YP directories above, you must specify an authorization hash. You can manage authhashes <a href="%s" target="_blank">on the SHOUTcast web site</a>.' => 
+      'The display name assigned to this mount point when viewing it on administrative or public pages. Leave blank to automatically generate one.' => 
       array (
         0 => '',
       ),
-      'Comments' => 
+      'Enable to allow listeners to select this mount point on this station\'s public pages.' => 
       array (
         0 => '',
       ),
-      'Describe the use-case for this API key for future reference.' => 
+      'Set as Default Mount Point' => 
       array (
-        0 => 'Beskriv användningsfallet för denna API-nyckel för framtida referens.',
+        0 => '',
+      ),
+      'If this mount is the default, it will be played on the radio preview and the public radio page in this system.' => 
+      array (
+        0 => '',
+      ),
+      'Relay Stream URL' => 
+      array (
+        0 => '',
+      ),
+      'Enter the full URL of another stream to relay its broadcast through this mount point.' => 
+      array (
+        0 => '',
+      ),
+      'Enable AutoDJ' => 
+      array (
+        0 => '',
+      ),
+      'If enabled, the AutoDJ will automatically play music to this mount point.' => 
+      array (
+        0 => '',
+      ),
+      'Custom Stream URL' => 
+      array (
+        0 => '',
+      ),
+      'You can set a custom URL for this stream that AzuraCast will use when referring to it. Leave empty to use the default value.' => 
+      array (
+        0 => '',
+      ),
+      'Metadata' => 
+      array (
+        0 => '',
+      ),
+      'Full Text' => 
+      array (
+        0 => '',
+      ),
+      'Artist Name' => 
+      array (
+        0 => '',
+      ),
+      'Song Title' => 
+      array (
+        0 => 'Låttitel',
       ),
       'Role Name' => 
       array (
@@ -1460,6 +2307,262 @@ X-Crowdin-File-ID: 4
       'Permissions for %s' => 
       array (
         0 => 'Behörigheter för %s',
+      ),
+      'Roles' => 
+      array (
+        0 => 'Roller',
+      ),
+      'Rolling Release' => 
+      array (
+        0 => '',
+      ),
+      'Stable' => 
+      array (
+        0 => '',
+      ),
+      'Settings' => 
+      array (
+        0 => '',
+      ),
+      'Security' => 
+      array (
+        0 => '',
+      ),
+      'Privacy' => 
+      array (
+        0 => '',
+      ),
+      'Services' => 
+      array (
+        0 => '',
+      ),
+      'Site Base URL' => 
+      array (
+        0 => '',
+      ),
+      'The base URL where this service is located. Use either the external IP address or fully-qualified domain name (if one exists) pointing to this server.' => 
+      array (
+        0 => '',
+      ),
+      'AzuraCast Instance Name' => 
+      array (
+        0 => '',
+      ),
+      'This name will appear as a sub-header next to the AzuraCast logo, to help identify this server.' => 
+      array (
+        0 => '',
+      ),
+      'Prefer Browser URL (If Available)' => 
+      array (
+        0 => '',
+      ),
+      'If this setting is set to "Yes", the browser URL will be used instead of the base URL when it\'s available. Set to "No" to always use the base URL.' => 
+      array (
+        0 => 'Om denna inställning är inställd på "Ja", kommer webbläsarens URL att användas istället för bas-URL när den är tillgänglig. Sätt till "Nej" för att alltid använda bas-URL.',
+      ),
+      'Use Web Proxy for Radio' => 
+      array (
+        0 => 'Använd Web Proxy för Radio',
+      ),
+      'By default, radio stations broadcast on their own ports (i.e. 8000). If you\'re using a service like CloudFlare or accessing your radio station by SSL, you should enable this feature, which routes all radio through the web ports (80 and 443).' => 
+      array (
+        0 => 'Som standard sänds radiostationer på sina egna portar (dvs. 8000). Om du använder en tjänst som CloudFlare eller använder din radiostation via SSL, bör du aktivera denna funktion, som leder all radio genom webbportarna (80 och 443).',
+      ),
+      'Days of Playback History to Keep' => 
+      array (
+        0 => 'Dagar av uppspelningshistorik att behålla',
+      ),
+      'Set longer to preserve more playback history and listener metadata for stations. Set shorter to save disk space. ' => 
+      array (
+        0 => '',
+      ),
+      'Last 14 Days' => 
+      array (
+        0 => 'Senaste 14 dagarna',
+      ),
+      'Last 30 Days' => 
+      array (
+        0 => 'Senaste 30 dagarna',
+      ),
+      'Last 60 Days' => 
+      array (
+        0 => 'Senaste 60 dagarna',
+      ),
+      'Last Year' => 
+      array (
+        0 => 'Senaste året',
+      ),
+      'Last 2 Years' => 
+      array (
+        0 => 'Senaste 2 åren',
+      ),
+      'Indefinitely' => 
+      array (
+        0 => 'Obegränsat',
+      ),
+      'Use WebSockets for Now Playing Updates' => 
+      array (
+        0 => '',
+      ),
+      'Enables or disables the use of the newer and faster WebSocket-based system for receiving live updates on public players. You may need to disable this if you encounter problems with it.' => 
+      array (
+        0 => '',
+      ),
+      'Enable Advanced Features' => 
+      array (
+        0 => '',
+      ),
+      'Enable certain advanced features in the web interface, including advanced playlist configuration, station port assignment, changing base media directories and other functionality that should only be used by users who are comfortable with advanced functionality.' => 
+      array (
+        0 => '',
+      ),
+      'Always Use HTTPS' => 
+      array (
+        0 => 'Använd alltid HTTPS',
+      ),
+      'Set to "Yes" to always use "https://" secure URLs, and to automatically redirect to the secure URL when an insecure URL is visited.' => 
+      array (
+        0 => 'Sätt till "Ja" för att alltid använda "https://" säkra webbadresser, och att automatiskt omdirigera till den säkra webbadressen när en osäker webbadress besöks.',
+      ),
+      'API "Access-Control-Allow-Origin" header' => 
+      array (
+        0 => '',
+      ),
+      '<a href="%s" target="_blank">Learn more about this header</a>. Set to * to allow all sources, or specify a list of origins separated by a comma (,).' => 
+      array (
+        0 => '',
+      ),
+      'Listener Analytics Collection' => 
+      array (
+        0 => '',
+      ),
+      'Aggregate listener statistics are used to show station reports across the system. IP-based listener statistics are used to view live listener tracking and may be required for royalty reports.' => 
+      array (
+        0 => '',
+      ),
+      '<b>Full:</b> Collect aggregate listener statistics and IP-based listener statistics' => 
+      array (
+        0 => '',
+      ),
+      '<b>Limited:</b> Only collect aggregate listener statistics' => 
+      array (
+        0 => '',
+      ),
+      '<b>None:</b> Do not collect any listener analytics' => 
+      array (
+        0 => '',
+      ),
+      'AzuraCast Update Checks' => 
+      array (
+        0 => '',
+      ),
+      'Current Release Channel' => 
+      array (
+        0 => '',
+      ),
+      'For information on how to switch your release channel, visit <a href="%s" target="_blank">this page</a>.' => 
+      array (
+        0 => '',
+      ),
+      'Show Update Announcements' => 
+      array (
+        0 => '',
+      ),
+      'Show new releases within your update channel on the AzuraCast homepage.' => 
+      array (
+        0 => '',
+      ),
+      'E-mail Delivery Service' => 
+      array (
+        0 => '',
+      ),
+      'Used for "Forgot Password" functionality, web hooks and other functions.' => 
+      array (
+        0 => '',
+      ),
+      'Enable Mail Delivery' => 
+      array (
+        0 => '',
+      ),
+      'Sender Name' => 
+      array (
+        0 => '',
+      ),
+      'Sender E-mail Address' => 
+      array (
+        0 => '',
+      ),
+      'SMTP Host' => 
+      array (
+        0 => '',
+      ),
+      'SMTP Port' => 
+      array (
+        0 => '',
+      ),
+      'Use Secure (TLS) SMTP Connection' => 
+      array (
+        0 => '',
+      ),
+      'Usually enabled for port 465, disabled for ports 587 or 25.' => 
+      array (
+        0 => '',
+      ),
+      'SMTP Username' => 
+      array (
+        0 => '',
+      ),
+      'SMTP Password' => 
+      array (
+        0 => '',
+      ),
+      'Third-Party Services' => 
+      array (
+        0 => '',
+      ),
+      'Check Web Services for Album Art for "Now Playing" Tracks' => 
+      array (
+        0 => '',
+      ),
+      'Check Web Services for Album Art When Uploading Media' => 
+      array (
+        0 => '',
+      ),
+      'Last.fm API Key' => 
+      array (
+        0 => '',
+      ),
+      '<a href="%s" target="_blank">Apply for an API key here</a>. This service can provide album art for tracks where none is available locally.' => 
+      array (
+        0 => '',
+      ),
+      'Code from Authenticator App' => 
+      array (
+        0 => 'Kod från Autentiseringsapp',
+      ),
+      'Enter the current code provided by your authenticator app to verify that it\'s working correctly.' => 
+      array (
+        0 => 'Ange den aktuella koden som tillhandahålls av din autentiseringsapp för att verifiera att den fungerar korrekt.',
+      ),
+      'Verify Authenticator' => 
+      array (
+        0 => 'Verifiera autentiserare',
+      ),
+      'Backup Filename' => 
+      array (
+        0 => '',
+      ),
+      'Path where the backup file should be located.' => 
+      array (
+        0 => '',
+      ),
+      'Exclude Media from Backup' => 
+      array (
+        0 => '',
+      ),
+      'This will produce a significantly smaller backup, but you should make sure to back up your media elsewhere. Note that only locally stored media will be backed up.' => 
+      array (
+        0 => '',
       ),
       'Station Profile' => 
       array (
@@ -1476,14 +2579,6 @@ X-Crowdin-File-ID: 4
       'Administration' => 
       array (
         0 => 'Administration',
-      ),
-      'Name' => 
-      array (
-        0 => 'Namn',
-      ),
-      'Description' => 
-      array (
-        0 => 'Beskrivning',
       ),
       'Web Site URL' => 
       array (
@@ -1509,7 +2604,7 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Enable On-Demand Streaming and Downloads' => 
+      'Enable On-Demand Streaming' => 
       array (
         0 => '',
       ),
@@ -1517,13 +2612,9 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Default Album Art URL' => 
+      'Enable Downloads on On-Demand Page' => 
       array (
-        0 => 'Standard-skivomslag URL',
-      ),
-      'If a song has no album art, this URL will be listed instead. Leave blank to use the standard placeholder art.' => 
-      array (
-        0 => 'Om en låt inte har något skivomslag, kommer denna URL att listas istället. Lämna tomt för att använda det förvalda skivomslaget.',
+        0 => '',
       ),
       'URL Stub' => 
       array (
@@ -1769,6 +2860,14 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
+      'Media Storage Location' => 
+      array (
+        0 => '',
+      ),
+      'Live Recordings Storage Location' => 
+      array (
+        0 => '',
+      ),
       'Enable Broadcasting' => 
       array (
         0 => '',
@@ -1785,688 +2884,9 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Media Storage Location' => 
+      'Log in' => 
       array (
-        0 => '',
-      ),
-      'Live Recordings Storage Location' => 
-      array (
-        0 => '',
-      ),
-      'Enable to allow listeners to select this relay on this station\'s public pages.' => 
-      array (
-        0 => '',
-      ),
-      'Remote Station Type' => 
-      array (
-        0 => '',
-      ),
-      'The display name assigned to this relay when viewing it on administrative or public pages. Leave blank to automatically generate one.' => 
-      array (
-        0 => '',
-      ),
-      'Remote Station Listening URL' => 
-      array (
-        0 => '',
-      ),
-      'Example: if the remote radio URL is %s, enter <code>%s</code>.' => 
-      array (
-        0 => '',
-      ),
-      'Remote Station Listening Mountpoint/SID' => 
-      array (
-        0 => '',
-      ),
-      'Specify a mountpoint (i.e. <code>%s</code>) or a Shoutcast SID (i.e. <code>%s</code>) to specify a specific stream to use for statistics or broadcasting.' => 
-      array (
-        0 => '',
-      ),
-      'Remote Station Administrator Password' => 
-      array (
-        0 => '',
-      ),
-      'To retrieve detailed unique listeners and client details, an administrator password is often required.' => 
-      array (
-        0 => '',
-      ),
-      'Broadcast AutoDJ to Remote Station' => 
-      array (
-        0 => '',
-      ),
-      'If enabled, the AutoDJ on this installation will automatically play music to this mount point.' => 
-      array (
-        0 => '',
-      ),
-      'Configure AutoDJ Broadcasting' => 
-      array (
-        0 => '',
-      ),
-      'Remote Station Source Port' => 
-      array (
-        0 => '',
-      ),
-      'If the port you broadcast to is different from the one you listed in the URL above, specify the source port here.' => 
-      array (
-        0 => '',
-      ),
-      'Remote Station Source Mountpoint/SID' => 
-      array (
-        0 => '',
-      ),
-      'If the mountpoint (i.e. <code>/radio.mp3</code>) or Shoutcast SID (i.e. <code>2</code>) you broadcast to is different from the one listed above, specify the source mount point here.' => 
-      array (
-        0 => '',
-      ),
-      'Remote Station Source Username' => 
-      array (
-        0 => '',
-      ),
-      'If you are broadcasting using AutoDJ, enter the source username here. This may be blank.' => 
-      array (
-        0 => '',
-      ),
-      'Remote Station Source Password' => 
-      array (
-        0 => '',
-      ),
-      'If you are broadcasting using AutoDJ, enter the source password here.' => 
-      array (
-        0 => '',
-      ),
-      'Run Automatic Nightly Backups' => 
-      array (
-        0 => '',
-      ),
-      'Enable to have AzuraCast automatically run nightly backups at the time specified.' => 
-      array (
-        0 => '',
-      ),
-      'Scheduled Backup Time' => 
-      array (
-        0 => '',
-      ),
-      'The time (in UTC) to run the automated backup, if enabled.' => 
-      array (
-        0 => '',
-      ),
-      'Exclude Media from Backups' => 
-      array (
-        0 => '',
-      ),
-      'Excluding media from automated backups will save space, but you should make sure to back up your media elsewhere. Note that only locally stored media will be backed up.' => 
-      array (
-        0 => '',
-      ),
-      'Number of Backup Copies to Keep' => 
-      array (
-        0 => '',
-      ),
-      'Copies older than the specified number of days will automatically be deleted. Set to zero to disable automatic deletion.' => 
-      array (
-        0 => '',
-      ),
-      'Storage Location' => 
-      array (
-        0 => '',
-      ),
-      'Base Theme for Public Pages' => 
-      array (
-        0 => 'Bastema för offentliga sidor',
-      ),
-      'Select a theme to use as a base for station public pages and the login page.' => 
-      array (
-        0 => 'Välj ett tema att använda som bas för offentliga sidor och inloggningssidan.',
-      ),
-      'Light' => 
-      array (
-        0 => 'Ljus',
-      ),
-      'Default' => 
-      array (
-        0 => 'Standard',
-      ),
-      'Dark' => 
-      array (
-        0 => 'Mörk',
-      ),
-      'Hide Album Art on Public Pages' => 
-      array (
-        0 => 'Dölj skivomslag på offentliga sidor',
-      ),
-      'If selected, album art will not display on public-facing radio pages.' => 
-      array (
-        0 => 'Om vald, kommer skivomslag inte visas på offentliga radio sidor.',
-      ),
-      'Homepage Redirect URL' => 
-      array (
-        0 => 'URL för omdirigering',
-      ),
-      'If a visitor is not signed in and visits the AzuraCast homepage, you can automatically redirect them to the URL specified here. Leave blank to redirect them to the login screen by default.' => 
-      array (
-        0 => 'Om en besökare inte är inloggad och besöker AzuraCasts hemsida, kan du automatiskt omdirigera dem till den URL som anges här. Lämna tomt för att omdirigera dem till inloggningsskärmen som standard.',
-      ),
-      'Hide AzuraCast Branding on Public Pages' => 
-      array (
-        0 => 'Dölj AzuraCast Branding på offentliga sidor',
-      ),
-      'If selected, this will remove the AzuraCast branding from public-facing pages.' => 
-      array (
-        0 => 'Om vald, kommer detta att ta bort AzuraCast branding från offentliga sidor.',
-      ),
-      'Custom CSS for Public Pages' => 
-      array (
-        0 => '',
-      ),
-      'This CSS will be applied to the station public pages and login page.' => 
-      array (
-        0 => '',
-      ),
-      'Custom JS for Public Pages' => 
-      array (
-        0 => '',
-      ),
-      'This javascript code will be applied to the station public pages and login page.' => 
-      array (
-        0 => '',
-      ),
-      'Custom CSS for Internal Pages' => 
-      array (
-        0 => '',
-      ),
-      'This CSS will be applied to the main management pages, like this one.' => 
-      array (
-        0 => '',
-      ),
-      'Reset Password' => 
-      array (
-        0 => 'Återställ lösenord',
-      ),
-      'Leave blank to use the current password.' => 
-      array (
-        0 => 'Lämna tomt för att använda det aktuella lösenordet.',
-      ),
-      'Roles' => 
-      array (
-        0 => 'Roller',
-      ),
-      'Backup Filename' => 
-      array (
-        0 => '',
-      ),
-      'Path where the backup file should be located.' => 
-      array (
-        0 => '',
-      ),
-      'Exclude Media from Backup' => 
-      array (
-        0 => '',
-      ),
-      'This will produce a significantly smaller backup, but you should make sure to back up your media elsewhere. Note that only locally stored media will be backed up.' => 
-      array (
-        0 => '',
-      ),
-      'Web Hook Details' => 
-      array (
-        0 => '',
-      ),
-      'Web hooks automatically send a HTTP POST request to the URL you specify to 
-                notify it any time one of the triggers you specify occurs on your station. The body of the POST message
-                is the exact same as the <a href="%s" target="_blank">Now Playing API response</a> for your station. 
-                In order to process quickly, web hooks have a short timeout, so the responding service should be
-                optimized to handle the request in under 2 seconds.' => 
-      array (
-        0 => '',
-      ),
-      'Web Hook Name' => 
-      array (
-        0 => '',
-      ),
-      'Choose a name for this webhook that will help you distinguish it from others. This will only be shown on the administration page.' => 
-      array (
-        0 => '',
-      ),
-      'Web Hook URL' => 
-      array (
-        0 => '',
-      ),
-      'The URL that will receive the POST messages any time an event is triggered.' => 
-      array (
-        0 => '',
-      ),
-      'Optional: HTTP Basic Authentication Username' => 
-      array (
-        0 => '',
-      ),
-      'If your web hook requires HTTP basic authentication, provide the username here.' => 
-      array (
-        0 => '',
-      ),
-      'Optional: HTTP Basic Authentication Password' => 
-      array (
-        0 => '',
-      ),
-      'If your web hook requires HTTP basic authentication, provide the password here.' => 
-      array (
-        0 => '',
-      ),
-      'Web Hook Triggers' => 
-      array (
-        0 => '',
-      ),
-      'Bot Token' => 
-      array (
-        0 => '',
-      ),
-      'See the <a href="%s" target="_blank">Telegram Documentation</a> for more details.' => 
-      array (
-        0 => '',
-      ),
-      'Chat ID' => 
-      array (
-        0 => '',
-      ),
-      'Unique identifier for the target chat or username of the target channel (in the format @channelusername).' => 
-      array (
-        0 => '',
-      ),
-      'Custom API Base URL' => 
-      array (
-        0 => '',
-      ),
-      'Leave blank to use the default Telegram API URL (recommended). Specify the full URL, like <code>https://api.pwrtelegram.xyz/</code>.' => 
-      array (
-        0 => '',
-      ),
-      'Customize Message' => 
-      array (
-        0 => '',
-      ),
-      'Variables are in the form of <code>{{ var.name }}</code>. All values in the <a href="%s" target="_blank">Now Playing API response</a> are avaliable for use. Any empty fields are ignored.' => 
-      array (
-        0 => '',
-      ),
-      'Main Message Content' => 
-      array (
-        0 => '',
-      ),
-      'Now playing on %s: %s by %s! Tune in now.' => 
-      array (
-        0 => '',
-      ),
-      'Message parsing mode' => 
-      array (
-        0 => '',
-      ),
-      'TuneIn Station ID' => 
-      array (
-        0 => '',
-      ),
-      'The station ID will be a numeric string that starts with the letter S.' => 
-      array (
-        0 => '',
-      ),
-      'TuneIn Partner ID' => 
-      array (
-        0 => '',
-      ),
-      'TuneIn Partner Key' => 
-      array (
-        0 => '',
-      ),
-      'Twitter Account Details' => 
-      array (
-        0 => '',
-      ),
-      'Steps for configuring a Twitter application:<br>
-                <ol type="1">
-                    <li>Create a new app on the <a href="%s" target="_blank">Twitter Applications site</a>. 
-                    Use this installation\'s base URL as the application URL.</li>
-                    <li>In the newly created application, click the "Keys and Access Tokens" tab.</li>
-                    <li>At the bottom of the page, click "Create my access token".</li>
-                </ol>
-                <p>Once these steps are completed, enter the information from the "Keys and Access Tokens" page into the fields below.</p>' => 
-      array (
-        0 => '',
-      ),
-      'Consumer Key (API Key)' => 
-      array (
-        0 => '',
-      ),
-      'Consumer Secret (API Secret)' => 
-      array (
-        0 => '',
-      ),
-      'Access Token' => 
-      array (
-        0 => '',
-      ),
-      'Access Token Secret' => 
-      array (
-        0 => '',
-      ),
-      'Only Send One Tweet Every...' => 
-      array (
-        0 => '',
-      ),
-      'No Limit' => 
-      array (
-        0 => '',
-      ),
-      '%d seconds' => 
-      array (
-        0 => '',
-      ),
-      '%d minutes' => 
-      array (
-        0 => '',
-      ),
-      'Message Body' => 
-      array (
-        0 => '',
-      ),
-      'Discord Web Hook URL' => 
-      array (
-        0 => '',
-      ),
-      'This URL is provided within the Discord application.' => 
-      array (
-        0 => '',
-      ),
-      'Now playing on %s:' => 
-      array (
-        0 => '',
-      ),
-      'URL' => 
-      array (
-        0 => 'URL',
-      ),
-      'Author Name' => 
-      array (
-        0 => '',
-      ),
-      'Thumbnail Image URL' => 
-      array (
-        0 => '',
-      ),
-      'Footer Text' => 
-      array (
-        0 => '',
-      ),
-      'Powered by %s' => 
-      array (
-        0 => 'Drivs av %s',
-      ),
-      'Rolling Release' => 
-      array (
-        0 => '',
-      ),
-      'Stable' => 
-      array (
-        0 => '',
-      ),
-      'Settings' => 
-      array (
-        0 => '',
-      ),
-      'Security' => 
-      array (
-        0 => '',
-      ),
-      'Privacy' => 
-      array (
-        0 => '',
-      ),
-      'Updates' => 
-      array (
-        0 => '',
-      ),
-      'Site Base URL' => 
-      array (
-        0 => '',
-      ),
-      'The base URL where this service is located. Use either the external IP address or fully-qualified domain name (if one exists) pointing to this server.' => 
-      array (
-        0 => '',
-      ),
-      'AzuraCast Instance Name' => 
-      array (
-        0 => '',
-      ),
-      'This name will appear as a sub-header next to the AzuraCast logo, to help identify this server.' => 
-      array (
-        0 => '',
-      ),
-      'Prefer Browser URL (If Available)' => 
-      array (
-        0 => '',
-      ),
-      'If this setting is set to "Yes", the browser URL will be used instead of the base URL when it\'s available. Set to "No" to always use the base URL.' => 
-      array (
-        0 => 'Om denna inställning är inställd på "Ja", kommer webbläsarens URL att användas istället för bas-URL när den är tillgänglig. Sätt till "Nej" för att alltid använda bas-URL.',
-      ),
-      'Use Web Proxy for Radio' => 
-      array (
-        0 => 'Använd Web Proxy för Radio',
-      ),
-      'By default, radio stations broadcast on their own ports (i.e. 8000). If you\'re using a service like CloudFlare or accessing your radio station by SSL, you should enable this feature, which routes all radio through the web ports (80 and 443).' => 
-      array (
-        0 => 'Som standard sänds radiostationer på sina egna portar (dvs. 8000). Om du använder en tjänst som CloudFlare eller använder din radiostation via SSL, bör du aktivera denna funktion, som leder all radio genom webbportarna (80 och 443).',
-      ),
-      'Days of Playback History to Keep' => 
-      array (
-        0 => 'Dagar av uppspelningshistorik att behålla',
-      ),
-      'Set longer to preserve more playback history for stations. Set shorter to save disk space.' => 
-      array (
-        0 => 'Ställ in längre för att bevara mer uppspelningshistorik för stationer. Ange kortare för att spara diskutrymme.',
-      ),
-      'Last 14 Days' => 
-      array (
-        0 => 'Senaste 14 dagarna',
-      ),
-      'Last 30 Days' => 
-      array (
-        0 => 'Senaste 30 dagarna',
-      ),
-      'Last 60 Days' => 
-      array (
-        0 => 'Senaste 60 dagarna',
-      ),
-      'Last Year' => 
-      array (
-        0 => 'Senaste året',
-      ),
-      'Last 2 Years' => 
-      array (
-        0 => 'Senaste 2 åren',
-      ),
-      'Indefinitely' => 
-      array (
-        0 => 'Obegränsat',
-      ),
-      'Use WebSockets for Now Playing Updates' => 
-      array (
-        0 => '',
-      ),
-      'Enables or disables the use of the newer and faster WebSocket-based system for receiving live updates on public players. You may need to disable this if you encounter problems with it.' => 
-      array (
-        0 => '',
-      ),
-      'Always Use HTTPS' => 
-      array (
-        0 => 'Använd alltid HTTPS',
-      ),
-      'Set to "Yes" to always use "https://" secure URLs, and to automatically redirect to the secure URL when an insecure URL is visited.' => 
-      array (
-        0 => 'Sätt till "Ja" för att alltid använda "https://" säkra webbadresser, och att automatiskt omdirigera till den säkra webbadressen när en osäker webbadress besöks.',
-      ),
-      'API "Access-Control-Allow-Origin" header' => 
-      array (
-        0 => '',
-      ),
-      '<a href="%s" target="_blank">Learn more about this header</a>. Set to * to allow all sources, or specify a list of origins separated by a comma (,).' => 
-      array (
-        0 => '',
-      ),
-      'Listener Analytics Collection' => 
-      array (
-        0 => '',
-      ),
-      'Aggregate listener statistics are used to show station reports across the system. IP-based listener statistics are used to view live listener tracking and may be required for royalty reports.' => 
-      array (
-        0 => '',
-      ),
-      '<b>Full:</b> Collect aggregate listener statistics and IP-based listener statistics' => 
-      array (
-        0 => '',
-      ),
-      '<b>Limited:</b> Only collect aggregate listener statistics' => 
-      array (
-        0 => '',
-      ),
-      '<b>None:</b> Do not collect any listener analytics' => 
-      array (
-        0 => '',
-      ),
-      'Current Release Channel' => 
-      array (
-        0 => '',
-      ),
-      'For information on how to switch your release channel, visit <a href="%s" target="_blank">this page</a>.' => 
-      array (
-        0 => '',
-      ),
-      'Show Update Announcements' => 
-      array (
-        0 => '',
-      ),
-      'Show new releases within your update channel on the AzuraCast homepage.' => 
-      array (
-        0 => '',
-      ),
-      'Username' => 
-      array (
-        0 => 'Användarnamn',
-      ),
-      'New Password' => 
-      array (
-        0 => 'Nytt lösenord',
-      ),
-      'SSH Public Keys' => 
-      array (
-        0 => 'Offentliga SSH-nycklar',
-      ),
-      'Optionally supply SSH public keys this user can use to connect instead of a password. Enter one key per line.' => 
-      array (
-        0 => 'Som tillval tillhandahåller SSH publika nycklar som användaren kan använda för att ansluta istället för ett lösenord. Ange en nyckel per rad.',
-      ),
-      'New Station Name' => 
-      array (
-        0 => 'Nytt Stationsnamn',
-      ),
-      'New Station Description' => 
-      array (
-        0 => 'Ny Stationsbeskrivning',
-      ),
-      'Customize Station Cloning' => 
-      array (
-        0 => 'Anpassa Station kloning',
-      ),
-      'Copy Media?' => 
-      array (
-        0 => 'Kopiera media?',
-      ),
-      'Choose how media should be duplicated from the old station.' => 
-      array (
-        0 => 'Välj hur media ska dupliceras från den gamla stationen.',
-      ),
-      'Do not share media between the stations' => 
-      array (
-        0 => '',
-      ),
-      'Share the same folder on disk between the stations' => 
-      array (
-        0 => 'Dela samma mapp på disk mellan stationerna',
-      ),
-      'Copy Playlists?' => 
-      array (
-        0 => 'Kopiera spellistor?',
-      ),
-      'Copy Streamer/DJ Accounts?' => 
-      array (
-        0 => 'Kopiera Streamer/DJ-konton?',
-      ),
-      'Copy Permissions?' => 
-      array (
-        0 => 'Kopiera behörigheter?',
-      ),
-      'Selecting "Yes" will assign any users with permissions to the current station to have permissions to the new one.' => 
-      array (
-        0 => 'Att välja "Ja" kommer att tilldela alla användare med rättigheter till den aktuella stationen för att ha rättigheter till den nya.',
-      ),
-      'Create New Station' => 
-      array (
-        0 => 'Skapa ny station',
-      ),
-      'Use Browser Default' => 
-      array (
-        0 => 'Använd webbläsarens standard',
-      ),
-      'Leave these fields blank to continue using your current password.' => 
-      array (
-        0 => 'Lämna dessa fält tomma för att fortsätta använda ditt nuvarande lösenord.',
-      ),
-      'Current Password' => 
-      array (
-        0 => 'Nuvarande lösenord',
-      ),
-      'Confirm New Password' => 
-      array (
-        0 => 'Bekräfta nytt lösenord',
-      ),
-      'Customization' => 
-      array (
-        0 => 'Anpassning',
-      ),
-      'Site Theme' => 
-      array (
-        0 => 'Tema för sidan',
-      ),
-      'Code from Authenticator App' => 
-      array (
-        0 => 'Kod från Autentiseringsapp',
-      ),
-      'Enter the current code provided by your authenticator app to verify that it\'s working correctly.' => 
-      array (
-        0 => 'Ange den aktuella koden som tillhandahålls av din autentiseringsapp för att verifiera att den fungerar korrekt.',
-      ),
-      'Verify Authenticator' => 
-      array (
-        0 => 'Verifiera autentiserare',
-      ),
-      'Instructions' => 
-      array (
-        0 => 'Instruktioner',
-      ),
-      '<p>SHOUTcast 2 DNAS is not free software, and its restrictive license does not allow AzuraCast to distribute the SHOUTcast binary. In order to install SHOUTcast, you should download the Linux x64 binary from the <a href="%s" target="_blank">SHOUTcast Radio Manager</a> web site. Upload the <code>sc_serv2_linux_x64-latest.tar.gz</code> into the field below to automatically extract it into the proper directory.</p>' => 
-      array (
-        0 => '',
-      ),
-      'Current Installed Version' => 
-      array (
-        0 => 'Nuvarande installerad version',
-      ),
-      'SHOUTcast is not currently installed on this installation.' => 
-      array (
-        0 => '',
-      ),
-      'Select SHOUTcast 64-bit .tar.gz File' => 
-      array (
-        0 => '',
-      ),
-      'Upload' => 
-      array (
-        0 => 'Ladda upp',
+        0 => 'Logga in',
       ),
       'Enable Automated Assignment' => 
       array (
@@ -2492,281 +2912,33 @@ X-Crowdin-File-ID: 4
       array (
         0 => '%d dagar',
       ),
-      'You can upload the MaxMind GeoLite database in order to provide geolocation of the IP addresses of your listeners. This will allow you to view the listeners on each station\'s "Listeners" report. To download the GeoLite database:' => 
+      'Comments' => 
       array (
         0 => '',
       ),
-      'Create an account on <a href="%s" target="_blank">the MaxMind developer site</a>.' => 
+      'Describe the use-case for this API key for future reference.' => 
+      array (
+        0 => 'Beskriv användningsfallet för denna API-nyckel för framtida referens.',
+      ),
+      '<p>SHOUTcast 2 DNAS is not free software, and its restrictive license does not allow AzuraCast to distribute the SHOUTcast binary. In order to install SHOUTcast, you should download the Linux x64 binary from the <a href="%s" target="_blank">SHOUTcast Radio Manager</a> web site. Upload the <code>sc_serv2_linux_x64-latest.tar.gz</code> into the field below to automatically extract it into the proper directory.</p>' => 
       array (
         0 => '',
       ),
-      'Visit the "My License Key" page under the "Services" section.' => 
+      'Current Installed Version' => 
+      array (
+        0 => 'Nuvarande installerad version',
+      ),
+      'SHOUTcast is not currently installed on this installation.' => 
       array (
         0 => '',
       ),
-      'Click "Generate new license key".' => 
+      'Select SHOUTcast 64-bit .tar.gz File' => 
       array (
         0 => '',
       ),
-      'Paste the generated license key into the field on this page.' => 
+      'Upload' => 
       array (
-        0 => '',
-      ),
-      'MaxMind License Key' => 
-      array (
-        0 => '',
-      ),
-      'Log in' => 
-      array (
-        0 => 'Logga in',
-      ),
-      'Metadata' => 
-      array (
-        0 => '',
-      ),
-      'Full Text' => 
-      array (
-        0 => '',
-      ),
-      'Artist Name' => 
-      array (
-        0 => '',
-      ),
-      'Are you sure?' => 
-      array (
-        0 => '',
-      ),
-      'Advanced' => 
-      array (
-        0 => 'Avancerat',
-      ),
-      'System Maintenance' => 
-      array (
-        0 => '',
-      ),
-      'Custom Branding' => 
-      array (
-        0 => '',
-      ),
-      'System Logs' => 
-      array (
-        0 => '',
-      ),
-      'Storage Locations' => 
-      array (
-        0 => '',
-      ),
-      'Backups' => 
-      array (
-        0 => '',
-      ),
-      'System Debugger' => 
-      array (
-        0 => '',
-      ),
-      'Users' => 
-      array (
-        0 => '',
-      ),
-      'User Accounts' => 
-      array (
-        0 => '',
-      ),
-      'Permissions' => 
-      array (
-        0 => '',
-      ),
-      'Audit Log' => 
-      array (
-        0 => '',
-      ),
-      'API Keys' => 
-      array (
-        0 => '',
-      ),
-      'Stations' => 
-      array (
-        0 => '',
-      ),
-      'Custom Fields' => 
-      array (
-        0 => '',
-      ),
-      'Connected AzuraRelays' => 
-      array (
-        0 => '',
-      ),
-      'Start Station' => 
-      array (
-        0 => '',
-      ),
-      'Ready to start broadcasting? Click to start your station.' => 
-      array (
-        0 => '',
-      ),
-      'Restart broadcasting? This will disconnect any current listeners.' => 
-      array (
-        0 => '',
-      ),
-      'Restart to Apply Changes' => 
-      array (
-        0 => '',
-      ),
-      'Click to restart your station and apply configuration changes.' => 
-      array (
-        0 => '',
-      ),
-      'Profile' => 
-      array (
-        0 => 'Profil',
-      ),
-      'Public Page' => 
-      array (
-        0 => 'Offentlig sida',
-      ),
-      'On-Demand Media' => 
-      array (
-        0 => '',
-      ),
-      'Music Files' => 
-      array (
-        0 => 'Musikfiler',
-      ),
-      'Playlists' => 
-      array (
-        0 => 'Spellistor',
-      ),
-      'Streamer/DJ Accounts' => 
-      array (
-        0 => 'DJ konton',
-      ),
-      'Web DJ' => 
-      array (
-        0 => '',
-      ),
-      'Mount Points' => 
-      array (
-        0 => '',
-      ),
-      'Remote Relays' => 
-      array (
-        0 => '',
-      ),
-      'Web Hooks' => 
-      array (
-        0 => 'Web Hookar',
-      ),
-      'Reports' => 
-      array (
-        0 => 'Rapporter',
-      ),
-      'Statistics Overview' => 
-      array (
-        0 => 'Statistisk översikt',
-      ),
-      'Song Requests' => 
-      array (
-        0 => '',
-      ),
-      'Song Playback Timeline' => 
-      array (
-        0 => '',
-      ),
-      'Song Listener Impact' => 
-      array (
-        0 => '',
-      ),
-      'Duplicate Songs' => 
-      array (
-        0 => '',
-      ),
-      'SoundExchange Royalties' => 
-      array (
-        0 => '',
-      ),
-      'Utilities' => 
-      array (
-        0 => 'Verktyg',
-      ),
-      'SFTP Users' => 
-      array (
-        0 => '',
-      ),
-      'Automated Assignment' => 
-      array (
-        0 => '',
-      ),
-      'Log Viewer' => 
-      array (
-        0 => '',
-      ),
-      'Upcoming Song Queue' => 
-      array (
-        0 => '',
-      ),
-      'Restart Broadcasting' => 
-      array (
-        0 => '',
-      ),
-      'Generic Web Hook' => 
-      array (
-        0 => '',
-      ),
-      'Automatically send a message to any URL when your station data changes.' => 
-      array (
-        0 => '',
-      ),
-      'TuneIn AIR' => 
-      array (
-        0 => '',
-      ),
-      'Send song metadata changes to TuneIn.' => 
-      array (
-        0 => '',
-      ),
-      'Discord Webhook' => 
-      array (
-        0 => '',
-      ),
-      'Automatically send a customized message to your Discord server.' => 
-      array (
-        0 => '',
-      ),
-      'Telegram Chat Message' => 
-      array (
-        0 => '',
-      ),
-      'Use the Telegram Bot API to send a message to a channel.' => 
-      array (
-        0 => '',
-      ),
-      'Twitter Post' => 
-      array (
-        0 => '',
-      ),
-      'Automatically send a tweet.' => 
-      array (
-        0 => '',
-      ),
-      'Any time the currently playing song changes' => 
-      array (
-        0 => '',
-      ),
-      'Any time the listener count increases' => 
-      array (
-        0 => '',
-      ),
-      'Any time the listener count decreases' => 
-      array (
-        0 => '',
-      ),
-      'Any time a live streamer/DJ connects to the stream' => 
-      array (
-        0 => '',
-      ),
-      'Any time a live streamer/DJ disconnects from the stream' => 
-      array (
-        0 => '',
+        0 => 'Ladda upp',
       ),
       'Generate the translation locale file.' => 
       array (
@@ -2808,7 +2980,111 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Insert' => 
+      'Skip to main content' => 
+      array (
+        0 => '',
+      ),
+      'Toggle Sidebar' => 
+      array (
+        0 => '',
+      ),
+      'Toggle Menu' => 
+      array (
+        0 => '',
+      ),
+      'Dashboard' => 
+      array (
+        0 => '',
+      ),
+      'System Administration' => 
+      array (
+        0 => '',
+      ),
+      'My Account' => 
+      array (
+        0 => 'Mitt konto',
+      ),
+      'Switch Theme' => 
+      array (
+        0 => '',
+      ),
+      'My API Keys' => 
+      array (
+        0 => '',
+      ),
+      'Help' => 
+      array (
+        0 => '',
+      ),
+      'End Session' => 
+      array (
+        0 => '',
+      ),
+      'Sign Out' => 
+      array (
+        0 => '',
+      ),
+      'Like our software? <a href="%s" target="_blank">Donate to support AzuraCast!</a>' => 
+      array (
+        0 => 'Gillar du vår programvara? <a href="%s" target="_blank">Donera för att stödja AzuraCast!</a>',
+      ),
+      'Errors were encountered when trying to save changes:' => 
+      array (
+        0 => '',
+      ),
+      'General' => 
+      array (
+        0 => '',
+      ),
+      'Details' => 
+      array (
+        0 => '',
+      ),
+      '%s of %s Used (%d Files)' => 
+      array (
+        0 => '',
+      ),
+      '%s Used (%d Files)' => 
+      array (
+        0 => '',
+      ),
+      'You can also upload files in bulk via SFTP.' => 
+      array (
+        0 => 'Du kan också ladda upp filer i bulk via SFTP.',
+      ),
+      'Manage SFTP Accounts' => 
+      array (
+        0 => 'Hantera SFTP-konton',
+      ),
+      'Please wait...' => 
+      array (
+        0 => 'Vänligen vänta...',
+      ),
+      'Station Broadcasting Disabled' => 
+      array (
+        0 => 'Stationssändning inaktiverad',
+      ),
+      'Your station is currently not enabled for broadcasting. You can still manage media, playlists, and other station settings. To re-enable broadcasting, <a href="%s">edit your station profile</a>.' => 
+      array (
+        0 => 'Din station är för närvarande inte aktiverad för sändning. Du kan fortfarande hantera medier, spellistor och andra kanalinställningar. För att återaktivera sändning, <a href="%s">redigera din station profil</a>.',
+      ),
+      'Mount points are how listeners connect and listen to your station. Each mount point can be a different audio format or quality. Using mount points, you can set up a high-quality stream for broadband listeners and a mobile stream for phone users.' => 
+      array (
+        0 => '',
+      ),
+      'Actions' => 
+      array (
+        0 => '',
+      ),
+      'Mount Point' => 
+      array (
+        0 => '',
+      ),
+      'Edit' => 
+      array (
+        0 => 'Redigera',
+      ),
+      'Delete mount point "%s"?' => 
       array (
         0 => '',
       ),
@@ -2816,13 +3092,81 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Update' => 
+      'Default Mount' => 
       array (
         0 => '',
       ),
-      'Changes' => 
+      'Station Time' => 
       array (
         0 => '',
+      ),
+      'Clear all pending requests?' => 
+      array (
+        0 => 'Rensa alla väntande önskningar?',
+      ),
+      'Clear Pending Requests' => 
+      array (
+        0 => 'Rensa väntande önskningar',
+      ),
+      'Date Requested' => 
+      array (
+        0 => 'Önskad',
+      ),
+      'Date Played' => 
+      array (
+        0 => '',
+      ),
+      'Requester IP' => 
+      array (
+        0 => 'Önskarens IP',
+      ),
+      'Not Played' => 
+      array (
+        0 => 'Inte spelad',
+      ),
+      'Delete request?' => 
+      array (
+        0 => 'Ta bort önskning?',
+      ),
+      'Best Performing Songs' => 
+      array (
+        0 => 'Låtar med bäst utförande',
+      ),
+      'in the last 48 hours' => 
+      array (
+        0 => 'under de senaste 48 timmarna',
+      ),
+      'Change' => 
+      array (
+        0 => 'Ändra',
+      ),
+      'Song' => 
+      array (
+        0 => 'Låt',
+      ),
+      'Worst Performing Songs' => 
+      array (
+        0 => 'Låtar med sämst utförande',
+      ),
+      'Most Played Songs' => 
+      array (
+        0 => 'Mest spelade låtar',
+      ),
+      'in the last month' => 
+      array (
+        0 => 'under den senaste månaden',
+      ),
+      'Plays' => 
+      array (
+        0 => 'Spelningar',
+      ),
+      'Live Listeners' => 
+      array (
+        0 => 'Live lyssnare',
+      ),
+      'There are too many data points to map!' => 
+      array (
+        0 => 'Det finns för många datapunkter att karta!',
       ),
       'Today' => 
       array (
@@ -2844,7 +3188,487 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'Förra månaden',
       ),
+      'Report Not Available' => 
+      array (
+        0 => '',
+      ),
+      'This report is not available for this station, because the system administrator has chosen not to collect detailed IP-based listener information.' => 
+      array (
+        0 => '',
+      ),
+      'Download CSV' => 
+      array (
+        0 => 'Ladda ner CSV',
+      ),
       'Date/Time' => 
+      array (
+        0 => '',
+      ),
+      'Source' => 
+      array (
+        0 => 'Källa',
+      ),
+      'Listener Request' => 
+      array (
+        0 => '',
+      ),
+      'Playlist:' => 
+      array (
+        0 => '',
+      ),
+      'Live Streamer:' => 
+      array (
+        0 => '',
+      ),
+      'Unique Listeners' => 
+      array (
+        0 => 'Unika lyssnare',
+      ),
+      'for selected period' => 
+      array (
+        0 => 'för vald period',
+      ),
+      'Total Listener Hours' => 
+      array (
+        0 => 'Totalt antal lyssnartimmar',
+      ),
+      'IP' => 
+      array (
+        0 => 'IP',
+      ),
+      'Time (sec)' => 
+      array (
+        0 => 'Tid (sek)',
+      ),
+      'User Agent' => 
+      array (
+        0 => '',
+      ),
+      'Stream' => 
+      array (
+        0 => '',
+      ),
+      'Location' => 
+      array (
+        0 => 'Plats',
+      ),
+      'Mobile Device' => 
+      array (
+        0 => 'Mobil enhet',
+      ),
+      'Desktop Device' => 
+      array (
+        0 => 'Skrivbordsenhet',
+      ),
+      'Unknown' => 
+      array (
+        0 => 'Okänd',
+      ),
+      'Local' => 
+      array (
+        0 => '',
+      ),
+      'Remote' => 
+      array (
+        0 => '',
+      ),
+      'Hour' => 
+      array (
+        0 => 'Timme',
+      ),
+      'Filename' => 
+      array (
+        0 => 'Filnamn',
+      ),
+      'Length Text' => 
+      array (
+        0 => '',
+      ),
+      'Playlist(s)' => 
+      array (
+        0 => 'Spellistor',
+      ),
+      'Joins' => 
+      array (
+        0 => 'Anslutningar',
+      ),
+      'Losses' => 
+      array (
+        0 => 'Förluster',
+      ),
+      'Total' => 
+      array (
+        0 => 'Totalt',
+      ),
+      'Play %' => 
+      array (
+        0 => 'Spela %',
+      ),
+      'Ratio' => 
+      array (
+        0 => '',
+      ),
+      'Remote relays let you work with broadcasting software outside this server. Any relay you include here will be included in your station\'s statistics. You can also broadcast from this server to remote relays.' => 
+      array (
+        0 => '',
+      ),
+      'Remote Relay' => 
+      array (
+        0 => '',
+      ),
+      'Delete remote relay "%s"?' => 
+      array (
+        0 => '',
+      ),
+      'Streamer accounts are currently disabled for this station. To enable streamer accounts, click the button below.' => 
+      array (
+        0 => '',
+      ),
+      'Enable Streaming' => 
+      array (
+        0 => '',
+      ),
+      'Connection Information' => 
+      array (
+        0 => '',
+      ),
+      'IceCast Clients' => 
+      array (
+        0 => '',
+      ),
+      'Server' => 
+      array (
+        0 => 'Server',
+      ),
+      'You may need to connect directly via your IP address, which is <code>%s</code>.' => 
+      array (
+        0 => 'Du kan behöva ansluta direkt via din IP-adress, som är <code>%s</code>.',
+      ),
+      'Port' => 
+      array (
+        0 => 'Port',
+      ),
+      'Mount Name' => 
+      array (
+        0 => '',
+      ),
+      'ShoutCast v1 Clients' => 
+      array (
+        0 => 'ShoutCast v1 klienter',
+      ),
+      '%d (%d for some clients)' => 
+      array (
+        0 => '%d (%d för vissa klienter)',
+      ),
+      'or' => 
+      array (
+        0 => '',
+      ),
+      '(DJ username and password separated by a colon or comma)' => 
+      array (
+        0 => '',
+      ),
+      'Setup instructions for broadcasting software are available <a href="%s" target="_blank">on the AzuraCast Wiki</a>.' => 
+      array (
+        0 => 'Installationsinstruktioner för sändningsprogram finns <a href="%s" target="_blank">på AzuraCast Wiki</a>.',
+      ),
+      'Delete SFTP User "%s"?' => 
+      array (
+        0 => '',
+      ),
+      'Automated Playlist Assignment' => 
+      array (
+        0 => '',
+      ),
+      'Based on the previous performance of your station\'s songs, %s can automatically distribute songs evenly among your playlists, placing the highest performing songs in the highest-weighted playlists.' => 
+      array (
+        0 => '',
+      ),
+      'Once you have configured automated assignment, click the button below to run the automated assignment process. This process will not run at all unless you have selected "Enable" below.' => 
+      array (
+        0 => '',
+      ),
+      'Run Automated Assignment' => 
+      array (
+        0 => '',
+      ),
+      'Configure Automated Assignment' => 
+      array (
+        0 => '',
+      ),
+      'Select the type of web hook to create.' => 
+      array (
+        0 => '',
+      ),
+      'Web hooks let you connect to external web services and broadcast changes to your station to them.' => 
+      array (
+        0 => '',
+      ),
+      'Type' => 
+      array (
+        0 => 'Typ',
+      ),
+      'Triggers' => 
+      array (
+        0 => '',
+      ),
+      'Enable' => 
+      array (
+        0 => 'Aktivera',
+      ),
+      'Trigger the web hook manually and view the raw response.' => 
+      array (
+        0 => '',
+      ),
+      'Test' => 
+      array (
+        0 => 'Testa',
+      ),
+      'Delete web hook "%s"?' => 
+      array (
+        0 => '',
+      ),
+      'Available Logs' => 
+      array (
+        0 => 'Tillgängliga loggar',
+      ),
+      'Account Recovery' => 
+      array (
+        0 => '',
+      ),
+      'An account recovery link has been requested for your account on "%s".' => 
+      array (
+        0 => '',
+      ),
+      'Click the link below to log in to your account.' => 
+      array (
+        0 => '',
+      ),
+      'Copy to Clipboard' => 
+      array (
+        0 => 'Kopiera till urklipp',
+      ),
+      'Pause' => 
+      array (
+        0 => '',
+      ),
+      'Play' => 
+      array (
+        0 => 'Spela',
+      ),
+      'Log View' => 
+      array (
+        0 => 'Logg vy',
+      ),
+      'Automatically scroll to the bottom of the log' => 
+      array (
+        0 => '',
+      ),
+      'Need Help?' => 
+      array (
+        0 => '',
+      ),
+      'You can find answers for many common questions in our <a href="%s" target="_blank">support documents</a>.' => 
+      array (
+        0 => '',
+      ),
+      'If you\'re experiencing a bug or error, you can submit a GitHub issue using the link below.' => 
+      array (
+        0 => '',
+      ),
+      'Your current installation type is <b>%s</b>. Be sure to include this when creating a new issue.' => 
+      array (
+        0 => '',
+      ),
+      'Add New GitHub Issue' => 
+      array (
+        0 => '',
+      ),
+      'Log In' => 
+      array (
+        0 => 'Logga in',
+      ),
+      'Delete user "%s"?' => 
+      array (
+        0 => '',
+      ),
+      '(You)' => 
+      array (
+        0 => '',
+      ),
+      'SHOUTcast Installed' => 
+      array (
+        0 => '',
+      ),
+      'The SHOUTcast 2 DNAS is installed and ready for use.' => 
+      array (
+        0 => '',
+      ),
+      'Clear Cache' => 
+      array (
+        0 => '',
+      ),
+      'Clearing the application cache may log you out of your session.' => 
+      array (
+        0 => '',
+      ),
+      'Clear All Message Queues' => 
+      array (
+        0 => '',
+      ),
+      'This will clear any pending unprocessed messages in all message queues.' => 
+      array (
+        0 => '',
+      ),
+      'Synchronization Tasks' => 
+      array (
+        0 => '',
+      ),
+      'Run Task' => 
+      array (
+        0 => '',
+      ),
+      'Message Queues' => 
+      array (
+        0 => '',
+      ),
+      '%d queued messages' => 
+      array (
+        0 => '',
+      ),
+      'Clear Queue' => 
+      array (
+        0 => '',
+      ),
+      'Station-Specific Debugging' => 
+      array (
+        0 => '',
+      ),
+      'Rebuild AutoDJ Queue' => 
+      array (
+        0 => '',
+      ),
+      'Run Test' => 
+      array (
+        0 => '',
+      ),
+      'Send Liquidsoap Telnet Command' => 
+      array (
+        0 => '',
+      ),
+      'Command' => 
+      array (
+        0 => '',
+      ),
+      'Execute Command' => 
+      array (
+        0 => '',
+      ),
+      'Run Synchronization Task' => 
+      array (
+        0 => '',
+      ),
+      'Debug Home' => 
+      array (
+        0 => '',
+      ),
+      'The synchronization task is running in the background. The log below will update automatically.' => 
+      array (
+        0 => '',
+      ),
+      'Delete role "%s"?' => 
+      array (
+        0 => '',
+      ),
+      'This role cannot be deleted.' => 
+      array (
+        0 => '',
+      ),
+      'Global' => 
+      array (
+        0 => '',
+      ),
+      'Manage Stations' => 
+      array (
+        0 => '',
+      ),
+      'Add Station' => 
+      array (
+        0 => 'Lägg till station',
+      ),
+      'Station' => 
+      array (
+        0 => '',
+      ),
+      'Manage' => 
+      array (
+        0 => 'Hantera',
+      ),
+      'Clone' => 
+      array (
+        0 => '',
+      ),
+      'Delete station "%s"?' => 
+      array (
+        0 => '',
+      ),
+      'Relay' => 
+      array (
+        0 => '',
+      ),
+      'Is Public' => 
+      array (
+        0 => '',
+      ),
+      'First Connected' => 
+      array (
+        0 => '',
+      ),
+      'Latest Update' => 
+      array (
+        0 => '',
+      ),
+      'API Key' => 
+      array (
+        0 => '',
+      ),
+      'Owner' => 
+      array (
+        0 => '',
+      ),
+      'Revoke' => 
+      array (
+        0 => '',
+      ),
+      'Delete custom field "%s"?' => 
+      array (
+        0 => '',
+      ),
+      'GeoLite version "%s" is currently installed.' => 
+      array (
+        0 => '',
+      ),
+      'Uninstall GeoLite database?' => 
+      array (
+        0 => '',
+      ),
+      'Uninstall GeoLite Database' => 
+      array (
+        0 => '',
+      ),
+      'GeoLite is not currently installed on this installation.' => 
+      array (
+        0 => '',
+      ),
+      'Insert' => 
+      array (
+        0 => '',
+      ),
+      'Update' => 
+      array (
+        0 => '',
+      ),
+      'Changes' => 
       array (
         0 => '',
       ),
@@ -2857,10 +3681,6 @@ X-Crowdin-File-ID: 4
         0 => '',
       ),
       'Target' => 
-      array (
-        0 => '',
-      ),
-      'Actions' => 
       array (
         0 => '',
       ),
@@ -2904,123 +3724,15 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Synchronization Tasks' => 
-      array (
-        0 => '',
-      ),
       'Last run: %s' => 
       array (
         0 => '',
       ),
-      'Run Task' => 
+      'Backups Home' => 
       array (
         0 => '',
       ),
-      'Clear Cache' => 
-      array (
-        0 => '',
-      ),
-      'Clearing the application cache may log you out of your session.' => 
-      array (
-        0 => '',
-      ),
-      'Clear Message Queue' => 
-      array (
-        0 => '',
-      ),
-      'This will clear any pending unprocessed messages in the message queue.' => 
-      array (
-        0 => '',
-      ),
-      'Station-Specific Debugging' => 
-      array (
-        0 => '',
-      ),
-      'Rebuild AutoDJ Queue' => 
-      array (
-        0 => '',
-      ),
-      'Run Test' => 
-      array (
-        0 => '',
-      ),
-      'Send Liquidsoap Telnet Command' => 
-      array (
-        0 => '',
-      ),
-      'Command' => 
-      array (
-        0 => '',
-      ),
-      'Execute Command' => 
-      array (
-        0 => '',
-      ),
-      'SHOUTcast Installed' => 
-      array (
-        0 => '',
-      ),
-      'The SHOUTcast 2 DNAS is installed and ready for use.' => 
-      array (
-        0 => '',
-      ),
-      'Edit' => 
-      array (
-        0 => 'Redigera',
-      ),
-      'Delete role "%s"?' => 
-      array (
-        0 => '',
-      ),
-      'This role cannot be deleted.' => 
-      array (
-        0 => '',
-      ),
-      'Global' => 
-      array (
-        0 => '',
-      ),
-      'Because you are running Docker, some system logs can only be accessed from a shell session on the host computer. You can run <code>%s</code> to access container logs from the terminal.' => 
-      array (
-        0 => '',
-      ),
-      'Logs by Station' => 
-      array (
-        0 => '',
-      ),
-      'Manage Stations' => 
-      array (
-        0 => '',
-      ),
-      'Add Station' => 
-      array (
-        0 => 'Lägg till station',
-      ),
-      'Station' => 
-      array (
-        0 => '',
-      ),
-      'Manage' => 
-      array (
-        0 => 'Hantera',
-      ),
-      'Clone' => 
-      array (
-        0 => '',
-      ),
-      'Delete station "%s"?' => 
-      array (
-        0 => '',
-      ),
-      'API Key' => 
-      array (
-        0 => '',
-      ),
-      'Owner' => 
-      array (
-        0 => '',
-      ),
-      'Revoke' => 
+      'The backup process is running in the background. The log below will update automatically.' => 
       array (
         0 => '',
       ),
@@ -3072,189 +3784,13 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Backups Home' => 
+      'Because you are running Docker, some system logs can only be accessed from a shell session on the host computer. You can run <code>%s</code> to access container logs from the terminal.' => 
       array (
         0 => '',
       ),
-      'The backup process is running in the background. To view the logs, click the button below.' => 
+      'Logs by Station' => 
       array (
         0 => '',
-      ),
-      'View Backup Log' => 
-      array (
-        0 => '',
-      ),
-      'GeoLite version "%s" is currently installed.' => 
-      array (
-        0 => '',
-      ),
-      'Uninstall GeoLite database?' => 
-      array (
-        0 => '',
-      ),
-      'Uninstall GeoLite Database' => 
-      array (
-        0 => '',
-      ),
-      'GeoLite is not currently installed on this installation.' => 
-      array (
-        0 => '',
-      ),
-      'Delete custom field "%s"?' => 
-      array (
-        0 => '',
-      ),
-      'Relay' => 
-      array (
-        0 => '',
-      ),
-      'Is Public' => 
-      array (
-        0 => '',
-      ),
-      'First Connected' => 
-      array (
-        0 => '',
-      ),
-      'Latest Update' => 
-      array (
-        0 => '',
-      ),
-      'Log In' => 
-      array (
-        0 => 'Logga in',
-      ),
-      'Delete user "%s"?' => 
-      array (
-        0 => '',
-      ),
-      '(You)' => 
-      array (
-        0 => '',
-      ),
-      'Mascot designed by %s' => 
-      array (
-        0 => '',
-      ),
-      'Error: No Available Stations' => 
-      array (
-        0 => '',
-      ),
-      'Your account is active, but is not currently associated with any stations. If you believe this is an error, please contact this server\'s administrator.' => 
-      array (
-        0 => '',
-      ),
-      'Dashboard' => 
-      array (
-        0 => '',
-      ),
-      'AzuraCast User' => 
-      array (
-        0 => '',
-      ),
-      'My Account' => 
-      array (
-        0 => 'Mitt konto',
-      ),
-      'Listeners Per Station' => 
-      array (
-        0 => 'Lyssnare Per Station',
-      ),
-      'Average Listeners' => 
-      array (
-        0 => 'Genomsnittliga lyssnare',
-      ),
-      'Unique Listeners' => 
-      array (
-        0 => 'Unika lyssnare',
-      ),
-      'Station Overview' => 
-      array (
-        0 => 'Stationsöversikt',
-      ),
-      'Station Name' => 
-      array (
-        0 => 'Stationens namn',
-      ),
-      'Now Playing' => 
-      array (
-        0 => 'Nu Spelas',
-      ),
-      'AzuraCast First-Time Setup' => 
-      array (
-        0 => '',
-      ),
-      'Welcome to AzuraCast!' => 
-      array (
-        0 => 'Välkommen till AzuraCast!',
-      ),
-      'Let\'s get started by creating your Super Administrator account.' => 
-      array (
-        0 => '',
-      ),
-      'This account will have full access to the system, and you\'ll automatically be logged in to it for the rest of setup.' => 
-      array (
-        0 => '',
-      ),
-      'Create Station' => 
-      array (
-        0 => '',
-      ),
-      'Continue the setup process by creating your first radio station below. You can edit any of these details later.' => 
-      array (
-        0 => 'Fortsätt installationsprocessen genom att skapa din första radiostation nedan. Du kan redigera någon av dessa uppgifter senare.',
-      ),
-      'Create a New Radio Station' => 
-      array (
-        0 => '',
-      ),
-      'Complete the setup process by providing some information about your broadcast environment. These settings can be changed later from the administration panel.' => 
-      array (
-        0 => '',
-      ),
-      'Customize AzuraCast Settings' => 
-      array (
-        0 => '',
-      ),
-      'Enter Two-Factor Code' => 
-      array (
-        0 => '',
-      ),
-      'Your account uses a two-factor security code. Enter the code your device is currently showing below.' => 
-      array (
-        0 => '',
-      ),
-      'Security Code' => 
-      array (
-        0 => '',
-      ),
-      'Sign in' => 
-      array (
-        0 => 'Logga in',
-      ),
-      'Welcome!' => 
-      array (
-        0 => 'Välkommen!',
-      ),
-      'Welcome to %s!' => 
-      array (
-        0 => 'Välkommen till %s!',
-      ),
-      'name@example.com' => 
-      array (
-        0 => '',
-      ),
-      'Enter your password' => 
-      array (
-        0 => 'Ange ditt lösenord',
-      ),
-      'Please log in to continue.' => 
-      array (
-        0 => 'Logga in för att fortsätta.',
-      ),
-      '<a href="%s" target="_blank">Forgot your password?</a>' => 
-      array (
-        0 => '<a href="%s" target="_blank">Glömt ditt lösenord?</a>',
       ),
       'Enable Two-Factor Authentication' => 
       array (
@@ -3280,10 +3816,6 @@ X-Crowdin-File-ID: 4
       array (
         0 => 'QR-kod',
       ),
-      'Copy to Clipboard' => 
-      array (
-        0 => 'Kopiera till urklipp',
-      ),
       'Customize' => 
       array (
         0 => 'Anpassa',
@@ -3303,10 +3835,6 @@ X-Crowdin-File-ID: 4
       'Enable Two-Factor' => 
       array (
         0 => 'Aktivera tvåfaktorsfaktor',
-      ),
-      'My API Keys' => 
-      array (
-        0 => '',
       ),
       'New Key Generated' => 
       array (
@@ -3337,461 +3865,117 @@ X-Crowdin-File-ID: 4
       array (
         0 => '',
       ),
-      'Details' => 
+      'Create Station' => 
       array (
         0 => '',
       ),
-      'Errors were encountered when trying to save changes:' => 
+      'Complete the setup process by providing some information about your broadcast environment. These settings can be changed later from the administration panel.' => 
       array (
         0 => '',
       ),
-      'General' => 
+      'Customize AzuraCast Settings' => 
       array (
         0 => '',
       ),
-      'Remote relays let you work with broadcasting software outside this server. Any relay you include here will be included in your station\'s statistics. You can also broadcast from this server to remote relays.' => 
+      'AzuraCast First-Time Setup' => 
       array (
         0 => '',
       ),
-      'Remote Relay' => 
+      'Welcome to AzuraCast!' => 
+      array (
+        0 => 'Välkommen till AzuraCast!',
+      ),
+      'Let\'s get started by creating your Super Administrator account.' => 
       array (
         0 => '',
       ),
-      'Delete remote relay "%s"?' => 
+      'This account will have full access to the system, and you\'ll automatically be logged in to it for the rest of setup.' => 
       array (
         0 => '',
       ),
-      'Mount points are how listeners connect and listen to your station. Each mount point can be a different audio format or quality. Using mount points, you can set up a high-quality stream for broadband listeners and a mobile stream for phone users.' => 
+      'Continue the setup process by creating your first radio station below. You can edit any of these details later.' => 
+      array (
+        0 => 'Fortsätt installationsprocessen genom att skapa din första radiostation nedan. Du kan redigera någon av dessa uppgifter senare.',
+      ),
+      'Create a New Radio Station' => 
       array (
         0 => '',
       ),
-      'Mount Point' => 
+      'AzuraCast User' => 
       array (
         0 => '',
       ),
-      'Delete mount point "%s"?' => 
+      'Forgot Password' => 
       array (
         0 => '',
       ),
-      'Default Mount' => 
+      'name@example.com' => 
       array (
         0 => '',
       ),
-      'Automated Playlist Assignment' => 
+      'Sign in' => 
+      array (
+        0 => 'Logga in',
+      ),
+      'Send Recovery E-mail' => 
       array (
         0 => '',
       ),
-      'Based on the previous performance of your station\'s songs, %s can automatically distribute songs evenly among your playlists, placing the highest performing songs in the highest-weighted playlists.' => 
+      'Recover Account' => 
       array (
         0 => '',
       ),
-      'Once you have configured automated assignment, click the button below to run the automated assignment process. This process will not run at all unless you have selected "Enable" below.' => 
+      'Choose a new password for your account.' => 
       array (
         0 => '',
       ),
-      'Run Automated Assignment' => 
+      'Enter your password' => 
+      array (
+        0 => 'Ange ditt lösenord',
+      ),
+      'This installation\'s administrator has not configured this functionality.' => 
       array (
         0 => '',
       ),
-      'Configure Automated Assignment' => 
+      'Contact an administrator to reset your password following the instructions in our documentation:' => 
       array (
         0 => '',
       ),
-      'Reorder Playlist' => 
+      'Password Reset Instructions' => 
       array (
         0 => '',
       ),
-      'Reorder Playlist: %s' => 
+      'Enter Two-Factor Code' => 
       array (
         0 => '',
       ),
-      'Down' => 
-      array (
-        0 => 'Ner',
-      ),
-      'Up' => 
-      array (
-        0 => 'Upp',
-      ),
-      'Available Logs' => 
-      array (
-        0 => 'Tillgängliga loggar',
-      ),
-      'Select the type of web hook to create.' => 
+      'Your account uses a two-factor security code. Enter the code your device is currently showing below.' => 
       array (
         0 => '',
       ),
-      'Web hooks let you connect to external web services and broadcast changes to your station to them.' => 
+      'Security Code' => 
       array (
         0 => '',
       ),
-      'Type' => 
+      'Welcome!' => 
       array (
-        0 => 'Typ',
+        0 => 'Välkommen!',
       ),
-      'Triggers' => 
+      'Welcome to %s!' => 
       array (
-        0 => '',
+        0 => 'Välkommen till %s!',
       ),
-      'Enable' => 
-      array (
-        0 => 'Aktivera',
-      ),
-      'Trigger the web hook manually and view the raw response.' => 
+      'Remember me' => 
       array (
         0 => '',
       ),
-      'Test' => 
+      'Please log in to continue.' => 
       array (
-        0 => 'Testa',
+        0 => 'Logga in för att fortsätta.',
       ),
-      'Delete web hook "%s"?' => 
-      array (
-        0 => '',
-      ),
-      'Connection Information' => 
+      'Forgot your password?' => 
       array (
         0 => '',
-      ),
-      'IceCast Clients' => 
-      array (
-        0 => '',
-      ),
-      'Server' => 
-      array (
-        0 => 'Server',
-      ),
-      'You may need to connect directly via your IP address, which is <code>%s</code>.' => 
-      array (
-        0 => 'Du kan behöva ansluta direkt via din IP-adress, som är <code>%s</code>.',
-      ),
-      'Port' => 
-      array (
-        0 => 'Port',
-      ),
-      'Mount Name' => 
-      array (
-        0 => '',
-      ),
-      'ShoutCast v1 Clients' => 
-      array (
-        0 => 'ShoutCast v1 klienter',
-      ),
-      '%d (%d for some clients)' => 
-      array (
-        0 => '%d (%d för vissa klienter)',
-      ),
-      '(DJ username and password separated by a colon)' => 
-      array (
-        0 => '(DJ användarnamn och lösenord separerade med ett kolon)',
-      ),
-      'Setup instructions for broadcasting software are available <a href="%s" target="_blank">on the AzuraCast Wiki</a>.' => 
-      array (
-        0 => 'Installationsinstruktioner för sändningsprogram finns <a href="%s" target="_blank">på AzuraCast Wiki</a>.',
-      ),
-      'Streamer accounts are currently disabled for this station. To enable streamer accounts, click the button below.' => 
-      array (
-        0 => '',
-      ),
-      'Enable Streaming' => 
-      array (
-        0 => '',
-      ),
-      'Delete SFTP User "%s"?' => 
-      array (
-        0 => '',
-      ),
-      'Listener Request' => 
-      array (
-        0 => '',
-      ),
-      'Playlist:' => 
-      array (
-        0 => '',
-      ),
-      'Delete queue item?' => 
-      array (
-        0 => '',
-      ),
-      'Cued On' => 
-      array (
-        0 => 'Köad på',
-      ),
-      'Source' => 
-      array (
-        0 => 'Källa',
-      ),
-      '%s of %s Used (%d Files)' => 
-      array (
-        0 => '',
-      ),
-      '%s Used (%d Files)' => 
-      array (
-        0 => '',
-      ),
-      'You can also upload files in bulk via SFTP.' => 
-      array (
-        0 => 'Du kan också ladda upp filer i bulk via SFTP.',
-      ),
-      'Manage SFTP Accounts' => 
-      array (
-        0 => 'Hantera SFTP-konton',
-      ),
-      'Clear all pending requests?' => 
-      array (
-        0 => 'Rensa alla väntande önskningar?',
-      ),
-      'Clear Pending Requests' => 
-      array (
-        0 => 'Rensa väntande önskningar',
-      ),
-      'Date Requested' => 
-      array (
-        0 => 'Önskad',
-      ),
-      'Date Played' => 
-      array (
-        0 => '',
-      ),
-      'Requester IP' => 
-      array (
-        0 => 'Önskarens IP',
-      ),
-      'Not Played' => 
-      array (
-        0 => 'Inte spelad',
-      ),
-      'Delete request?' => 
-      array (
-        0 => 'Ta bort önskning?',
-      ),
-      'Download CSV' => 
-      array (
-        0 => 'Ladda ner CSV',
-      ),
-      'Filename' => 
-      array (
-        0 => 'Filnamn',
-      ),
-      'Length Text' => 
-      array (
-        0 => '',
-      ),
-      'Playlist(s)' => 
-      array (
-        0 => 'Spellistor',
-      ),
-      'Joins' => 
-      array (
-        0 => 'Anslutningar',
-      ),
-      'Losses' => 
-      array (
-        0 => 'Förluster',
-      ),
-      'Total' => 
-      array (
-        0 => 'Totalt',
-      ),
-      'Plays' => 
-      array (
-        0 => 'Spelningar',
-      ),
-      'Play %' => 
-      array (
-        0 => 'Spela %',
-      ),
-      'Ratio' => 
-      array (
-        0 => '',
-      ),
-      'Best Performing Songs' => 
-      array (
-        0 => 'Låtar med bäst utförande',
-      ),
-      'in the last 48 hours' => 
-      array (
-        0 => 'under de senaste 48 timmarna',
-      ),
-      'Change' => 
-      array (
-        0 => 'Ändra',
-      ),
-      'Song' => 
-      array (
-        0 => 'Låt',
-      ),
-      'Worst Performing Songs' => 
-      array (
-        0 => 'Låtar med sämst utförande',
-      ),
-      'Most Played Songs' => 
-      array (
-        0 => 'Mest spelade låtar',
-      ),
-      'in the last month' => 
-      array (
-        0 => 'under den senaste månaden',
-      ),
-      'Live Listeners' => 
-      array (
-        0 => 'Live lyssnare',
-      ),
-      'for selected period' => 
-      array (
-        0 => 'för vald period',
-      ),
-      'Total Listener Hours' => 
-      array (
-        0 => 'Totalt antal lyssnartimmar',
-      ),
-      'IP' => 
-      array (
-        0 => 'IP',
-      ),
-      'Time (sec)' => 
-      array (
-        0 => 'Tid (sek)',
-      ),
-      'User Agent' => 
-      array (
-        0 => '',
-      ),
-      'Location' => 
-      array (
-        0 => 'Plats',
-      ),
-      'Mobile Device' => 
-      array (
-        0 => 'Mobil enhet',
-      ),
-      'Desktop Device' => 
-      array (
-        0 => 'Skrivbordsenhet',
-      ),
-      'Unknown' => 
-      array (
-        0 => 'Okänd',
-      ),
-      'Live Streamer:' => 
-      array (
-        0 => '',
-      ),
-      'Song Duplicates' => 
-      array (
-        0 => 'Låtdubletter',
-      ),
-      'No duplicates were found. Nice work!' => 
-      array (
-        0 => 'Inga dubbletter hittades. Bra jobbat!',
-      ),
-      'Title / File Path' => 
-      array (
-        0 => 'Titel / sökväg',
-      ),
-      'There are too many data points to map!' => 
-      array (
-        0 => 'Det finns för många datapunkter att karta!',
-      ),
-      'Report Not Available' => 
-      array (
-        0 => '',
-      ),
-      'This report is not available for this station, because the system administrator has chosen not to collect detailed IP-based listener information.' => 
-      array (
-        0 => '',
-      ),
-      'Hour' => 
-      array (
-        0 => 'Timme',
-      ),
-      'Please wait...' => 
-      array (
-        0 => 'Vänligen vänta...',
-      ),
-      'Station Time' => 
-      array (
-        0 => '',
-      ),
-      'Station Broadcasting Disabled' => 
-      array (
-        0 => 'Stationssändning inaktiverad',
-      ),
-      'Your station is currently not enabled for broadcasting. You can still manage media, playlists, and other station settings. To re-enable broadcasting, <a href="%s">edit your station profile</a>.' => 
-      array (
-        0 => 'Din station är för närvarande inte aktiverad för sändning. Du kan fortfarande hantera medier, spellistor och andra kanalinställningar. För att återaktivera sändning, <a href="%s">redigera din station profil</a>.',
-      ),
-      'Pause' => 
-      array (
-        0 => '',
-      ),
-      'Play' => 
-      array (
-        0 => 'Spela',
-      ),
-      'Log View' => 
-      array (
-        0 => 'Logg vy',
-      ),
-      'Automatically scroll to the bottom of the log' => 
-      array (
-        0 => '',
-      ),
-      'Need Help?' => 
-      array (
-        0 => '',
-      ),
-      'You can find answers for many common questions in our <a href="%s" target="_blank">support documents</a>.' => 
-      array (
-        0 => '',
-      ),
-      'If you\'re experiencing a bug or error, you can submit a GitHub issue using the link below.' => 
-      array (
-        0 => '',
-      ),
-      'Your current installation type is <b>%s</b>. Be sure to include this when creating a new issue.' => 
-      array (
-        0 => '',
-      ),
-      'Add New GitHub Issue' => 
-      array (
-        0 => '',
-      ),
-      'Skip to main content' => 
-      array (
-        0 => '',
-      ),
-      'Toggle Sidebar' => 
-      array (
-        0 => '',
-      ),
-      'Toggle Menu' => 
-      array (
-        0 => '',
-      ),
-      'System Administration' => 
-      array (
-        0 => '',
-      ),
-      'Switch Theme' => 
-      array (
-        0 => '',
-      ),
-      'Help' => 
-      array (
-        0 => '',
-      ),
-      'End Session' => 
-      array (
-        0 => '',
-      ),
-      'Sign Out' => 
-      array (
-        0 => '',
-      ),
-      'Like our software? <a href="%s" target="_blank">Donate to support AzuraCast!</a>' => 
-      array (
-        0 => 'Gillar du vår programvara? <a href="%s" target="_blank">Donera för att stödja AzuraCast!</a>',
       ),
     ),
   ),

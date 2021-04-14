@@ -1,7 +1,8 @@
 <?php
 
-use App\Customization;
 use App\Environment;
+use App\Http\ServerRequest;
+use App\Locale;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
@@ -132,7 +133,13 @@ return [
         'inline' => [
             'js' => [
                 function (Request $request) {
-                    $locale = $request->getAttribute('locale', Customization::DEFAULT_LOCALE);
+                    /** @var Locale|null $locale */
+                    $localeObj = $request->getAttribute(ServerRequest::ATTR_LOCALE);
+
+                    $locale = ($localeObj instanceof Locale)
+                        ? $localeObj->getLocale()
+                        : Locale::DEFAULT_LOCALE;
+
                     $locale = explode('.', $locale)[0];
                     $localeShort = substr($locale, 0, 2);
                     $localeWithDashes = str_replace('_', '-', $locale);
@@ -141,6 +148,8 @@ return [
                         'lang' => [
                             'confirm' => __('Are you sure?'),
                             'advanced' => __('Advanced'),
+                            'pw_blank' => __('Enter a password to continue.'),
+                            'pw_good' => __('No problems detected.'),
                         ],
                         'locale' => $locale,
                         'locale_short' => $localeShort,
@@ -468,7 +477,7 @@ return [
 
     'StationMedia' => [
         'order' => 10,
-        'require' => ['vue-component-common', 'bootstrap-vue'],
+        'require' => ['vue-component-common', 'bootstrap-vue', 'fancybox'],
         // Auto-managed by Assets
     ],
 
@@ -505,6 +514,12 @@ return [
 
     'StationProfile' => [
         'order' => 10,
+        'require' => ['vue-component-common', 'bootstrap-vue', 'moment', 'fancybox'],
+        // Auto-managed by Assets
+    ],
+
+    'StationQueue' => [
+        'order' => 10,
         'require' => ['vue-component-common', 'bootstrap-vue', 'moment'],
         // Auto-managed by Assets
     ],
@@ -512,6 +527,12 @@ return [
     'AdminStorageLocations' => [
         'order' => 10,
         'require' => ['vue-component-common', 'bootstrap-vue'],
+        // Auto-managed by Assets
+    ],
+
+    'Dashboard' => [
+        'order' => 10,
+        'require' => ['vue-component-common', 'bootstrap-vue', 'chartjs'],
         // Auto-managed by Assets
     ],
 ];

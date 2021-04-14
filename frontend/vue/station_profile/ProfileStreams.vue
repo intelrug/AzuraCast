@@ -19,7 +19,7 @@
                 <tbody>
                 <tr class="align-middle" v-for="mount in np.station.mounts">
                     <td class="pr-1">
-                        <a class="btn-audio" href="#" v-bind:data-url="mount.url" @click.prevent="toggle(mount.url)">
+                        <a class="btn-audio has-listener" href="#" v-bind:data-url="mount.url" @click.prevent="toggle(mount.url)">
                             <i class="material-icons" aria-hidden="true">play_circle_filled</i>
                         </a>
                     </td>
@@ -49,7 +49,7 @@
                 <tbody>
                 <tr class="align-middle" v-for="remote in np.station.remotes">
                     <td class="pr-1">
-                        <a class="btn-audio" href="#" v-bind:data-url="remote.url" @click.prevent="toggle(remote.url)">
+                        <a class="btn-audio has-listener" href="#" v-bind:data-url="remote.url" @click.prevent="toggle(remote.url)">
                             <i class="material-icons" aria-hidden="true">play_circle_filled</i>
                         </a>
                     </td>
@@ -70,11 +70,11 @@
             </template>
         </table>
         <div class="card-actions">
-            <a class="btn btn-outline-primary" :href="playlistPlsUri">
+            <a class="btn btn-outline-primary" :href="np.station.playlist_pls_url">
                 <i class="material-icons" aria-hidden="true">file_download</i>
                 <translate key="lang_streams_download_pls">Download PLS</translate>
             </a>
-            <a class="btn btn-outline-primary" :href="playlistM3uUri">
+            <a class="btn btn-outline-primary" :href="np.station.playlist_m3u_url">
                 <i class="material-icons" aria-hidden="true">file_download</i>
                 <translate key="lang_streams_download_m3u">Download M3U</translate>
             </a>
@@ -83,15 +83,7 @@
 </template>
 
 <script>
-export const profileStreamsProps = {
-    props: {
-        playlistPlsUri: String,
-        playlistM3uUri: String
-    }
-};
-
 export default {
-    mixins: [profileStreamsProps],
     props: {
         np: Object
     },

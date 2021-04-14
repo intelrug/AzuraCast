@@ -91,13 +91,12 @@ class Runner
 
         set_time_limit($syncInfo['timeout']);
 
-        if ($this->environment->isCli()) {
-            error_reporting(E_ALL & ~E_STRICT & ~E_NOTICE);
-            ini_set('display_errors', '1');
-            ini_set('log_errors', '1');
-        }
-
-        $this->logger->notice(sprintf('Running sync task: %s', $syncInfo['name']));
+        $this->logger->notice(
+            sprintf('Running sync task: %s', $syncInfo['name']),
+            [
+                'force' => $force,
+            ]
+        );
 
         $lock = $this->lockFactory->createLock('sync_' . $type, $syncInfo['timeout']);
 
@@ -119,9 +118,17 @@ class Runner
             $tasks = $event->getTasks();
 
             foreach ($tasks as $taskClass => $task) {
-                if (!$lock->isAcquired()) {
+                if (!$force && !$lock->isAcquired()) {
+                    $this->logger->error(
+                        sprintf('Lock timed out before task %s can run.', $taskClass)
+                    );
                     return;
                 }
+
+                $this->logger->debug(sprintf(
+                    'Starting sub-task: %s',
+                    $taskClass
+                ));
 
                 $start_time = microtime(true);
 
@@ -145,6 +152,10 @@ class Runner
         } finally {
             $lock->release();
         }
+
+        $this->logger->debug(
+            sprintf('Sync task "%s" completed successfully.', $syncInfo['name']),
+        );
     }
 
     /**

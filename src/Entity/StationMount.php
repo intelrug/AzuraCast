@@ -15,7 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Table(name="station_mounts")
  * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks
  *
  * @AuditLog\Auditable
  *
@@ -196,12 +195,45 @@ class StationMount implements StationMountInterface
         return $this->id;
     }
 
-    public function isVisibleOnPublicPages(): bool
+    public function getStation(): Station
     {
-        if ($this->is_default) {
-            return true;
+        return $this->station;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $new_name): void
+    {
+        // Ensure all mount point names start with a leading slash.
+        $this->name = $this->truncateString('/' . ltrim($new_name, '/'), 100);
+    }
+
+    /**
+     * @AuditLog\AuditIdentifier
+     */
+    public function getDisplayName(): string
+    {
+        if (!empty($this->display_name)) {
+            return $this->display_name;
         }
 
+        if ($this->enable_autodj) {
+            return $this->autodj_bitrate . 'kbps ' . strtoupper($this->autodj_format);
+        }
+
+        return $this->name;
+    }
+
+    public function setDisplayName(?string $display_name): void
+    {
+        $this->display_name = $this->truncateString($display_name);
+    }
+
+    public function isVisibleOnPublicPages(): bool
+    {
         return $this->is_visible_on_public_pages;
     }
 
@@ -330,52 +362,31 @@ class StationMount implements StationMountInterface
         $this->listeners_total = $listeners_total;
     }
 
-    /** @inheritdoc */
     public function getAutodjHost(): ?string
     {
         return '127.0.0.1';
     }
 
-    /** @inheritdoc */
     public function getAutodjPort(): ?int
     {
         $fe_settings = $this->getStation()->getFrontendConfig();
         return $fe_settings->getPort();
     }
 
-    public function getStation(): Station
-    {
-        return $this->station;
-    }
-
-    /** @inheritdoc */
     public function getAutodjUsername(): ?string
     {
         return '';
     }
 
-    /** @inheritdoc */
     public function getAutodjPassword(): ?string
     {
         $fe_settings = $this->getStation()->getFrontendConfig();
         return $fe_settings->getSourcePassword();
     }
 
-    /** @inheritdoc */
     public function getAutodjMount(): ?string
     {
         return $this->getName();
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $new_name): void
-    {
-        // Ensure all mount point names start with a leading slash.
-        $this->name = $this->truncateString('/' . ltrim($new_name, '/'), 100);
     }
 
     public function getAutodjAdapterType(): string
@@ -420,26 +431,5 @@ class StationMount implements StationMountInterface
         }
 
         return $response;
-    }
-
-    /**
-     * @AuditLog\AuditIdentifier
-     */
-    public function getDisplayName(): string
-    {
-        if (!empty($this->display_name)) {
-            return $this->display_name;
-        }
-
-        if ($this->enable_autodj) {
-            return $this->autodj_bitrate . 'kbps ' . strtoupper($this->autodj_format);
-        }
-
-        return $this->name;
-    }
-
-    public function setDisplayName(?string $display_name): void
-    {
-        $this->display_name = $this->truncateString($display_name);
     }
 }

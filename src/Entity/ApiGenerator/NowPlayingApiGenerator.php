@@ -54,12 +54,15 @@ class NowPlayingApiGenerator
         $npOld = $station->getNowplaying();
 
         $np = new Entity\Api\NowPlaying();
+        $np->is_online = $npResult->meta->online;
         $np->station = ($this->stationApiGenerator)($station, $baseUri);
-        $np->listeners = new Entity\Api\NowPlayingListeners([
-            'current' => $npResult->listeners->current,
-            'unique' => $npResult->listeners->unique,
-            'total' => $npResult->listeners->total,
-        ]);
+        $np->listeners = new Entity\Api\NowPlayingListeners(
+            [
+                'current' => $npResult->listeners->current,
+                'unique' => $npResult->listeners->unique,
+                'total' => $npResult->listeners->total,
+            ]
+        );
 
         // Pull from current NP data if song details haven't changed .
         if ($npOld instanceof Entity\Api\NowPlaying && $this->tracksMatch($npResult, $npOld)) {
@@ -81,12 +84,17 @@ class NowPlayingApiGenerator
 
             $np->song_history = $this->songHistoryApiGenerator->fromArray(
                 $this->historyRepo->getVisibleHistory($station),
-                $baseUri
+                $baseUri,
+                true
             );
 
             $nextVisible = $this->queueRepo->getNextVisible($station);
             if ($nextVisible instanceof Entity\StationQueue) {
-                $np->playing_next = ($this->stationQueueApiGenerator)($nextVisible, $baseUri);
+                $np->playing_next = ($this->stationQueueApiGenerator)(
+                    $nextVisible,
+                    $baseUri,
+                    true
+                );
             }
         }
 
@@ -108,11 +116,10 @@ class NowPlayingApiGenerator
             $np->live = new Entity\Api\NowPlayingLive(false);
         }
 
-        // Register a new item in song history.
-        $apiSongHistory = ($this->songHistoryApiGenerator)($sh_obj, $baseUri);
-
+        $apiSongHistory = ($this->songHistoryApiGenerator)($sh_obj, $baseUri, true);
         $apiCurrentSong = new Entity\Api\NowPlayingCurrentSong();
         $apiCurrentSong->fromParentObject($apiSongHistory);
+
         $np->now_playing = $apiCurrentSong;
 
         $np->update();
@@ -149,21 +156,30 @@ class NowPlayingApiGenerator
         $np->station = ($this->stationApiGenerator)($station, $baseUri);
         $np->listeners = new Entity\Api\NowPlayingListeners();
 
-        $songObj = Entity\Song::createFromText('Stream Offline');
+        $songObj = Entity\Song::createOffline();
 
         $offlineApiNowPlaying = new Entity\Api\NowPlayingCurrentSong();
         $offlineApiNowPlaying->sh_id = 0;
-        $offlineApiNowPlaying->song = ($this->songApiGenerator)($songObj, $station, $baseUri);
+        $offlineApiNowPlaying->song = ($this->songApiGenerator)(
+            $songObj,
+            $station,
+            $baseUri
+        );
         $np->now_playing = $offlineApiNowPlaying;
 
         $np->song_history = $this->songHistoryApiGenerator->fromArray(
             $this->historyRepo->getVisibleHistory($station),
-            $baseUri
+            $baseUri,
+            true
         );
 
         $nextVisible = $this->queueRepo->getNextVisible($station);
         if ($nextVisible instanceof Entity\StationQueue) {
-            $np->playing_next = ($this->stationQueueApiGenerator)($nextVisible, $baseUri);
+            $np->playing_next = ($this->stationQueueApiGenerator)(
+                $nextVisible,
+                $baseUri,
+                true
+            );
         }
 
         $np->live = new Entity\Api\NowPlayingLive(false);

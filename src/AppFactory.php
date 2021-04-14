@@ -6,6 +6,7 @@ use App\Http\Factory\ServerRequestFactory;
 use DI;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Invoker;
+use Monolog\Registry;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -47,7 +48,26 @@ class AppFactory
 
         $di = self::buildContainer($environment, $diDefinitions);
 
-        Logger::setInstance($di->get(LoggerInterface::class));
+        $logger = $di->get(LoggerInterface::class);
+
+        register_shutdown_function(function (LoggerInterface $logger): void {
+            $error = error_get_last();
+            $errno = $error["type"] ?? \E_ERROR;
+            $errfile = $error["file"] ?? 'unknown';
+            $errline = $error["line"] ?? 0;
+            $errstr  = $error["message"] ?? 'Shutdown';
+
+            if ($errno &= \E_PARSE | \E_ERROR | \E_USER_ERROR | \E_CORE_ERROR | \E_COMPILE_ERROR) {
+                $logger->critical(sprintf(
+                    'Fatal error: %s in %s on line %d',
+                    $errstr,
+                    $errfile,
+                    $errline
+                ));
+            }
+        }, $logger);
+
+        Registry::addLogger($logger, 'app', true);
 
         ServerRequestCreatorFactory::setSlimHttpDecoratorsAutomaticDetection(false);
         ServerRequestCreatorFactory::setServerRequestCreator(new ServerRequestFactory());
@@ -93,8 +113,12 @@ class AppFactory
     {
         error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING & ~E_STRICT);
 
-        ini_set('display_startup_errors', !$environment->isProduction() ? '1' : '0');
-        ini_set('display_errors', !$environment->isProduction() ? '1' : '0');
+        $displayStartupErrors = (!$environment->isProduction() || $environment->isCli())
+            ? '1'
+            : '0';
+        ini_set('display_startup_errors', $displayStartupErrors);
+        ini_set('display_errors', $displayStartupErrors);
+
         ini_set('log_errors', '1');
         ini_set(
             'error_log',

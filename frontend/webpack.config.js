@@ -13,9 +13,11 @@ module.exports = {
     AdminStorageLocations: './vue/AdminStorageLocations.vue',
     StationMedia: './vue/StationMedia.vue',
     StationPlaylists: './vue/StationPlaylists.vue',
+    StationQueue: './vue/StationQueue.vue',
     StationStreamers: './vue/StationStreamers.vue',
     StationOnDemand: './vue/StationOnDemand.vue',
-    StationProfile: './vue/StationProfile.vue'
+    StationProfile: './vue/StationProfile.vue',
+    Dashboard: './vue/Dashboard.vue'
   },
   resolve: {
     extensions: ['*', '.js', '.vue', '.json']

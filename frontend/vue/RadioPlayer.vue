@@ -215,6 +215,7 @@
 import axios from 'axios';
 import NchanSubscriber from 'nchan';
 import AudioPlayer from './components/AudioPlayer';
+import NowPlaying from './entity/NowPlaying';
 
 export const radioPlayerProps = {
     props: {
@@ -225,28 +226,7 @@ export const radioPlayerProps = {
         initialNowPlaying: {
             type: Object,
             default () {
-                return {
-                    'station': {
-                        'listen_url': '',
-                        'mounts': [],
-                        'remotes': []
-                    },
-                    'now_playing': {
-                        'song': {
-                            'title': 'Song Title',
-                            'artist': 'Song Artist',
-                            'art': ''
-                        },
-                        'is_request': false,
-                        'played_at': 0,
-                        'duration': 0
-                    },
-                    'live': {
-                        'is_live': false,
-                        'streamer_name': ''
-                    },
-                    'song_history': []
-                };
+                return NowPlaying;
             }
         },
         useNchan: {
@@ -272,7 +252,6 @@ export default {
                 'name': '',
                 'url': ''
             },
-            'np_timeout': null,
             'nchan_subscriber': null,
             'clock_interval': null
         };
@@ -283,8 +262,7 @@ export default {
 
         // Convert initial NP data from prop to data.
         this.setNowPlaying(this.np);
-
-        this.np_timeout = setTimeout(this.checkNowPlaying, 5000);
+        setTimeout(this.checkNowPlaying, 5000);
     },
     computed: {
         lang_play_btn () {
@@ -399,11 +377,12 @@ export default {
             } else {
                 axios.get(this.nowPlayingUri).then((response) => {
                     this.setNowPlaying(response.data);
+
+                    setTimeout(this.checkNowPlaying, 15000);
                 }).catch((error) => {
                     console.error(error);
-                }).then(() => {
-                    clearTimeout(this.np_timeout);
-                    this.np_timeout = setTimeout(this.checkNowPlaying, 15000);
+
+                    setTimeout(this.checkNowPlaying, 30000);
                 });
             }
         },
@@ -411,14 +390,20 @@ export default {
             this.np = np_new;
 
             // Set a "default" current stream if none exists.
-            if (this.current_stream.url === '' && np_new.station.listen_url !== '' && this.streams.length > 0) {
+            if (this.current_stream.url === '' && this.streams.length > 0) {
                 let current_stream = null;
 
-                this.streams.forEach(function (stream) {
-                    if (stream.url === np_new.station.listen_url) {
-                        current_stream = stream;
-                    }
-                });
+                if (np_new.station.listen_url !== '') {
+                    this.streams.forEach(function (stream) {
+                        if (stream.url === np_new.station.listen_url) {
+                            current_stream = stream;
+                        }
+                    });
+                }
+
+                if (current_stream === null) {
+                    current_stream = this.streams[0];
+                }
 
                 this.current_stream = current_stream;
             }

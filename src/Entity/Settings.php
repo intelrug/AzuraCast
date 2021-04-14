@@ -308,6 +308,55 @@ class Settings
 
     /**
      * @OA\Property(example="false")
+     * @var bool Attempt to fetch album art from external sources when processing media.
+     */
+    protected bool $useExternalAlbumArtWhenProcessingMedia = false;
+
+    public function getUseExternalAlbumArtWhenProcessingMedia(): bool
+    {
+        return $this->useExternalAlbumArtWhenProcessingMedia;
+    }
+
+    public function setUseExternalAlbumArtWhenProcessingMedia(bool $useExternalAlbumArtWhenProcessingMedia): void
+    {
+        $this->useExternalAlbumArtWhenProcessingMedia = $useExternalAlbumArtWhenProcessingMedia;
+    }
+
+    /**
+     * @OA\Property(example="false")
+     * @var bool Attempt to fetch album art from external sources in API requests.
+     */
+    protected bool $useExternalAlbumArtInApis = false;
+
+    public function getUseExternalAlbumArtInApis(): bool
+    {
+        return $this->useExternalAlbumArtInApis;
+    }
+
+    public function setUseExternalAlbumArtInApis(bool $useExternalAlbumArtInApis): void
+    {
+        $this->useExternalAlbumArtInApis = $useExternalAlbumArtInApis;
+    }
+
+    /**
+     * @OA\Property(example="SAMPLE-API-KEY")
+     * @var string|null An API key to connect to Last.fm services, if provided.
+     */
+    protected ?string $lastFmApiKey = null;
+
+    public function getLastFmApiKey(): ?string
+    {
+        return $this->lastFmApiKey;
+    }
+
+    public function setLastFmApiKey(?string $lastFmApiKey): void
+    {
+        $lastFmApiKey = trim($lastFmApiKey);
+        $this->lastFmApiKey = (!empty($lastFmApiKey)) ? $lastFmApiKey : null;
+    }
+
+    /**
+     * @OA\Property(example="false")
      * @var bool Hide AzuraCast Branding on Public Pages
      */
     protected bool $hideProductName = false;
@@ -741,5 +790,149 @@ class Settings
     public function updateGeoliteLastRun(): void
     {
         $this->setGeoliteLastRun(time());
+    }
+
+    /**
+     * @OA\Property(example=false)
+     * @var bool Whether to enable "advanced" functionality in the system that is intended for power users.
+     */
+    protected bool $enableAdvancedFeatures = false;
+
+    public function getEnableAdvancedFeatures(): bool
+    {
+        return $this->enableAdvancedFeatures;
+    }
+
+    public function setEnableAdvancedFeatures(bool $enableAdvancedFeatures): void
+    {
+        $this->enableAdvancedFeatures = $enableAdvancedFeatures;
+    }
+
+    /**
+     * @OA\Property(example="true")
+     * @var bool Enable e-mail delivery across the application.
+     */
+    protected bool $mailEnabled = false;
+
+    public function getMailEnabled(): bool
+    {
+        return $this->mailEnabled;
+    }
+
+    public function setMailEnabled(bool $mailEnabled): void
+    {
+        $this->mailEnabled = $mailEnabled;
+    }
+
+    /**
+     * @OA\Property(example="AzuraCast")
+     * @var string The name of the sender of system e-mails.
+     */
+    protected string $mailSenderName = '';
+
+    public function getMailSenderName(): string
+    {
+        return $this->mailSenderName;
+    }
+
+    public function setMailSenderName(string $mailSenderName): void
+    {
+        $this->mailSenderName = $mailSenderName;
+    }
+
+    /**
+     * @OA\Property(example="example@example.com")
+     * @var string The e-mail address of the sender of system e-mails.
+     */
+    protected string $mailSenderEmail = '';
+
+    public function getMailSenderEmail(): string
+    {
+        return $this->mailSenderEmail;
+    }
+
+    public function setMailSenderEmail(string $mailSenderEmail): void
+    {
+        $this->mailSenderEmail = $mailSenderEmail;
+    }
+
+    /**
+     * @OA\Property(example="smtp.example.com")
+     * @var string The host to send outbound SMTP mail.
+     */
+    protected string $mailSmtpHost = '';
+
+    public function getMailSmtpHost(): string
+    {
+        return $this->mailSmtpHost;
+    }
+
+    public function setMailSmtpHost(string $mailSmtpHost): void
+    {
+        $this->mailSmtpHost = $mailSmtpHost;
+    }
+
+    /**
+     * @OA\Property(example=465)
+     * @var int The port for sending outbound SMTP mail.
+     */
+    protected int $mailSmtpPort = 0;
+
+    public function getMailSmtpPort(): int
+    {
+        return $this->mailSmtpPort;
+    }
+
+    public function setMailSmtpPort(int $mailSmtpPort): void
+    {
+        $this->mailSmtpPort = $mailSmtpPort;
+    }
+
+    /**
+     * @OA\Property(example="username")
+     * @var string The username when connecting to SMTP mail.
+     */
+    protected string $mailSmtpUsername = '';
+
+    public function getMailSmtpUsername(): string
+    {
+        return $this->mailSmtpUsername;
+    }
+
+    public function setMailSmtpUsername(string $mailSmtpUsername): void
+    {
+        $this->mailSmtpUsername = $mailSmtpUsername;
+    }
+
+    /**
+     * @OA\Property(example="password")
+     * @var string The password when connecting to SMTP mail.
+     */
+    protected string $mailSmtpPassword = '';
+
+    public function getMailSmtpPassword(): string
+    {
+        return $this->mailSmtpPassword;
+    }
+
+    public function setMailSmtpPassword(string $mailSmtpPassword): void
+    {
+        $this->mailSmtpPassword = $mailSmtpPassword;
+    }
+
+    /**
+     * @OA\Property(example="true")
+     * @var bool Whether to use a secure (TLS) connection when sending SMTP mail.
+     */
+    protected bool $mailSmtpSecure = true;
+
+    public function getMailSmtpSecure(): bool
+    {
+        return $this->mailSmtpSecure;
+    }
+
+    public function setMailSmtpSecure(bool $mailSmtpSecure): void
+    {
+        $this->mailSmtpSecure = $mailSmtpSecure;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Sync\Task;
 
+use App\Doctrine\ReloadableEntityManagerInterface;
 use App\Entity;
-use App\Entity\Station;
 use App\Environment;
 use App\Event\Radio\GenerateRawNowPlaying;
 use App\Event\SendWebhooks;
@@ -14,7 +14,6 @@ use App\Message;
 use App\Radio\Adapters;
 use App\Radio\AutoDJ;
 use DeepCopy\DeepCopy;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Monolog\Logger;
 use NowPlaying\Result\Result;
@@ -50,7 +49,7 @@ class NowPlayingTask extends AbstractTask implements EventSubscriberInterface
     protected RouterInterface $router;
 
     public function __construct(
-        EntityManagerInterface $em,
+        ReloadableEntityManagerInterface $em,
         LoggerInterface $logger,
         Adapters $adapters,
         AutoDJ $autodj,
@@ -196,15 +195,7 @@ class NowPlayingTask extends AbstractTask implements EventSubscriberInterface
             $np = ($this->nowPlayingApiGenerator)($station, $npResult);
 
             // Trigger the dispatching of webhooks.
-
-            /** @var Entity\Api\NowPlaying $np_event */
-            $np_event = (new DeepCopy())->copy($np);
-            $np_event->resolveUrls($this->router->getBaseUrl(false));
-            $np_event->cache = 'event';
-
-            $webhook_event = new SendWebhooks($station, $np_event, $standalone);
-
-            $this->eventDispatcher->dispatch($webhook_event);
+            $this->dispatchWebhooks($station, $np, $standalone);
 
             $station->setNowplaying($np);
             $this->em->persist($station);
@@ -318,7 +309,55 @@ class NowPlayingTask extends AbstractTask implements EventSubscriberInterface
         $event->setResult($result);
     }
 
-    protected function getLockForStation(Station $station): LockInterface
+    protected function dispatchWebhooks(
+        Entity\Station $station,
+        Entity\Api\NowPlaying $npOriginal,
+        bool $isStandalone = true
+    ): void {
+        /** @var Entity\Api\NowPlaying $np */
+        $np = (new DeepCopy())->copy($npOriginal);
+        $np->resolveUrls($this->router->getBaseUrl(false));
+        $np->cache = 'event';
+
+        $npOld = $station->getNowplaying();
+        $triggers = [
+            Entity\StationWebhook::TRIGGER_ALL,
+        ];
+
+        if ($npOld instanceof Entity\Api\NowPlaying) {
+            if ($npOld->now_playing->song->id !== $np->now_playing->song->id) {
+                $triggers[] = Entity\StationWebhook::TRIGGER_SONG_CHANGED;
+            }
+
+            if ($npOld->listeners->current > $np->listeners->current) {
+                $triggers[] = Entity\StationWebhook::TRIGGER_LISTENER_LOST;
+            } elseif ($npOld->listeners->current < $np->listeners->current) {
+                $triggers[] = Entity\StationWebhook::TRIGGER_LISTENER_GAINED;
+            }
+
+            if ($npOld->live->is_live === false && $np->live->is_live === true) {
+                $triggers[] = Entity\StationWebhook::TRIGGER_LIVE_CONNECT;
+            } elseif ($npOld->live->is_live === true && $np->live->is_live === false) {
+                $triggers[] = Entity\StationWebhook::TRIGGER_LIVE_DISCONNECT;
+            }
+
+            if ($npOld->is_online && !$np->is_online) {
+                $triggers[] = Entity\StationWebhook::TRIGGER_STATION_OFFLINE;
+            } elseif (!$npOld->is_online && $np->is_online) {
+                $triggers[] = Entity\StationWebhook::TRIGGER_STATION_ONLINE;
+            }
+        }
+
+        $message = new Message\DispatchWebhookMessage();
+        $message->station_id = (int)$station->getId();
+        $message->np = $np;
+        $message->triggers = $triggers;
+        $message->is_standalone = $isStandalone;
+
+        $this->messageBus->dispatch($message);
+    }
+
+    protected function getLockForStation(Entity\Station $station): LockInterface
     {
         return $this->lockFactory->createLock('nowplaying_station_' . $station->getId(), 600);
     }
