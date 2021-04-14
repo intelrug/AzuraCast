@@ -257,6 +257,19 @@ return [
                     ],
                 ],
 
+                StationFrontendConfiguration::STATISTICS_PORT => [
+                    'text',
+                    [
+                        'label' => __('Customize Statistics Port'),
+                        'label_class' => 'advanced',
+                        'description' => __(
+                            'No other program can be using this port. Leave blank to automatically assign a port.'
+                        ),
+                        'belongsTo' => 'frontend_config',
+                        'form_group_class' => 'col-md-6',
+                    ],
+                ],
+
                 StationFrontendConfiguration::MAX_LISTENERS => [
                     'text',
                     [

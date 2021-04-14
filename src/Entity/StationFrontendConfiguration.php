@@ -99,6 +99,19 @@ class StationFrontendConfiguration extends ArrayCollection
         $this->set(self::PORT, $port);
     }
 
+    public const STATISTICS_PORT = 'statistics_port';
+
+    public function getStatisticsPort(): ?int
+    {
+        $port = $this->get(self::STATISTICS_PORT);
+        return is_numeric($port) ? (int)$port : null;
+    }
+
+    public function setStatisticsPort(?int $port): void
+    {
+        $this->set(self::STATISTICS_PORT, $port);
+    }
+
     public const MAX_LISTENERS = 'max_listeners';
 
     public function getMaxListeners(): ?int

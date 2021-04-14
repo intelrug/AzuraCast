@@ -32,7 +32,7 @@ class Icecast extends AbstractFrontend
     public function getNowPlaying(Entity\Station $station, bool $includeClients = true): Result
     {
         $feConfig = $station->getFrontendConfig();
-        $radioPort = $feConfig->getPort();
+        $radioPort = $feConfig->getStatisticsPort() ? $feConfig->getStatisticsPort() : $feConfig->getPort();
 
         $baseUrl = 'http://' . ($this->environment->isDocker() ? 'stations' : 'localhost') . ':' . $radioPort;
 
