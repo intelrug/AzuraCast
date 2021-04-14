@@ -412,6 +412,20 @@ return [
                     ],
                 ],
 
+                'request_ip_threshold' => [
+                    'number',
+                    [
+                        'label' => __('Request IP Threshold (Minutes)'),
+                        'description' => __(
+                            'If requests are enabled, this specifies the minimum time (in minutes) between song requests for one ip. Set to 0 for no threshold.'
+                        ),
+                        'default' => Station::DEFAULT_REQUEST_IP_THRESHOLD,
+                        'min' => '0',
+                        'max' => '1440',
+                        'form_group_class' => 'col-md-6',
+                    ],
+                ],
+
                 'enable_streamers' => [
                     'toggle',
                     [

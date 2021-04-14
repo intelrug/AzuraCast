@@ -72,7 +72,7 @@ class StationRequestRepository extends Repository
 
         if (!$isAuthenticated) {
             // Check for any request (on any station) within the last $threshold_seconds.
-            $thresholdMins = $station->getRequestThreshold() ?? 5;
+            $thresholdMins = $station->getRequestIpThreshold() ?? 5;
             $thresholdSeconds = $thresholdMins * 60;
 
             // Always have a minimum threshold to avoid flooding.
@@ -212,7 +212,7 @@ class StationRequestRepository extends Repository
         $eligibleTracks = [
             $media->getId() => [
                 'title' => $media->getTitle(),
-                'artist' => $media->getArtist(),
+                // 'artist' => $media->getArtist(),
             ],
         ];
 
@@ -221,7 +221,7 @@ class StationRequestRepository extends Repository
         if ($isDuplicate) {
             throw new Exception(
                 __(
-                    'This song or artist has been played too recently. Wait a while before requesting it again.'
+                    'This song has been played too recently. Wait a while before requesting it again.'
                 )
             );
         }

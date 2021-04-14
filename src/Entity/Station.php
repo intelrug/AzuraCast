@@ -38,6 +38,7 @@ class Station
 
     public const DEFAULT_REQUEST_DELAY = 5;
     public const DEFAULT_REQUEST_THRESHOLD = 15;
+    public const DEFAULT_REQUEST_IP_THRESHOLD = 15;
     public const DEFAULT_DISCONNECT_DEACTIVATE_STREAMER = 0;
     public const DEFAULT_API_HISTORY_ITEMS = 5;
 
@@ -213,6 +214,14 @@ class Station
      * @var int|null
      */
     protected $request_threshold = self::DEFAULT_REQUEST_THRESHOLD;
+
+     /**
+     * @ORM\Column(name="request_ip_threshold", type="integer", nullable=true)
+     *
+     * @OA\Property(example=15)
+     * @var int|null
+     */
+    protected $request_ip_threshold = self::DEFAULT_REQUEST_IP_THRESHOLD;
 
     /**
      * @ORM\Column(name="disconnect_deactivate_streamer", type="integer", nullable=true, options={"default":0})
@@ -793,6 +802,16 @@ class Station
     public function setRequestThreshold(int $request_threshold = null): void
     {
         $this->request_threshold = $request_threshold;
+    }
+
+    public function getRequestIpThreshold(): ?int
+    {
+        return $this->request_ip_threshold;
+    }
+
+    public function setRequestIpThreshold(int $request_ip_threshold = null): void
+    {
+        $this->request_ip_threshold = $request_ip_threshold;
     }
 
     public function getDisconnectDeactivateStreamer(): int
